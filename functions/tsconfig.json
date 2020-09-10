@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "outDir": "lib",
+    "baseUrl": "./src",
+    "sourceMap": true,
+    "strict": true,
+    "target": "es2017",
+    "resolveJsonModule": true,
+    "types": ["googlemaps"],
+    "typeRoots": ["node_modules/@types"]
+  },
+  "compileOnSave": true,
+  "include": ["src"]
+}

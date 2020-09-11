@@ -2,7 +2,13 @@
   "hosting": {
     "public": "public",
     "predeploy": "cd web && npm run build",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"]
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [
+      {
+        "source": "/",
+        "destination": "/home.html"
+      }
+    ]
   },
   "functions": {
     "predeploy": [

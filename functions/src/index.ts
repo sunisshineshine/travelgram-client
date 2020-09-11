@@ -1,14 +1,6 @@
 import * as functions from "firebase-functions";
 
-import { getPlaceAutocomplete } from "./apis/google/places";
-
-// // Start writing Firebase Functions
-// // https://firebase.google.com/docs/functions/typescript
-//
-// export const helloWorld = functions.https.onRequest((request, response) => {
-//   functions.logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+import { getPlaceAutocomplete, getPlaceDetail } from "./apis/google/places";
 
 export const placeAutocompletion = functions.https.onCall(
   (data, context): Promise<google.maps.places.AutocompletePrediction[]> => {
@@ -18,3 +10,17 @@ export const placeAutocompletion = functions.https.onCall(
     });
   }
 );
+
+export const placeDetail = functions.https.onCall((data, context) => {
+  const request = data as google.maps.places.PlaceDetailsRequest;
+  return getPlaceDetail(request).catch((reason) => {
+    return reason;
+  });
+});
+
+// export const placeDetail = functions.https.onRequest((req, res) => {
+//   console.log("request");
+//   const request = (req.query as unknown) as google.maps.places.PlaceDetailsRequest;
+//   getPlaceDetail(request);
+//   res.json("requested");
+// });

@@ -7,6 +7,7 @@ p {
   margin: 0;
 }
 
-#search-place-suggest .active {
+#search-place-suggest .active,
+#search-place-suggest p:hover {
   background-color: cornflowerblue;
 }

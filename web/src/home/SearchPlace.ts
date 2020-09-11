@@ -32,7 +32,6 @@ const submitPlace = () => {
   }
   const selectedPrediction = predictionList[selectedPredictionPosition];
   if (selectedPrediction != null) {
-    console.log(selectedPrediction);
     addPlanItem(selectedPrediction);
     clearPredictions();
     $input.value = "";
@@ -80,13 +79,17 @@ const updatePredictionListDocument = () => {
   $predictionList.innerHTML = "";
 
   predictionList.map((prediction, index) => {
-    const $suggest = document.createElement("p");
-    $suggest.innerHTML =
+    const $prediction = document.createElement("p");
+    $prediction.innerHTML =
       prediction.structured_formatting.main_text + prediction.description;
     if (index == selectedPredictionPosition) {
-      $suggest.className = "active";
+      $prediction.className = "active";
     }
-    $predictionList.appendChild($suggest);
+    $prediction.addEventListener("click", () => {
+      selectedPredictionPosition = index;
+      submitPlace();
+    });
+    $predictionList.appendChild($prediction);
   });
 };
 

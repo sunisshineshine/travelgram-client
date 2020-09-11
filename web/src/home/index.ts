@@ -1,6 +1,7 @@
 import "./index.css";
 
 import "./SearchPlace";
+import { getPlaceDetail } from "../firebase/functions";
 
 const $planList = document.getElementById("plan-list") as HTMLElement;
 let planList: string[] = [];
@@ -19,4 +20,7 @@ export const addPlanItem = (
 ) => {
   planList.push(place.structured_formatting.main_text);
   updatePlanList();
+  getPlaceDetail(place.place_id).then((result) => {
+    console.log(result);
+  });
 };

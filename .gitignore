@@ -70,5 +70,7 @@ config.json
 
 # about parcel
 .cache
-public
 dist
+
+web-older
+web-react-older

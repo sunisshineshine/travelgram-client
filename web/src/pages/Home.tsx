@@ -3,12 +3,17 @@ import React, { useState, useEffect } from "react";
 import * as Navigator from "../navigator";
 import { getAuthUser } from "../firebase/auth";
 
-import { getPlaceAutocompletions } from "../firebase/functions";
+import {
+  getPlaceAutocompletions,
+  getPlaceDetail,
+  createPlan,
+} from "../firebase/functions";
 
 import "./Home.css";
 
 export const Home = () => {
   const [user, setUser] = useState<firebase.User | null>(null);
+  const [places, setPlaces] = useState<string[]>([]);
 
   getAuthUser().then((user) => {
     if (user) {
@@ -17,6 +22,21 @@ export const Home = () => {
       Navigator.goLoginPage();
     }
   });
+
+  const placeAdded = (placeId: string) => {
+    setPlaces((prev) => [...prev, placeId]);
+  };
+
+  const addPlan = () => {
+    createPlan("test plan")
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   if (user == null) {
     // loading user information
     return (
@@ -28,14 +48,36 @@ export const Home = () => {
     // display with user
     return (
       <div className="home">
+        <button onClick={addPlan}>Create Plan</button>
         <h1>Welcome to yogurtravel</h1>
         <h2>{user.email}</h2>
         <p>describe your plan</p>
-        <div id="plan-list"></div>
-        <PlaceSearchBar />
+        {places &&
+          places.map((placeId, index) => {
+            return (
+              <PlaceComponent key={index} index={index} placeId={placeId} />
+            );
+          })}
+        <PlaceSearchBar onAdded={placeAdded} />
       </div>
     );
   }
+};
+
+const PlaceComponent = (props: { index: number; placeId: string }) => {
+  const { placeId } = props;
+  const [place, setPlace] = useState<google.maps.places.PlaceResult>();
+  useEffect(() => {
+    getPlaceDetail(placeId)
+      .then((result) => {
+        console.log(result);
+        setPlace(result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [placeId]);
+  return <div>{place && place.name}</div>;
 };
 
 let scheduledQuery = "";
@@ -63,7 +105,7 @@ const getPredictions = (
   }, 500);
 };
 
-const PlaceSearchBar = () => {
+const PlaceSearchBar = (props: { onAdded: (placeId: string) => void }) => {
   const [input, setInput] = useState("");
   const [predictions, setPredictions] = useState<
     google.maps.places.AutocompletePrediction[]
@@ -74,7 +116,7 @@ const PlaceSearchBar = () => {
     const { key } = props;
     switch (key) {
       case "Enter":
-        submitPlace();
+        submitPlace(selectedPosition);
         return;
 
       case "ArrowDown":
@@ -86,6 +128,8 @@ const PlaceSearchBar = () => {
         return;
 
       default:
+        setPosition(-1);
+
         if (input == "") {
           clearPredictions();
         } else {
@@ -96,16 +140,19 @@ const PlaceSearchBar = () => {
   };
 
   // todo : sync with list and database
-  const submitPlace = () => {
-    if (selectedPosition == -1) {
-      setPosition(0);
+  const submitPlace = (position: number) => {
+    if (position == -1) {
+      position = 0;
     }
-    const selectedPrediction = predictions[selectedPosition];
+
+    if (predictions.length == 0) {
+      return;
+    }
+
+    const selectedPrediction = predictions[position];
     if (selectedPrediction != null) {
-      // addPlanItem(selectedPrediction);
-      console.log(selectedPrediction);
+      props.onAdded(selectedPrediction.place_id);
       clearPredictions();
-      setInput("");
     }
   };
 
@@ -137,12 +184,17 @@ const PlaceSearchBar = () => {
 
   const PredictionComponent = (props: {
     index: number;
-    p+rediction: google.maps.places.AutocompletePrediction;
+    prediction: google.maps.places.AutocompletePrediction;
   }) => {
-    const { prediction } = props;
+    const { index, prediction } = props;
     return (
-      <div>
-        <p className={selectedPosition == props.index ? "active" : ""}>
+      <div
+        onClick={() => {
+          console.log(index);
+          submitPlace(index);
+        }}
+      >
+        <p className={selectedPosition == index ? "active" : ""}>
           {prediction.structured_formatting.main_text}
         </p>
       </div>
@@ -162,14 +214,15 @@ const PlaceSearchBar = () => {
           onQueryChanged({ key: e.key });
         }}
       />
-      <div id="search-place-predictions">
-        {predictions.map((prediction, index) => (
-          <PredictionComponent
-            prediction={prediction}
-            index={index}
-            key={index}
-          />
-        ))}
+      <div className="search-place-predictions">
+        {predictions &&
+          predictions.map((prediction, index) => (
+            <PredictionComponent
+              prediction={prediction}
+              index={index}
+              key={index}
+            />
+          ))}
       </div>
     </div>
   );

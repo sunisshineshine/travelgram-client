@@ -7,7 +7,7 @@ p {
   margin: 0;
 }
 
-.active,
-p:hover {
+.search-place-predictions .active,
+.search-place-predictions p:hover {
   background-color: cornflowerblue;
 }

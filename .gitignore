@@ -72,5 +72,13 @@ config.json
 .cache
 dist
 
+web.build
+
 web-older
 web-react-older
+
+build
+
+interfaces
+
+functions/lib

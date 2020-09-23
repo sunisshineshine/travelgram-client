@@ -1,18 +1,11 @@
-import { getAuthUser } from "./auth";
-import { firebaseApp } from "./initialize";
+import { firebaseFunctions } from "../initialize";
+import { getAuthUser } from "../auth";
 
-// firebaseApp.functions().useFunctionsEmulator("http://localhost:5001");
-// const functions = firebaseApp.functions();
-
-const functions = firebaseApp.functions("asia-northeast3");
-
-const functionsPlaceAutocompletion = functions.httpsCallable(
+const functionsPlaceAutocompletion = firebaseFunctions.httpsCallable(
   "placeAutocompletion"
 );
 
-const functionsPlaceDetail = functions.httpsCallable("placeDetail");
-
-const functionsCreatePlan = functions.httpsCallable("createPlan");
+const functionsPlaceDetail = firebaseFunctions.httpsCallable("placeDetail");
 
 export const getPlaceAutocompletions = async (
   query: string
@@ -56,31 +49,4 @@ export const getPlaceDetail = (
     .catch((reason) => {
       return reason;
     });
-};
-
-export const createPlan = async (title: string): Promise<ActionResult> => {
-  console.log("create Plan");
-  const user = await getAuthUser();
-  if (!user) {
-    return { ok: false, error_message: "user not logged in" };
-  }
-  const uid = user.uid;
-
-  const request: CreatePlanRequest = {
-    title,
-    uid,
-  };
-
-  return new Promise(async (resolve, reject) => {
-    const result = await functionsCreatePlan(request).catch((reason) => {
-      reject(reason);
-    });
-
-    if (!result) {
-      return;
-    }
-    const data = (result.data as unknown) as ActionResult;
-    resolve(data);
-    return;
-  });
 };

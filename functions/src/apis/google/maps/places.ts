@@ -1,3 +1,5 @@
+import { functions } from "../../google/firebase/initialize";
+
 import { GOOGLE_API_KEY } from "../../../config.json";
 
 import fetch from "node-fetch";
@@ -9,32 +11,52 @@ const PLACE_DETAIL_BASE_URL =
 const PLACE_AUTOCOMPLETE_BASE_URL =
   "https://maps.googleapis.com/maps/api/place/autocomplete/json";
 
-interface PlaceDetailResponse {
-  status: google.maps.places.PlacesServiceStatus;
-  result: google.maps.places.PlaceResult;
-  html_attributions: any;
-}
+// apis
+export const placeDetail = functions.https.onCall(
+  (data, context): Promise<google.maps.places.PlaceResult> => {
+    const request = data as google.maps.places.PlaceDetailsRequest;
 
+    return getPlaceDetail(request).catch((error) => {
+      console.error(error);
+      throw new Error(error);
+    });
+  }
+);
+
+export const placeAutocompletion = functions.https.onCall(
+  (data, context): Promise<google.maps.places.AutocompletePrediction[]> => {
+    const request = data as google.maps.places.AutocompletionRequest;
+
+    console.log(request);
+
+    return getPlaceAutocomplete(request).catch((error) => {
+      throw new Error(error);
+    });
+  }
+);
+
+// code
 export const getPlaceDetail = async (
   request: google.maps.places.PlaceDetailsRequest
 ): Promise<google.maps.places.PlaceResult> => {
   // props check
   const { placeId } = request;
 
-  if (!placeId) {
-    return Promise.reject("placeId is not provided");
+  if (placeId == "" || !placeId) {
+    throw new Error("invalid request : placeid");
   }
 
   const url = new URL(PLACE_DETAIL_BASE_URL);
-  url.searchParams.set("place_id", request.placeId);
+  url.searchParams.set("place_id", placeId);
   url.searchParams.set("key", GOOGLE_API_KEY);
 
   const response = await fetch(utf8.encode(url.href)).catch((error) => {
-    console.log(error);
+    console.log("hello");
+    throw error;
   });
 
   if (!response) {
-    return Promise.reject("cannot fetch with " + url);
+    throw new Error("cannot fetch with " + url);
   }
 
   const result = ((await response.json()) as unknown) as PlaceDetailResponse;
@@ -48,12 +70,6 @@ export const getPlaceDetail = async (
   });
 };
 
-interface AutocompleteResult {
-  status: google.maps.places.PlacesServiceStatus;
-  error_message?: string;
-  predictions: google.maps.places.AutocompletePrediction[];
-}
-
 export const getPlaceAutocomplete = async (
   request: google.maps.places.AutocompletionRequest
 ): Promise<google.maps.places.AutocompletePrediction[]> => {
@@ -61,7 +77,7 @@ export const getPlaceAutocomplete = async (
 
   // props check
   if (!(input && input != "")) {
-    return Promise.reject("please fill the query input");
+    throw new Error("please fill the query input");
   }
 
   // console.log(request);
@@ -75,18 +91,18 @@ export const getPlaceAutocomplete = async (
   });
 
   if (!response) {
-    return Promise.reject("cannot fetch with " + url.href);
+    throw new Error("cannot fetch with " + url.href);
   }
 
   const result = ((await response.json()) as unknown) as AutocompleteResult;
 
   if (result.status == "OK") {
     if (result.predictions.length > 0) {
-      return Promise.resolve(result.predictions);
+      return result.predictions;
     } else {
-      return Promise.reject("search result is empty");
+      throw new Error("search result is empty");
     }
   } else {
-    return Promise.reject("cannot get result data : " + result.error_message);
+    throw new Error("cannot get result data : " + result.error_message);
   }
 };

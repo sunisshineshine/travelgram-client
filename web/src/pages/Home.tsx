@@ -1,19 +1,32 @@
 import React, { useState, useEffect } from "react";
 
+import * as PATHS from "../constants/paths";
 import * as Navigator from "../navigator";
 import { getAuthUser } from "../firebase/auth";
 
 import {
   getPlaceAutocompletions,
   getPlaceDetail,
-  createPlan,
-} from "../firebase/functions";
+} from "../firebase/functions/places";
+
+import * as PLANS from "../firebase/functions/plans";
 
 import "./Home.css";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import { PlansPage } from "./plan/Plans";
 
 export const Home = () => {
   const [user, setUser] = useState<firebase.User | null>(null);
   const [places, setPlaces] = useState<string[]>([]);
+  const [plans, setPlans] = useState<Plan[]>([]);
+
+  useEffect(() => {
+    console.log("getting plans");
+    PLANS.getPlans().then((plans) => {
+      console.log(plans);
+      setPlans(plans);
+    });
+  }, []);
 
   getAuthUser().then((user) => {
     if (user) {
@@ -28,13 +41,7 @@ export const Home = () => {
   };
 
   const addPlan = () => {
-    createPlan("test plan")
-      .then((result) => {
-        console.log(result);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    PLANS.createPlan("sample").then((result) => console.log(result));
   };
 
   if (user == null) {
@@ -49,6 +56,9 @@ export const Home = () => {
     return (
       <div className="home">
         <button onClick={addPlan}>Create Plan</button>
+        {plans.map((plan) => {
+          return plan.title;
+        })}
         <h1>Welcome to yogurtravel</h1>
         <h2>{user.email}</h2>
         <p>describe your plan</p>

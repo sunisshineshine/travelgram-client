@@ -4,6 +4,7 @@ import { firebaseFunctions } from "../initialize";
 const functionsPlan = firebaseFunctions.httpsCallable("plan");
 const functionsPlans = firebaseFunctions.httpsCallable("plans");
 const functionsCreatePlan = firebaseFunctions.httpsCallable("createPlan");
+const functionsPlanItem = firebaseFunctions.httpsCallable("planItem");
 
 export const getPlan = async (docId: string): Promise<Plan> => {
   console.log("get plan with " + docId);
@@ -35,12 +36,14 @@ export const getPlans = async (): Promise<Plan[]> => {
   return (result.data as unknown) as Plan[];
 };
 
-export const createPlan = async (title: string): Promise<ActionResult> => {
+export const createPlan = async (
+  title: string
+): Promise<DatabaseActionResult> => {
   console.log("create Plan");
   const user = await getAuthUser();
 
   if (!user) {
-    return { ok: false, error_message: "user not logged in" };
+    throw new Error("user not logged in");
   }
 
   const uid = user.uid;
@@ -51,6 +54,22 @@ export const createPlan = async (title: string): Promise<ActionResult> => {
   };
 
   const result = await functionsCreatePlan(request);
-  const data = (result.data as unknown) as ActionResult;
+  const data = (result.data as unknown) as DatabaseActionResult;
   return data;
+};
+
+export const getPlanItem = async (docId: string): Promise<PlanItem> => {
+  console.log("get plan item with" + docId);
+  const request: DocIdRequest = {
+    id: docId,
+  };
+
+  const result = await functionsPlanItem(request);
+  console.log(result);
+  const data = result.data;
+  if (!data) {
+    throw new Error("data is not exist");
+  } else {
+    return data as PlanItem;
+  }
 };

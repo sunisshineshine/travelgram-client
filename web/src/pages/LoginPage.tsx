@@ -5,7 +5,7 @@ import {
 } from "../firebase/auth";
 import { goHome, goSignUpPage } from "../navigator";
 
-export const Login = () => {
+export const LoginPage = () => {
   const [message, setMessage] = useState("Please Login");
 
   const doLogin = (request: EmailPasswordRequest) => {
@@ -14,8 +14,8 @@ export const Login = () => {
         if (result.ok) {
           goHome();
         } else {
-          if (result.error) {
-            setMessage(result.error?.toString());
+          if (result.error_message) {
+            setMessage(result.error_message?.toString());
           }
         }
       })
@@ -71,7 +71,7 @@ const LoginInputForm = (props: {
       </div>
       <button
         id="login-button"
-        onClick={(e) => {
+        onClick={() => {
           props.submit({
             email,
             password,

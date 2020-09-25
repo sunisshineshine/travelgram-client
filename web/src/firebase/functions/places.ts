@@ -1,5 +1,4 @@
 import { firebaseFunctions } from "../initialize";
-import { getAuthUser } from "../auth";
 
 const functionsPlaceAutocompletion = firebaseFunctions.httpsCallable(
   "placeAutocompletion"

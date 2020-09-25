@@ -5,15 +5,15 @@ import {
 } from "../firebase/auth";
 import { goHome, goLoginPage } from "../navigator";
 
-export const Signup = () => {
+export const SignupPage = () => {
   const [message, setMessage] = useState("please fill the form");
 
   const doSignUp = (request: EmailPasswordRequest) => {
     createUserWithEmailPassword(request).then((result) => {
       if (result.ok) {
         goHome();
-      } else if (result.error) {
-        setMessage(result.error.toString());
+      } else if (result.error_message) {
+        setMessage(result.error_message.toString());
       }
     });
   };
@@ -77,7 +77,7 @@ const SignupInputForm = (props: {
       </div>
       <button
         id="signup-button"
-        onClick={(e) => {
+        onClick={() => {
           if (password != passwordConfirm) {
             props.submit(undefined, "please check password confirm");
             return;

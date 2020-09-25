@@ -1,5 +1,4 @@
 import { firebaseApp } from "./initialize";
-import { FirebaseActionResult } from "./initialize";
 
 export interface EmailPasswordRequest {
   email: string;
@@ -7,23 +6,23 @@ export interface EmailPasswordRequest {
 }
 export const createUserWithEmailPassword = async (
   props: EmailPasswordRequest
-): Promise<FirebaseActionResult> => {
+): Promise<ActionResult> => {
   const { email, password } = props;
   return firebaseApp
     .auth()
     .createUserWithEmailAndPassword(email, password)
     .then((credential) => {
       console.log(`creating user successfull : ${credential.user?.email}`);
-      const result: FirebaseActionResult = {
+      const result: ActionResult = {
         ok: true,
       };
       return result;
     })
     .catch((reason) => {
       console.log(reason);
-      const result: FirebaseActionResult = {
+      const result: ActionResult = {
         ok: false,
-        error: reason,
+        error_message: reason,
       };
       return result;
     });
@@ -31,7 +30,7 @@ export const createUserWithEmailPassword = async (
 
 export const doLoginWithEmailAndPassword = async (
   props: EmailPasswordRequest
-): Promise<FirebaseActionResult> => {
+): Promise<ActionResult> => {
   const { email, password } = props;
   return firebaseApp
     .auth()
@@ -63,7 +62,7 @@ export const getAuthUser = async (): Promise<firebase.User | null> => {
   });
 };
 
-export const doSignOut = (): Promise<FirebaseActionResult> => {
+export const doSignOut = (): Promise<ActionResult> => {
   return firebaseApp
     .auth()
     .signOut()

@@ -4,25 +4,41 @@ import * as PLANS from "../../firebase/functions/plans";
 import * as PATHS from "../../constants/paths";
 
 export const PlansPage = () => {
+  console.log("plans page");
   const [plans, setPlans] = useState<Plan[]>([]);
   useEffect(() => {
-    PLANS.getPlans().then((plans) => {
-      setPlans(plans);
-      console.log(plans);
-    });
+    updatePlans();
   }, []);
 
+  const updatePlans = () => {
+    PLANS.getPlans()
+      .then((plans) => {
+        setPlans(plans);
+        console.log("plan has updated");
+        console.log(plans.map((plan) => plan.title));
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const createPlan = () => {
+    PLANS.createPlan("sample")
+      .then(() => {
+        updatePlans();
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   const onPlanClicked = (plan: Plan) => {
+    console.log("plan clicked");
     if (!plan.docId) {
       console.log("doc id is empty");
       return;
     }
-    console.log(plan);
     PATHS.goPlanDetail(plan.docId);
-  };
-
-  const createPlan = () => {
-    PLANS.createPlan("sample");
   };
 
   return (

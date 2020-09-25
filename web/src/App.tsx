@@ -1,33 +1,51 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import * as PATHS from "./constants/paths";
-import { PlansPage } from "./pages/plan/Plans";
+import { PlansPage } from "./pages/plan/PlansPage";
 
-import { Home } from "./pages/Home";
-import { Login } from "./pages/Login";
-import { Signup } from "./pages/Signup";
-import { PlanDetailPage } from "./pages/plan/PlanDetail";
-
+import { HomePage } from "./pages/HomePage";
+import { LoginPage } from "./pages/LoginPage";
+import { SignupPage } from "./pages/SignupPage";
+import { PlanDetailPage } from "./pages/plan/PlanDetailPage";
+import { User } from "firebase";
+import { getAuthUser } from "./firebase/auth";
 export const App = () => {
+  const [user, setUser] = useState<User | null>(null);
+  useEffect(() => {
+    getAuthUser()
+      .then((user) => {
+        setUser(user);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  });
   return (
     <div className="app">
       <Router>
         <Switch>
-          <Route exact path={PATHS.HOME}>
-            <Home />
-          </Route>
           <Route path={PATHS.LOGIN_PAGE}>
-            <Login />
+            <LoginPage />
           </Route>
           <Route path={PATHS.SIGN_UP_PAGE}>
-            <Signup />
+            <SignupPage />
           </Route>
-          <Route exact path={PATHS.PLANS}>
-            <PlansPage />
-          </Route>
-          <Route path={PATHS.PLAN_DETAIL}>
-            <PlanDetailPage />
+          {user && (
+            <>
+              <Route exact path={PATHS.HOME}>
+                <HomePage />
+              </Route>
+              <Route exact path={PATHS.PLANS}>
+                <PlansPage />
+              </Route>
+              <Route path={PATHS.PLAN_DETAIL}>
+                <PlanDetailPage />
+              </Route>
+            </>
+          )}
+          <Route>
+            <div>invalid request</div>
           </Route>
         </Switch>
       </Router>

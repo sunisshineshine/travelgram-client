@@ -16,3 +16,11 @@ export const PlanComponent = (props: {
     </div>
   );
 };
+
+export const PlanItemComponent = (props: { planItem: PlanItem }) => {
+  console.log(props);
+  console.log("plan item componenet rendered");
+  // const [planItem, setPlanItem] = useState<PlanItem | null>(null);
+
+  return <div>{props.planItem.docId}</div>;
+};

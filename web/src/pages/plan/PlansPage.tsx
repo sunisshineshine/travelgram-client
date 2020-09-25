@@ -2,10 +2,12 @@ import React, { useEffect, useState } from "react";
 import { PlanComponent } from "../../components/plans/plan";
 import * as PLANS from "../../firebase/functions/plans";
 import * as PATHS from "../../constants/paths";
+import { TestModal } from "../../components/plans/CreatePlanModal";
 
 export const PlansPage = () => {
   console.log("plans page");
   const [plans, setPlans] = useState<Plan[]>([]);
+  const [modalVisible, setVisible] = useState(false);
   useEffect(() => {
     updatePlans();
   }, []);
@@ -22,14 +24,8 @@ export const PlansPage = () => {
       });
   };
 
-  const createPlan = () => {
-    PLANS.createPlan("sample")
-      .then(() => {
-        updatePlans();
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+  const onCreatePlanButtonClicked = () => {
+    setVisible((prev) => !prev);
   };
 
   const onPlanClicked = (plan: Plan) => {
@@ -41,13 +37,19 @@ export const PlansPage = () => {
     PATHS.goPlanDetail(plan.docId);
   };
 
+  const onModalClosed = () => {
+    setVisible(false);
+    updatePlans();
+  };
+
   return (
     <div className="plans">
+      <TestModal visible={modalVisible} onClosed={onModalClosed} />
       <p>Please choose your plan</p>
       {plans.map((plan, index) => (
         <PlanComponent key={index} plan={plan} onClick={onPlanClicked} />
       ))}
-      <button onClick={createPlan}>create plan</button>
+      <button onClick={onCreatePlanButtonClicked}>create plan</button>
     </div>
   );
 };

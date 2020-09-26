@@ -46,6 +46,16 @@ export const planItem = functions.https.onCall((data, context) => {
   return getPlanItem(request);
 });
 
+export const createPlanItem = functions.https.onCall((data, context) => {
+  const request = data as CreatePlanItemRequest;
+  console.log(request);
+  if (request.uid != context.auth?.uid) {
+    throw new Error("auth error : provided uid diffrent");
+  }
+
+  return createPlanItemWithUidPlaceIdTitle(request);
+});
+
 // codes
 export const createPlanWithTitle = async (
   request: CreatePlanRequest
@@ -118,24 +128,36 @@ export const getPlanDetailWithDocId = async (
   return await returnPlan(plan);
 };
 
-export const createPlaceItem = async (
-  uid: string,
-  placeId: string,
-  title: string
+export const createPlanItemWithUidPlaceIdTitle = async (
+  request: CreatePlanItemRequest
 ): Promise<DatabaseActionResult> => {
+  const { uid, title, placeId, planDocId } = request;
   console.log("creating place Item title: " + title);
-  const docId = planItemsCollection.doc().id;
+
+  const planItemDocId = planItemsCollection.doc().id;
   const placeItem: PlanItem = {
-    docId,
+    docId: planItemDocId,
     placeId,
     uid,
     title,
+    planDocId,
   };
-  const result = await planItemsCollection.doc(docId).set(placeItem);
-  console.log(result);
+
+  const planSnapshot = await plansCollection.doc(planDocId).get();
+  const plan = (planSnapshot.data() as unknown) as Plan | undefined;
+
+  if (!plan) {
+    throw new Error("cannot get plan from provided planDocId");
+  }
+
+  plan.planItemIds.push(planItemDocId);
+  await planSnapshot.ref.set(plan);
+
+  await planItemsCollection.doc(planItemDocId).set(placeItem);
+
   return {
     ok: true,
-    docId,
+    docId: planItemDocId,
   };
 };
 

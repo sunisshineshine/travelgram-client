@@ -3,7 +3,7 @@ import * as PLACES from "./apis/google/maps/places";
 
 export const { placeDetail, placeAutocompletion } = PLACES;
 
-export const { plan, plans, createPlan, planItem } = PLANS;
+export const { plan, plans, createPlan, planItem, createPlanItem } = PLANS;
 
 // import { plansCollection, functions } from "./apis/google/firebase/initialize";
 

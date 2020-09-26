@@ -1,5 +1,5 @@
 import { planItemsCollection, plansCollection } from "../initialize";
-import { createPlaceItem } from "../plans";
+import { createPlanItemWithUidPlaceIdTitle } from "../plans";
 
 export const returnPlan = async (target: Plan): Promise<Plan> => {
   let plan = Object.assign(target, {});
@@ -56,7 +56,13 @@ export const planMigration20200924 = async (old: Plan): Promise<Plan> => {
 
   const planItems = await Promise.all(
     places.map(async (place) => {
-      const result = await createPlaceItem(uid, place, "");
+      const request: CreatePlanItemRequest = {
+        planDocId: plan.docId,
+        uid,
+        title: "",
+        placeId: place,
+      };
+      const result = await createPlanItemWithUidPlaceIdTitle(request);
       return planItemsCollection.doc(result.docId);
     })
   );

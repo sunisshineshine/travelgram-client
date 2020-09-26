@@ -5,6 +5,9 @@ const functionsPlan = firebaseFunctions.httpsCallable("plan");
 const functionsPlans = firebaseFunctions.httpsCallable("plans");
 const functionsCreatePlan = firebaseFunctions.httpsCallable("createPlan");
 const functionsPlanItem = firebaseFunctions.httpsCallable("planItem");
+const functionsCreatePlanItem = firebaseFunctions.httpsCallable(
+  "createPlanItem"
+);
 
 export const getPlan = async (docId: string): Promise<Plan> => {
   console.log("get plan with " + docId);
@@ -72,4 +75,31 @@ export const getPlanItem = async (docId: string): Promise<PlanItem> => {
   } else {
     return data as PlanItem;
   }
+};
+
+export const createPlanItem = async (
+  planDocId: string,
+  title: string,
+  placeId: string
+): Promise<DatabaseActionResult> => {
+  console.log("create plan item : " + title);
+  const uid = (await getAuthUser())?.uid;
+  if (!uid) {
+    throw new Error("cannot get uid auth");
+  }
+  const request: CreatePlanItemRequest = {
+    planDocId,
+    title,
+    placeId,
+    uid,
+  };
+
+  const result = await functionsCreatePlanItem(request);
+  const data = result.data as DatabaseActionResult;
+
+  if (!data) {
+    throw new Error("data is empty");
+  }
+
+  return data;
 };

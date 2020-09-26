@@ -58,8 +58,16 @@ export const PlanDetailPage = () => {
     console.log(planItems);
   };
 
-  const onPlaceAdded = (placeId: string) => {
-    console.log(placeId);
+  const onPlaceAdded = (placeName: string, placeId: string) => {
+    if (!plan) {
+      return;
+    }
+    console.log("place added : " + placeId);
+    PLANS.createPlanItem(plan.docId, placeName, placeId)
+      .then(() => {
+        updatePlanItems();
+      })
+      .catch((error) => console.error(error));
   };
 
   return (

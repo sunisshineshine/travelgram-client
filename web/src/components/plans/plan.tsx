@@ -22,5 +22,5 @@ export const PlanItemComponent = (props: { planItem: PlanItem }) => {
   console.log("plan item componenet rendered");
   // const [planItem, setPlanItem] = useState<PlanItem | null>(null);
 
-  return <div>{props.planItem.docId}</div>;
+  return <div>{props.planItem.title}</div>;
 };

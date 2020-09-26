@@ -28,7 +28,7 @@ const getPredictions = (
 };
 
 export const PlaceSearchBar = (props: {
-  onAdded: (placeId: string) => void;
+  onAdded: (placeName: string, placeId: string) => void;
 }) => {
   const [input, setInput] = useState("");
   const [predictions, setPredictions] = useState<
@@ -75,7 +75,10 @@ export const PlaceSearchBar = (props: {
 
     const selectedPrediction = predictions[position];
     if (selectedPrediction != null) {
-      props.onAdded(selectedPrediction.place_id);
+      props.onAdded(
+        selectedPrediction.structured_formatting.main_text,
+        selectedPrediction.place_id
+      );
       clearPredictions();
     }
   };

@@ -60,13 +60,27 @@ export const PlanDetailPage = () => {
     console.log(planItems);
   };
 
-  const onPlaceAdded = (placeName: string, placeId: string) => {
+  const onPlaceAdded = (place: google.maps.places.PlaceResult) => {
     if (!plan) {
       return;
     }
     setLoading(true);
-    console.log("place added : " + placeId);
-    PLANS.createPlanItem(plan.docId, placeName, placeId)
+    const title = place.name;
+
+    const placeReq: PlaceBased = {
+      placeId: place.place_id || null,
+      address: place.formatted_address || null,
+      lat: ((place.geometry?.location.lat as unknown) as number) || null,
+      lng: ((place.geometry?.location.lng as unknown) as number) || null,
+    };
+
+    console.log("place added : " + title);
+    PLANS.createPlanItem({
+      title,
+      planDocId: plan.docId,
+      timeReq: { endTime: null, startTime: null },
+      placeReq,
+    })
       .then(() => {
         updatePlanItems();
       })

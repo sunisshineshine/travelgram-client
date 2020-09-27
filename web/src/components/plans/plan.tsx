@@ -65,8 +65,9 @@ import "./PlanItemComponent.css";
 export const PlanItemComponent = (props: { planItem: PlanItem }) => {
   const { planItem } = props;
   return (
-    <div className="plan-item-component">
+    <div className="plan-item-component" onClick={() => console.log(planItem)}>
       <h2 className="title">{planItem.title}</h2>
+      <p>{planItem.address}</p>
     </div>
   );
 };

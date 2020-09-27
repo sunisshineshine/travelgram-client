@@ -42,7 +42,7 @@ export const getPlaceDetail = async (
   // props check
   const { placeId } = request;
 
-  if (placeId == "" || !placeId) {
+  if (!placeId) {
     throw new Error("invalid request : placeid");
   }
 

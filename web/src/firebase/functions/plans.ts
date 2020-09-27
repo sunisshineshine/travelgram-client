@@ -126,24 +126,32 @@ export const getPlanItem = async (docId: string): Promise<PlanItem> => {
   }
 };
 
-export const createPlanItem = async (
-  planDocId: string,
-  title: string,
-  placeId: string
-): Promise<DatabaseActionResult> => {
+export const createPlanItem = async (props: {
+  planDocId: string;
+  title: string;
+  timeReq: TimeBased;
+  placeReq: PlaceBased;
+}): Promise<DatabaseActionResult> => {
+  const { placeReq, planDocId, timeReq, title } = props;
   console.log("create plan item : " + title);
   const uid = (await getAuthUser())?.uid;
   if (!uid) {
     throw new Error("cannot get uid auth");
   }
+
+  const { address, lat, lng, placeId } = placeReq;
   const request: CreatePlanItemRequest = {
     planDocId,
     title,
-    placeId,
     uid,
-    // todo : implement with time
-    endTime: null,
-    startTime: null,
+    // time based
+    endTime: timeReq.endTime,
+    startTime: timeReq.startTime,
+    // place based
+    address,
+    lat,
+    lng,
+    placeId,
   };
 
   const result = await functionsCreatePlanItem(request);

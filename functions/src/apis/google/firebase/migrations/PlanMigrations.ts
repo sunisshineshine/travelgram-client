@@ -67,6 +67,9 @@ export const planMigration20200924 = async (old: Plan): Promise<Plan> => {
         placeId: place,
         endTime: null,
         startTime: null,
+        address: null,
+        lat: null,
+        lng: null,
       };
       const result = await createPlanItemWithUidPlaceIdTitle(request);
       return planItemsCollection.doc(result.docId);

@@ -13,24 +13,23 @@ export const PlanDetailPage = () => {
 
   const [plan, setPlan] = useState<Plan>();
   const [planItems, setPlanItems] = useState<PlanItem[]>([]);
-  const urlParams = new URLSearchParams(location.search);
-  const planDocId = urlParams.get("id");
-  console.log("current selected plan's id" + planDocId);
-
-  if (planDocId == null) {
-    window.location.pathname = PATHS.PLANS;
-    throw new Error("planDocId is null");
-  }
 
   useEffect(() => {
-    updatePlan();
+    const urlParams = new URLSearchParams(location.search);
+    const planDocId = urlParams.get("id");
+    console.log("current selected plan's id" + planDocId);
+    if (planDocId == null) {
+      window.location.pathname = PATHS.PLANS;
+      throw new Error("planDocId is null");
+    }
+    updatePlan(planDocId);
   }, []);
 
   useEffect(() => {
     updatePlanItems();
   }, [plan]);
 
-  const updatePlan = async () => {
+  const updatePlan = async (planDocId: string) => {
     setLoading(true);
     PLANS.getPlan(planDocId)
       .then((plan) => {

@@ -60,10 +60,13 @@ export const PlanComponent = (props: {
   );
 };
 
-export const PlanItemComponent = (props: { planItem: PlanItem }) => {
-  console.log(props);
-  console.log("plan item componenet rendered");
-  // const [planItem, setPlanItem] = useState<PlanItem | null>(null);
+import "./PlanItemComponent.css";
 
-  return <div>{props.planItem.title}</div>;
+export const PlanItemComponent = (props: { planItem: PlanItem }) => {
+  const { planItem } = props;
+  return (
+    <div className="plan-item-component">
+      <h2 className="title">{planItem.title}</h2>
+    </div>
+  );
 };

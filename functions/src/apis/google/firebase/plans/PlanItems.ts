@@ -3,7 +3,17 @@ import { planItemsCollection, plansCollection } from "../initialize";
 export const createPlanItemWithUidPlaceIdTitle = async (
   request: CreatePlanItemRequest
 ): Promise<DatabaseActionResult> => {
-  const { uid, title, placeId, planDocId, endTime, startTime } = request;
+  const {
+    uid,
+    title,
+    placeId,
+    planDocId,
+    endTime,
+    startTime,
+    address,
+    lat,
+    lng,
+  } = request;
   console.log("creating place Item title: " + title);
 
   const planItemDocId = planItemsCollection.doc().id;
@@ -15,6 +25,9 @@ export const createPlanItemWithUidPlaceIdTitle = async (
     planDocId,
     endTime,
     startTime,
+    address,
+    lat,
+    lng,
   };
 
   const planSnapshot = await plansCollection.doc(planDocId).get();

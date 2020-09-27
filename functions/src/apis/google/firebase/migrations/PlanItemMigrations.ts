@@ -12,13 +12,21 @@ export const returnPlanItem = async (target: PlanItem): Promise<PlanItem> => {
   return planItem;
 };
 
-// migration for timebased, it require null instead of undefined
+// migration for timebased, placebased it require null instead of undefined
 export const planItemMigration20200927 = async (
   old: PlanItem
 ): Promise<PlanItem> => {
+  console.log("in migration");
+  console.log(old.address);
   if (
-    (old.endTime && old.startTime) ||
-    (old.endTime == null && old.startTime == null)
+    !(
+      old.address == undefined ||
+      old.lat == undefined ||
+      old.lng == undefined ||
+      old.placeId == undefined ||
+      old.startTime == undefined ||
+      old.endTime == undefined
+    )
   ) {
     return old;
   }
@@ -26,11 +34,25 @@ export const planItemMigration20200927 = async (
   console.log("set end and start time for null");
   console.log("origin : ");
   console.log(old);
+  // time based
   if (!old.endTime) {
     old.endTime = null;
   }
   if (!old.startTime) {
     old.startTime = null;
+  }
+  // place based
+  if (!old.address) {
+    old.address = null;
+  }
+  if (!old.placeId) {
+    old.placeId = null;
+  }
+  if (!old.lat) {
+    old.lat = null;
+  }
+  if (!old.lng) {
+    old.lng = null;
   }
 
   await planItemsCollection.doc(old.docId).set(old);

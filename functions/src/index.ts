@@ -1,9 +1,17 @@
-import * as PLANS from "./apis/google/firebase/plans";
+import * as PLANS from "./apis/google/firebase/plans/index";
 import * as PLACES from "./apis/google/maps/places";
 
 export const { placeDetail, placeAutocompletion } = PLACES;
 
-export const { plan, plans, createPlan, planItem, createPlanItem } = PLANS;
+export const {
+  plan,
+  createPlan,
+  deletePlan,
+  plans,
+  planItem,
+  createPlanItem,
+  planItems,
+} = PLANS;
 
 // import { plansCollection, functions } from "./apis/google/firebase/initialize";
 

@@ -7,6 +7,10 @@ h5,
 p,
 div {
   margin: 0;
+  padding: 0;
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .app .main-content-page {
@@ -15,4 +19,8 @@ div {
   margin-right: auto;
 
   /* background-color: aqua; */
+}
+
+.row-container {
+  display: flex;
 }

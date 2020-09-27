@@ -1,18 +1,28 @@
 import { getAuthUser } from "../auth";
 import { firebaseFunctions } from "../initialize";
+import { createDocIdRequest } from "../utils/requests";
 
 const functionsPlan = firebaseFunctions.httpsCallable("plan");
 const functionsPlans = firebaseFunctions.httpsCallable("plans");
 const functionsCreatePlan = firebaseFunctions.httpsCallable("createPlan");
+const functionsDeletePlan = firebaseFunctions.httpsCallable("deletePlan");
 const functionsPlanItem = firebaseFunctions.httpsCallable("planItem");
+const functionsPlanItems = firebaseFunctions.httpsCallable("planItems");
 const functionsCreatePlanItem = firebaseFunctions.httpsCallable(
   "createPlanItem"
 );
 
+console.log("functions plan requested");
+
 export const getPlan = async (docId: string): Promise<Plan> => {
   console.log("get plan with " + docId);
+  const user = await getAuthUser();
+  if (!user) {
+    throw new Error("please login first");
+  }
   const request: DocIdRequest = {
-    id: docId,
+    uid: user.uid,
+    docId,
   };
 
   const result = await functionsPlan(request);
@@ -40,7 +50,9 @@ export const getPlans = async (): Promise<Plan[]> => {
 };
 
 export const createPlan = async (
-  title: string
+  title: string,
+  startTime: number | null,
+  endTime: number | null
 ): Promise<DatabaseActionResult> => {
   console.log("create Plan");
   const user = await getAuthUser();
@@ -54,17 +66,54 @@ export const createPlan = async (
   const request: CreatePlanRequest = {
     title,
     uid,
+    startTime,
+    endTime,
   };
+
+  console.log(request);
 
   const result = await functionsCreatePlan(request);
   const data = (result.data as unknown) as DatabaseActionResult;
   return data;
 };
+export const deletePlan = async (
+  docId: string
+): Promise<DatabaseActionResult> => {
+  console.log("deletePlan with " + docId);
+  const user = await getAuthUser();
+  if (!user) {
+    throw new Error("please login first");
+  }
+  const request: DocIdRequest = {
+    docId,
+    uid: user.uid,
+  };
+
+  const result = await functionsDeletePlan(request);
+  const data = result.data;
+  if (!data) {
+    throw new Error("data is empty");
+  }
+
+  console.log(data);
+
+  return {
+    docId,
+    ok: true,
+  };
+};
 
 export const getPlanItem = async (docId: string): Promise<PlanItem> => {
   console.log("get plan item with" + docId);
+  const user = await getAuthUser();
+  if (!user) {
+    throw new Error("please login first");
+  }
+
+  const uid = user.uid;
   const request: DocIdRequest = {
-    id: docId,
+    uid,
+    docId,
   };
 
   const result = await functionsPlanItem(request);
@@ -92,6 +141,9 @@ export const createPlanItem = async (
     title,
     placeId,
     uid,
+    // todo : implement with time
+    endTime: null,
+    startTime: null,
   };
 
   const result = await functionsCreatePlanItem(request);
@@ -102,4 +154,18 @@ export const createPlanItem = async (
   }
 
   return data;
+};
+
+export const getPlanItems = async (planDocId: string): Promise<PlanItem[]> => {
+  console.log("get plan Item from plan docId : " + planDocId);
+  const request = await createDocIdRequest(planDocId);
+
+  const result = await functionsPlanItems(request);
+  const planItems = result.data as PlanItem[];
+
+  if (!planItems) {
+    throw new Error("cannot get planitems");
+  }
+
+  return planItems;
 };

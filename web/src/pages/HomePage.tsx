@@ -38,7 +38,9 @@ export const HomePage = () => {
   };
 
   const addPlan = () => {
-    PLANS.createPlan("sample").then((result) => console.log(result));
+    PLANS.createPlan("sample", null, null).then((result) =>
+      console.log(result)
+    );
   };
 
   if (user == null) {

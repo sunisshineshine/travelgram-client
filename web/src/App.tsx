@@ -14,11 +14,14 @@ import { User } from "firebase";
 import { getAuthUser } from "./firebase/auth";
 import { TopBanner } from "./components/banners/TopBanner";
 import { goLoginPage } from "./navigator";
+import { LoadingModal } from "./components/utils/LoadingModal";
 export const App = () => {
+  const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
   useEffect(() => {
     getAuthUser()
       .then((user) => {
+        setLoading(false);
         setUser(user);
       })
       .catch((error) => {
@@ -27,6 +30,7 @@ export const App = () => {
   });
   return (
     <div className="app">
+      <LoadingModal loading={loading} />
       <TopBanner />
       <div className="main-content-page">
         <Router>

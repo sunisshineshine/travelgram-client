@@ -2,10 +2,14 @@ import React, { useEffect, useState } from "react";
 import { PlanComponent } from "../../components/plans/plan";
 import * as PLANS from "../../firebase/functions/plans";
 import * as PATHS from "../../constants/paths";
-import { TestModal } from "../../components/plans/CreatePlanModal";
+import { CreatePlanModal } from "../../components/plans/CreatePlanModal";
+
+import "./PlanPage.css";
+import { LoadingModal } from "../../components/utils/LoadingModal";
 
 export const PlansPage = () => {
   console.log("plans page");
+  const [loading, setLoading] = useState(false);
   const [plans, setPlans] = useState<Plan[]>([]);
   const [modalVisible, setVisible] = useState(false);
   useEffect(() => {
@@ -13,8 +17,10 @@ export const PlansPage = () => {
   }, []);
 
   const updatePlans = () => {
+    setLoading(true);
     PLANS.getPlans()
       .then((plans) => {
+        setLoading(false);
         setPlans(plans);
         console.log("plan has updated");
         console.log(plans.map((plan) => plan.title));
@@ -43,12 +49,15 @@ export const PlansPage = () => {
   };
 
   return (
-    <div className="plans">
-      <TestModal visible={modalVisible} onClosed={onModalClosed} />
-      <p>Please choose your plan</p>
-      {plans.map((plan, index) => (
-        <PlanComponent key={index} plan={plan} onClick={onPlanClicked} />
-      ))}
+    <div className="plans-page">
+      <LoadingModal loading={loading} />
+      <CreatePlanModal visible={modalVisible} onClosed={onModalClosed} />
+      <p className="title">Please choose your plan</p>
+      <div className="plan-list">
+        {plans.map((plan, index) => (
+          <PlanComponent key={index} plan={plan} onClick={onPlanClicked} />
+        ))}
+      </div>
       <button onClick={onCreatePlanButtonClicked}>create plan</button>
     </div>
   );

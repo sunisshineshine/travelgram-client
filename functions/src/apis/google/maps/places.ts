@@ -62,7 +62,7 @@ export const getPlaceDetail = async (
   const result = ((await response.json()) as unknown) as PlaceDetailResponse;
 
   return new Promise<google.maps.places.PlaceResult>((resolve, reject) => {
-    if (result.status == "OK") {
+    if (result.status === "OK") {
       resolve(result.result);
     } else {
       reject(result.status);
@@ -76,7 +76,7 @@ export const getPlaceAutocomplete = async (
   const { input } = request;
 
   // props check
-  if (!(input && input != "")) {
+  if (!(input && input !== "")) {
     throw new Error("please fill the query input");
   }
 
@@ -96,7 +96,7 @@ export const getPlaceAutocomplete = async (
 
   const result = ((await response.json()) as unknown) as AutocompleteResult;
 
-  if (result.status == "OK") {
+  if (result.status === "OK") {
     if (result.predictions.length > 0) {
       return result.predictions;
     } else {

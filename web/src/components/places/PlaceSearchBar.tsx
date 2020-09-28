@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import * as PLACES from "../../firebase/functions/places";
+import "./PlaceSearchBar.css";
 
 let scheduledQuery = "";
 let lastQueried = "";
@@ -18,6 +19,7 @@ const getPredictions = (
 
       PLACES.getPlaceAutocompletions(query)
         .then((predictions) => {
+          console.log(predictions);
           onResult(predictions);
         })
         .catch((reason) => {
@@ -115,20 +117,22 @@ export const PlaceSearchBar = (props: {
     const { index, prediction } = props;
     return (
       <div
+        className={"prediction-component border-bottom"}
         onClick={() => {
           console.log(index);
           submitPlace(index);
         }}
       >
-        <p className={selectedPosition == index ? "active" : ""}>
-          {prediction.structured_formatting.main_text}
-        </p>
+        <div className={selectedPosition == index ? "active" : ""}>
+          <p>{prediction.structured_formatting.main_text}</p>
+          <p>{prediction.description}</p>
+        </div>
       </div>
     );
   };
 
   return (
-    <div id="search-place">
+    <div className="place-search-bar border">
       <input
         id="input"
         autoComplete="off"

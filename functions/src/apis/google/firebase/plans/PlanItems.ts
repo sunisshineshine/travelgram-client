@@ -73,7 +73,7 @@ export const deletePlanItemWithDocId = async (
   }
 
   const planItem = data as PlanItem;
-  if (planItem.uid != request.uid) {
+  if (planItem.uid !== request.uid) {
     throw new Error("invalid request : uid");
   }
 

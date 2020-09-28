@@ -6,6 +6,8 @@ import { LoadingModal } from "../../components/utils/LoadingModal";
 import * as PATHS from "../../constants/paths";
 import * as PLANS from "../../firebase/functions/plans";
 
+import "./PlanDetailPage.css";
+
 export const PlanDetailPage = () => {
   const [title, setTitle] = useState("now loading plan detail...");
 

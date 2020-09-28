@@ -33,8 +33,8 @@ export const HomePage = () => {
     }
   });
 
-  const placeAdded = (placeId: string) => {
-    setPlaces((prev) => [...prev, placeId]);
+  const placeAdded = (placeId: google.maps.places.PlaceResult) => {
+    setPlaces((prev) => [...prev, placeId.place_id || ""]);
   };
 
   const addPlan = () => {

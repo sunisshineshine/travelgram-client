@@ -22,7 +22,9 @@ export const plan = functions.https.onCall((data, context) => {
   const request = data as DocIdRequest;
   console.log(request);
 
-  return getPlanDetailWithDocId(request).then((plan) => returnPlan(plan));
+  return getPlanDetailWithDocId(request).then((planReturned) =>
+    returnPlan(planReturned)
+  );
 });
 
 export const plans = functions.https.onCall(
@@ -31,13 +33,15 @@ export const plans = functions.https.onCall(
 
     console.log(request);
 
-    if (request.uid != context.auth?.uid) {
+    if (request.uid !== context.auth?.uid) {
       throw new Error(
         "request uid and context uid is diffrent. request aborted"
       );
     }
 
-    return getAllPlansWithUid(request).then((plans) => returnPlans(plans));
+    return getAllPlansWithUid(request).then((plansReturned) =>
+      returnPlans(plansReturned)
+    );
   }
 );
 
@@ -49,7 +53,7 @@ export const createPlan = functions.https.onCall(
 
     const { uid } = request;
     // uid auth check
-    if (!(uid == context.auth?.uid)) {
+    if (!(uid === context.auth?.uid)) {
       throw new Error("invalid request : uid");
     }
 
@@ -60,7 +64,7 @@ export const deletePlan = functions.https.onCall(
   (data, context): Promise<DatabaseActionResult> => {
     const request = data as DocIdRequest;
 
-    if (context.auth?.uid != request.uid) {
+    if (context.auth?.uid !== request.uid) {
       throw new Error("invalid request : uid");
     }
 
@@ -74,7 +78,9 @@ export const planItem = functions.https.onCall(
 
     console.log(request);
 
-    return getPlanItem(request).then((planItem) => returnPlanItem(planItem));
+    return getPlanItem(request).then((planItemReturned) =>
+      returnPlanItem(planItemReturned)
+    );
   }
 );
 
@@ -82,7 +88,7 @@ export const createPlanItem = functions.https.onCall(
   (data, context): Promise<DatabaseActionResult> => {
     const request = data as CreatePlanItemRequest;
     console.log(request);
-    if (request.uid != context.auth?.uid) {
+    if (request.uid !== context.auth?.uid) {
       throw new Error("auth error : provided uid diffrent");
     }
 
@@ -95,12 +101,12 @@ export const planItems = functions.https.onCall(
     const request = data as DocIdRequest;
     console.log(request);
 
-    if (request.uid != context.auth?.uid) {
+    if (request.uid !== context.auth?.uid) {
       throw new Error("auth error : provided uid diffrent");
     }
 
-    return getPlanItemsFromPlanId(request).then((planItems) =>
-      returnPlanItems(planItems)
+    return getPlanItemsFromPlanId(request).then((planItemsReturned) =>
+      returnPlanItems(planItemsReturned)
     );
   }
 );

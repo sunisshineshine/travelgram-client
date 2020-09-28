@@ -8,7 +8,7 @@ export const createPlanWithTitle = async (
 ): Promise<DatabaseActionResult> => {
   const { uid, title, endTime, startTime } = request;
 
-  if (!(title && title != "")) {
+  if (!(title && title !== "")) {
     return Promise.reject("request props are not filled correctly");
   }
   // create plan object
@@ -40,17 +40,17 @@ export const deletePlanWithDocId = async (
   console.log("plan will be deleted :");
   console.log(plan);
 
-  if (plan.uid != request.uid) {
+  if (plan.uid !== request.uid) {
     throw new Error("request's uid is not owner of this plan");
   }
 
   await Promise.all(
     plan.planItemIds.map(async (planItemId) => {
-      const request: DocIdRequest = {
+      const deletePlanRequest: DocIdRequest = {
         uid: plan.uid,
         docId: planItemId,
       };
-      await deletePlanItemWithDocId(request);
+      await deletePlanItemWithDocId(deletePlanRequest);
     })
   );
 
@@ -92,7 +92,7 @@ export const getPlanDetailWithDocId = async (
 ): Promise<Plan> => {
   console.log("get plan detail with doc id : " + request.docId);
   const { docId: docId } = request;
-  if (docId == "") {
+  if (docId === "") {
     throw new Error("invalid request : docid is empty");
   }
 

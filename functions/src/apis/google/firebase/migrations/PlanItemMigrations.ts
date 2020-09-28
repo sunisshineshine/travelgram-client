@@ -20,12 +20,12 @@ export const planItemMigration20200927 = async (
   console.log(old.address);
   if (
     !(
-      old.address == undefined ||
-      old.lat == undefined ||
-      old.lng == undefined ||
-      old.placeId == undefined ||
-      old.startTime == undefined ||
-      old.endTime == undefined
+      old.address === undefined ||
+      old.lat === undefined ||
+      old.lng === undefined ||
+      old.placeId === undefined ||
+      old.startTime === undefined ||
+      old.endTime === undefined
     )
   ) {
     return old;

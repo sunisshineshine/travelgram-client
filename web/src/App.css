@@ -24,3 +24,11 @@ body {
 .row-container {
   display: flex;
 }
+
+.border {
+  border: 1px gray solid;
+}
+
+.border-bottom {
+  border-bottom: 1px gray solid;
+}

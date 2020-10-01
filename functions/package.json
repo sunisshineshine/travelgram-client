@@ -7,6 +7,7 @@
     "serve": "npm run build && firebase emulators:start --only functions,firestore",
     "serve-only": "npm run build && firebase emulators:start --only functions",
     "serve-watch": "npm run build-watch | npm run serve",
+    "compile": "tsc -w",
     "shell": "npm run build && firebase functions:shell",
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",

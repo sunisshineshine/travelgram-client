@@ -11,6 +11,7 @@ export const {
   planItem,
   createPlanItem,
   planItems,
+  updatePlanItem,
 } = PLANS;
 
 // import { plansCollection, functions } from "./apis/google/firebase/initialize";

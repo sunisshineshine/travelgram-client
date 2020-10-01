@@ -4,17 +4,8 @@ import {
   returnPlanItems,
 } from "../migrations/PlanItemMigrations";
 import { returnPlan, returnPlans } from "../migrations/PlanMigrations";
-import {
-  getPlanItem,
-  createPlanItemWithUidPlaceIdTitle,
-  getPlanItemsFromPlanId,
-} from "./PlanItems";
-import {
-  createPlanWithTitle,
-  getPlanDetailWithDocId,
-  getAllPlansWithUid,
-  deletePlanWithDocId,
-} from "./Plans.";
+import * as PLANITEMS from "./PlanItems";
+import * as PLANS from "./Plans.";
 
 export const plan = functions.https.onCall((data, context) => {
   console.log("get plan detail request");
@@ -22,7 +13,7 @@ export const plan = functions.https.onCall((data, context) => {
   const request = data as DocIdRequest;
   console.log(request);
 
-  return getPlanDetailWithDocId(request).then((planReturned) =>
+  return PLANS.getPlanDetailWithDocId(request).then((planReturned: Plan) =>
     returnPlan(planReturned)
   );
 });
@@ -39,7 +30,7 @@ export const plans = functions.https.onCall(
       );
     }
 
-    return getAllPlansWithUid(request).then((plansReturned) =>
+    return PLANS.getAllPlansWithUid(request).then((plansReturned: Plan[]) =>
       returnPlans(plansReturned)
     );
   }
@@ -57,7 +48,7 @@ export const createPlan = functions.https.onCall(
       throw new Error("invalid request : uid");
     }
 
-    return createPlanWithTitle(request);
+    return PLANS.createPlanWithTitle(request);
   }
 );
 export const deletePlan = functions.https.onCall(
@@ -68,7 +59,7 @@ export const deletePlan = functions.https.onCall(
       throw new Error("invalid request : uid");
     }
 
-    return deletePlanWithDocId(request);
+    return PLANS.deletePlanWithDocId(request);
   }
 );
 
@@ -78,7 +69,7 @@ export const planItem = functions.https.onCall(
 
     console.log(request);
 
-    return getPlanItem(request).then((planItemReturned) =>
+    return PLANITEMS.getPlanItem(request).then((planItemReturned: PlanItem) =>
       returnPlanItem(planItemReturned)
     );
   }
@@ -92,9 +83,16 @@ export const createPlanItem = functions.https.onCall(
       throw new Error("auth error : provided uid diffrent");
     }
 
-    return createPlanItemWithUidPlaceIdTitle(request);
+    return PLANITEMS.createPlanItemWithUidPlaceIdTitle(request);
   }
 );
+
+export const updatePlanItem = functions.https.onCall((data, context) => {
+  const request = data as UpdateRequest<PlanItem>;
+  console.log(request);
+
+  return PLANITEMS.updatePlanItem(request);
+});
 
 export const planItems = functions.https.onCall(
   (data, context): Promise<PlanItem[]> => {
@@ -105,7 +103,9 @@ export const planItems = functions.https.onCall(
       throw new Error("auth error : provided uid diffrent");
     }
 
-    return getPlanItemsFromPlanId(request).then((planItemsReturned) =>
+    return PLANITEMS.getPlanItemsFromPlanId(
+      request
+    ).then((planItemsReturned: PlanItem[]) =>
       returnPlanItems(planItemsReturned)
     );
   }

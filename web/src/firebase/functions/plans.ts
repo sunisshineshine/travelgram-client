@@ -7,6 +7,9 @@ const functionsPlans = firebaseFunctions.httpsCallable("plans");
 const functionsCreatePlan = firebaseFunctions.httpsCallable("createPlan");
 const functionsDeletePlan = firebaseFunctions.httpsCallable("deletePlan");
 const functionsPlanItem = firebaseFunctions.httpsCallable("planItem");
+const functionsUpdatePlanItem = firebaseFunctions.httpsCallable(
+  "updatePlanItem"
+);
 const functionsPlanItems = firebaseFunctions.httpsCallable("planItems");
 const functionsCreatePlanItem = firebaseFunctions.httpsCallable(
   "createPlanItem"
@@ -162,6 +165,26 @@ export const createPlanItem = async (props: {
   }
 
   return data;
+};
+
+// tototododododo
+export const updatePlanItem = async (props: {
+  planItem: PlanItem;
+}): Promise<DatabaseActionResult> => {
+  console.log("update plan item");
+  const request: UpdateRequest<PlanItem> = {
+    docId: props.planItem.docId,
+    item: props.planItem,
+  };
+
+  const result = (await functionsUpdatePlanItem(request))
+    .data as DatabaseActionResult;
+  console.log(result);
+  if (!result) {
+    throw new Error("cannot update plan item");
+  }
+
+  return result;
 };
 
 export const getPlanItems = async (planDocId: string): Promise<PlanItem[]> => {

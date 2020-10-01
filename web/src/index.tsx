@@ -1,6 +1,11 @@
 import React from "react";
 import { render } from "react-dom";
 
-import { App } from "./App";
+import { App, ContextProviders } from "./App";
 
-render(<App />, document.getElementById("root"));
+render(
+  <ContextProviders>
+    <App />
+  </ContextProviders>,
+  document.getElementById("root")
+);

@@ -1,31 +1,35 @@
-import React, { useState } from "react";
-import { deletePlan } from "../../firebase/functions/plans";
-import { LoadingModal } from "../utils/LoadingModal";
+import React, { useContext, useState } from "react";
+import { deletePlan, updatePlanItem } from "../../firebase/functions/plans";
+import { DateComponent } from "../utils/DateComponent";
+import { InputStringModal } from "../utils/InputStringModal";
+import { LoadingStateContext } from "../utils/LoadingModal";
 import "./plan.css";
+
+export const PlanListComponent = (props: {
+  plans: Plan[];
+  onClicked: (plan: Plan) => void;
+}) => {
+  const { plans } = props;
+  return (
+    <div className="plan-list">
+      {plans.map((plan, index) => (
+        <PlanComponent key={index} plan={plan} onClick={props.onClicked} />
+      ))}
+    </div>
+  );
+};
 
 export const PlanComponent = (props: {
   plan: Plan;
   onClick: (plan: Plan) => void;
 }) => {
-  const [loading, setLoading] = useState(false);
+  const setLoadingState = useContext(LoadingStateContext)![1];
   const { plan } = props;
-  const startDate = plan.startTime && new Date(plan.startTime);
-  const endDate = plan.endTime && new Date(plan.endTime);
-  const startDateStr = startDate
-    ? (startDate.getMonth() + 1).toString() +
-      "/" +
-      startDate.getDate().toString()
-    : null;
-
-  const endDateStr = endDate
-    ? (endDate.getMonth() + 1).toString() + "/" + endDate.getDate().toString()
-    : null;
-
   const onDeleteButtonClicked = () => {
-    setLoading(true);
+    setLoadingState({ activated: true, message: "plan deleting" });
     console.log("plan delete button has clicked");
     deletePlan(plan.docId).then(() => {
-      setLoading(false);
+      setLoadingState({ activated: false });
       window.location.reload();
     });
     return true;
@@ -38,12 +42,9 @@ export const PlanComponent = (props: {
         props.onClick(plan);
       }}
     >
-      <LoadingModal loading={loading} />
-      <div className="date">
-        <p>{startDateStr}</p>
-        <p>{(startDate || startDateStr) && "~"} </p>
-        <p>{endDateStr}</p>
-      </div>
+      <DateComponent
+        time={{ endTime: plan.endTime, startTime: plan.startTime }}
+      />
       <div className="row-container">
         <p className="title">{props.plan.title}</p>
         <p
@@ -63,10 +64,26 @@ export const PlanComponent = (props: {
 import "./PlanItemComponent.css";
 
 export const PlanItemComponent = (props: { planItem: PlanItem }) => {
+  const [changingTitle, setChangingTitle] = useState(false);
   const { planItem } = props;
   return (
-    <div className="plan-item-component" onClick={() => console.log(planItem)}>
-      <p className="title">{planItem.title}</p>
+    <div className="plan-item-component">
+      {/* title change modal */}
+      <InputStringModal
+        activated={changingTitle}
+        title="changing title "
+        placeholder={planItem.title}
+        onCall={(input) => {
+          const item = planItem;
+          item.title = input;
+          updatePlanItem({ planItem: item }).then(() => {
+            window.location.reload();
+          });
+        }}
+      />
+      <p className="title" onClick={() => setChangingTitle(true)}>
+        {planItem.title}
+      </p>
       <p>{planItem.address}</p>
     </div>
   );

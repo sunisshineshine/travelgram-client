@@ -87,6 +87,20 @@ export const deletePlanItemWithDocId = async (
   };
 };
 
+export const updatePlanItem = async (
+  request: UpdateRequest<PlanItem>
+): Promise<DatabaseActionResult> => {
+  console.log("update plan item :" + request.docId);
+  const result = await planItemsCollection
+    .doc(request.docId)
+    .update(request.item);
+  console.log(result);
+  return {
+    docId: request.docId,
+    ok: true,
+  };
+};
+
 export const getPlanItemsFromPlanId = async (
   request: DocIdRequest
 ): Promise<PlanItem[]> => {

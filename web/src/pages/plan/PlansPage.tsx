@@ -1,26 +1,35 @@
-import React, { useEffect, useState } from "react";
-import { PlanComponent } from "../../components/plans/plan";
+import React, { useContext, useEffect, useState } from "react";
+import { NavItemsContext } from "../../components/utils/Navigation";
+
+import { PlanListComponent } from "../../components/plans/plan";
 import * as PLANS from "../../firebase/functions/plans";
 import * as PATHS from "../../constants/paths";
 import { CreatePlanModal } from "../../components/plans/CreatePlanModal";
 
-import "./PlanPage.css";
-import { LoadingModal } from "../../components/utils/LoadingModal";
+import "./PlansPage.css";
+import { LoadingStateContext } from "../../components/utils/LoadingModal";
 
 export const PlansPage = () => {
   console.log("plans page");
-  const [loading, setLoading] = useState(false);
+  const setLoadingState = useContext(LoadingStateContext)![1];
   const [plans, setPlans] = useState<Plan[]>([]);
   const [modalVisible, setVisible] = useState(false);
+  const setNavItems = useContext(NavItemsContext)![1];
   useEffect(() => {
     updatePlans();
+    const navItems: NavItem[] = [];
+    navItems.push({
+      content: "go plan select(here)",
+      navigate: PATHS.goPlans,
+    });
+    setNavItems(navItems);
   }, []);
 
   const updatePlans = () => {
-    setLoading(true);
+    setLoadingState({ activated: true, message: "now updating plan list" });
     PLANS.getPlans()
       .then((plans) => {
-        setLoading(false);
+        setLoadingState({ activated: false });
         setPlans(plans);
         console.log("plan has updated");
         console.log(plans.map((plan) => plan.title));
@@ -50,14 +59,9 @@ export const PlansPage = () => {
 
   return (
     <div className="plans-page">
-      <LoadingModal loading={loading} />
       <CreatePlanModal visible={modalVisible} onClosed={onModalClosed} />
       <p className="title">Please choose your plan</p>
-      <div className="plan-list">
-        {plans.map((plan, index) => (
-          <PlanComponent key={index} plan={plan} onClick={onPlanClicked} />
-        ))}
-      </div>
+      <PlanListComponent onClicked={onPlanClicked} plans={plans} />
       <button onClick={onCreatePlanButtonClicked}>create plan</button>
     </div>
   );

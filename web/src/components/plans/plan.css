@@ -22,12 +22,6 @@
   align-self: center;
 }
 
-.plan-component .date {
-  margin-right: 10px;
-  display: flex;
-  flex-direction: row-reverse;
-}
-
 .plan-component .delete-button {
   color: red;
   font-weight: bold;

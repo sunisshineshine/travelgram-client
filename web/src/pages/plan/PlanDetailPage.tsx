@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { PlaceSearchBar } from "../../components/places/PlaceSearchBar";
 import { PlanItemComponent } from "../../components/plans/plan";
 import { PlanTitleComponent } from "../../components/plans/PlanTitleComponent";
-import { LoadingModal } from "../../components/utils/LoadingModal";
+import { LoadingStateContext } from "../../components/utils/LoadingModal";
 import * as PATHS from "../../constants/paths";
 import * as PLANS from "../../firebase/functions/plans";
 
@@ -11,7 +11,8 @@ import "./PlanDetailPage.css";
 export const PlanDetailPage = () => {
   const [title, setTitle] = useState("now loading plan detail...");
 
-  const [loading, setLoading] = useState(false);
+  console.log(title);
+  const setLoadingState = useContext(LoadingStateContext)![1];
 
   const [plan, setPlan] = useState<Plan>();
   const [planItems, setPlanItems] = useState<PlanItem[]>([]);
@@ -32,10 +33,10 @@ export const PlanDetailPage = () => {
   }, [plan]);
 
   const updatePlan = async (planDocId: string) => {
-    setLoading(true);
+    setLoadingState({ activated: true, message: "getting plan detail" });
     PLANS.getPlan(planDocId)
       .then((plan) => {
-        setLoading(false);
+        setLoadingState({ activated: false });
         console.log("plan recieved");
         console.log(plan);
         setTitle(plan.title);
@@ -52,12 +53,12 @@ export const PlanDetailPage = () => {
     if (!plan) {
       return;
     }
-    setLoading(true);
+    setLoadingState({ activated: true, message: "updating plan Items" });
     console.log("plan items will be updated with :" + plan.docId);
     const planItems = await PLANS.getPlanItems(plan.docId);
     console.log(planItems);
     setPlanItems(planItems);
-    setLoading(false);
+    setLoadingState({ activated: false });
     console.log("plan items updated :");
     console.log(planItems);
   };
@@ -66,7 +67,7 @@ export const PlanDetailPage = () => {
     if (!plan) {
       return;
     }
-    setLoading(true);
+    setLoadingState({ activated: true, message: "adding plan" });
     const title = place.name;
 
     const placeReq: PlaceBased = {
@@ -93,20 +94,23 @@ export const PlanDetailPage = () => {
     if (!plan) {
       return;
     }
-    setLoading(true);
+    setLoadingState({ activated: true, message: "now deleting plan" });
     PLANS.deletePlan(plan.docId).then(PATHS.goPlans);
   };
 
   return (
     <div className="plan-detail-page">
-      <LoadingModal loading={loading} />
-      <PlanTitleComponent title={title} />
-      <button onClick={PATHS.goPlans}>go back to plan select</button>
-      <button onClick={onDeleteButtonClciked}>delete this plan</button>
-      {planItems.map((planItem, index) => {
-        return <PlanItemComponent key={index} planItem={planItem} />;
-      })}
-      <PlaceSearchBar onAdded={onPlaceAdded} />
+      {plan && (
+        <>
+          <PlanTitleComponent plan={plan} />
+          <button onClick={PATHS.goPlans}>go back to plan select</button>
+          <button onClick={onDeleteButtonClciked}>delete this plan</button>
+          {planItems.map((planItem, index) => {
+            return <PlanItemComponent key={index} planItem={planItem} />;
+          })}
+          <PlaceSearchBar onAdded={onPlaceAdded} />
+        </>
+      )}
     </div>
   );
 };

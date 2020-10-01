@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import "./App.css";
@@ -14,24 +14,43 @@ import { User } from "firebase";
 import { getAuthUser } from "./firebase/auth";
 import { TopBanner } from "./components/banners/TopBanner";
 import { goLoginPage } from "./navigator";
-import { LoadingModal } from "./components/utils/LoadingModal";
+import {
+  LoadingContextProvider,
+  LoadingModal,
+  LoadingStateContext,
+} from "./components/utils/LoadingModal";
+import {
+  NavigationnComponent as NavigationComponent,
+  NavItemsContextProvider,
+} from "./components/utils/Navigation";
 export const App = () => {
-  const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
+  console.log("getting loading state");
+  const setLoadingState = useContext(LoadingStateContext)?.[1];
   useEffect(() => {
+    if (!setLoadingState) {
+      console.log(setLoadingState);
+      return;
+    }
+    setLoadingState({
+      activated: true,
+      message: "now getting user information",
+    });
     getAuthUser()
       .then((user) => {
-        setLoading(false);
+        setLoadingState({ activated: false });
         setUser(user);
       })
       .catch((error) => {
         console.error(error);
       });
-  });
+  }, []);
+
   return (
     <div className="app">
-      <LoadingModal loading={loading} />
+      <LoadingModal />
       <TopBanner />
+      <NavigationComponent />
       <div className="main-content-page">
         <Router>
           <Switch>
@@ -63,5 +82,15 @@ export const App = () => {
         </Router>
       </div>
     </div>
+  );
+};
+
+export const ContextProviders = (props: { children: React.ReactNode }) => {
+  return (
+    <>
+      <NavItemsContextProvider>
+        <LoadingContextProvider>{props.children}</LoadingContextProvider>
+      </NavItemsContextProvider>
+    </>
   );
 };

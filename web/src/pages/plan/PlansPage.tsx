@@ -14,6 +14,7 @@ export const PlansPage = () => {
   const setLoadingState = useContext(LoadingStateContext)![1];
   const [plans, setPlans] = useState<Plan[]>([]);
   const [modalVisible, setVisible] = useState(false);
+  console.log(modalVisible);
   const setNavItems = useContext(NavItemsContext)![1];
   useEffect(() => {
     updatePlans();
@@ -59,6 +60,9 @@ export const PlansPage = () => {
 
   return (
     <div className="plans-page">
+      {/* <CreatePlanModal visible={modalVisible} onClosed={onModalClosed} /> */}
+
+      {/* for css creating */}
       <CreatePlanModal visible={modalVisible} onClosed={onModalClosed} />
       <p className="title">Please choose your plan</p>
       <PlanListComponent onClicked={onPlanClicked} plans={plans} />

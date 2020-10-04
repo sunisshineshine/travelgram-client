@@ -36,3 +36,7 @@
   background-color: rgba(255, 0, 0, 0.3);
   transition: 0.5s;
 }
+
+.plan-item-component {
+  padding: 10px;
+}

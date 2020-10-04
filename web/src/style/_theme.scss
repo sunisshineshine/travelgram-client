@@ -1,0 +1,130 @@
+$dimen-sm: 8px;
+$color-primary-dark: #00308f;
+$color-primary: #1974d2;
+$color-primary-light: #3cc8ff;
+
+.color-red {
+  color: red;
+}
+.color-blue {
+  color: blue;
+}
+
+$dimen-xs: 4px;
+$dimen-sm: 8px;
+$dimen-md: 12px;
+$dimen-lg: 16px;
+
+$font-size-xs: 12px;
+$font-size-sm: 14px;
+$font-size-md: 16px;
+$font-size-lg: 18px;
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.flex-coloumn {
+  display: flex;
+  flex-direction: column;
+}
+
+.justify-content-space {
+  justify-content: space-evenly;
+}
+
+.justify-content-space-between {
+  justify-content: space-between;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+.align-center {
+  width: fit-content;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.align-right {
+  margin-right: 0px;
+  margin-left: auto;
+}
+
+.border-radius {
+  border-radius: $dimen-md;
+  padding: $dimen-md;
+}
+
+.border-primary {
+  border: 1px solid $color-primary;
+}
+
+.border-right-primary {
+  border-right: 1px solid $color-primary;
+}
+
+.border-bottom-primary {
+  border-bottom: 1px solid $color-primary;
+}
+
+.close-button {
+  background-color: red;
+  width: 24px;
+  height: 24px;
+}
+
+.text-label {
+  margin-left: $dimen-md;
+  color: $color-primary;
+  font-size: $font-size-xs;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.font-bold {
+  font-weight: bold;
+}
+
+.font-size-md {
+  font-size: $font-size-md;
+}
+
+.font-size-lg {
+  font-size: $font-size-lg;
+}
+
+.input-form {
+  display: flex;
+  flex-direction: column;
+  label {
+    margin-left: $dimen-md;
+    margin-bottom: $dimen-xs;
+    color: $color-primary;
+    font-size: $font-size-xs;
+    font-style: italic;
+    font-weight: bold;
+  }
+
+  input {
+    border: solid $color-primary 1px;
+    border-radius: $dimen-sm;
+    padding: $dimen-md;
+    outline: none;
+    font-size: $font-size-md;
+    font-weight: 500;
+    color: $color-primary;
+  }
+
+  input:focus {
+    text-decoration: underline;
+  }
+
+  ::placeholder {
+    color: $color-primary-light;
+    font-size: $font-size-xs;
+    font-style: italic;
+  }
+}

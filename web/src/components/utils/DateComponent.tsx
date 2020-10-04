@@ -1,5 +1,4 @@
 import React from "react";
-import "./DateComponent.css";
 
 export const DateComponent = (props: { time: TimeBased }) => {
   const { time } = props;

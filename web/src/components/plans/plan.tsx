@@ -66,6 +66,44 @@ import "./PlanItemComponent.css";
 export const PlanItemComponent = (props: { planItem: PlanItem }) => {
   const [changingTitle, setChangingTitle] = useState(false);
   const { planItem } = props;
+
+  const eventItemList: EventItem[] = [
+    {
+      docId: "",
+      endTime: 0,
+      startTime: 0,
+      planItemDocId: "",
+      title: "event temt",
+    },
+    {
+      docId: "",
+      endTime: 0,
+      startTime: 0,
+      planItemDocId: "",
+      title: "event temt",
+    },
+    {
+      docId: "",
+      endTime: 0,
+      startTime: 0,
+      planItemDocId: "",
+      title: "event temt",
+    },
+    {
+      docId: "",
+      endTime: 0,
+      startTime: 0,
+      planItemDocId: "",
+      title: "event temt",
+    },
+    {
+      docId: "",
+      endTime: 0,
+      startTime: 0,
+      planItemDocId: "",
+      title: "event temt",
+    },
+  ];
   return (
     <div className="plan-item-component">
       {/* title change modal */}
@@ -85,6 +123,18 @@ export const PlanItemComponent = (props: { planItem: PlanItem }) => {
         {planItem.title}
       </p>
       <p>{planItem.address}</p>
+      {eventItemList.map((eventItem) => {
+        return <div>{eventItem.title}</div>;
+      })}
     </div>
   );
+};
+
+interface EventItem extends FirebaseDocumentObject, TimeBased {
+  planItemDocId: string;
+  title: string;
+}
+
+export const EventItemComponent = (props: { eventItem: EventItem }) => {
+  return <div>{props.eventItem.title}</div>;
 };

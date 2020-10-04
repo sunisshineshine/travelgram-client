@@ -1,8 +1,9 @@
-import React, { useState } from "react";
-import "./CreatePlanModal.css";
+import React, { useContext, useState } from "react";
+import "./CreatePlanModal.scss";
 
 import * as PLANS from "../../firebase/functions/plans";
-import { CalendarComponent } from "../utils/CalendarComponent";
+import { CalendarSelectRangeComponent } from "../utils/calendar/CalendarComponent";
+import { LoadingStateContext } from "../utils/LoadingModal";
 
 export const CreatePlanModal = (props: {
   visible: boolean;
@@ -13,10 +14,14 @@ export const CreatePlanModal = (props: {
   const [startTime, setStartTime] = useState<number | null>(null);
   const [endTime, setEndTime] = useState<number | null>(null);
 
+  const setLoadingState = useContext(LoadingStateContext)![1];
+
   const createPlan = () => {
+    setLoadingState({ activated: true, message: "creating plan" });
     PLANS.createPlan(title, startTime, endTime)
       .then(() => {
         setTitle("");
+        setLoadingState({ activated: false });
         props.onClosed();
       })
       .catch((error) => {
@@ -25,14 +30,10 @@ export const CreatePlanModal = (props: {
       });
   };
 
-  const onStartDateSelected = (date: Date) => {
-    console.log("start time has set : " + date);
-    setStartTime(date.getTime());
-  };
-
-  const onEndDateSelected = (date: Date) => {
-    console.log("start time has set : " + date);
-    setEndTime(date.getTime());
+  const onRangeChanged: TimebasedCallBack = (time: TimeBased) => {
+    console.log(time);
+    setStartTime(time.startTime);
+    setEndTime(time.endTime);
   };
 
   return (
@@ -40,36 +41,35 @@ export const CreatePlanModal = (props: {
       className="create-plan-modal"
       style={{ display: props.visible ? "block" : "none" }}
     >
-      <div className="modal-content">
-        <span className="close" onClick={props.onClosed}>
-          &times;
-        </span>
-        <div>
-          <label>title : </label>
-          <input
-            value={title}
-            onChange={(e) => {
-              setTitle(e.target.value);
-            }}
-          />
-          <p>
-            start from :{" "}
-            {startTime ? new Date(startTime).toDateString() : undefined}
+      <div className="modal-content flex-column border-radius">
+        <div id="top-bar" className="align-center">
+          <p id="title" className="font-bold">
+            CRATING PLAN HERE
           </p>
-          <p>
-            end at : {endTime ? new Date(endTime).toDateString() : undefined}
-          </p>
-          <button onClick={createPlan}>submit</button>
-          <div className="calendar-form row-container">
-            <CalendarComponent
-              title="start from"
-              onDateSelected={onStartDateSelected}
-            />
-            <CalendarComponent
-              title="end at"
-              onDateSelected={onEndDateSelected}
+        </div>
+        <div className="flex-row justify-content-space-between">
+          <div className="close-button" onClick={props.onClosed} />
+          <div onClick={createPlan}>OK</div>
+        </div>
+
+        <div id="title-input">
+          <div className="input-form">
+            <label>YOUR PLAN TITLE</label>
+            <input
+              value={title}
+              onChange={(e) => {
+                setTitle(e.target.value);
+              }}
+              placeholder="...your plan title here"
             />
           </div>
+        </div>
+
+        <div className="time-input">
+          <CalendarSelectRangeComponent
+            title="SELECT YOUR TRAVEL PERIOD"
+            onRangeUpdated={onRangeChanged}
+          />
         </div>
       </div>
     </div>

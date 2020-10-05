@@ -1,5 +1,9 @@
-import React, { useContext, useState } from "react";
-import { deletePlan } from "../../firebase/functions/plans";
+import React, { useContext, useEffect, useState } from "react";
+import {
+  createEventItem,
+  deletePlan,
+  getEventItems,
+} from "../../firebase/functions/plans";
 import {
   PeriodStringComponent,
   SelectPeriodComponent,
@@ -80,52 +84,22 @@ export const PlanTitleComponent = (props: { plan: Plan }) => {
 export const PlanItemComponent = (props: { planItem: PlanItem }) => {
   const { planItem } = props;
 
-  const eventItemList: EventItem[] = [
-    {
-      docId: "",
-      endTime: 0,
-      startTime: 0,
-      planItemDocId: "",
-      title: "event temt",
-    },
-    {
-      docId: "",
-      endTime: 0,
-      startTime: 0,
-      planItemDocId: "",
-      title: "event temt",
-    },
-    {
-      docId: "",
-      endTime: 0,
-      startTime: 0,
-      planItemDocId: "",
-      title: "event temt",
-    },
-    {
-      docId: "",
-      endTime: 0,
-      startTime: 0,
-      planItemDocId: "",
-      title: "event temt",
-    },
-    {
-      docId: "",
-      endTime: 0,
-      startTime: 0,
-      planItemDocId: "",
-      title: "event temt",
-    },
-  ];
+  const [eventItems, setEventItems] = useState<EventItem[]>([]);
+
+  useEffect(() => {
+    getEventItems(planItem.docId).then((results) => {
+      setEventItems(results);
+    });
+  }, []);
   return (
     <div id="plan-item-component">
       <h2 id="title">{planItem.title}</h2>
       <p>{planItem.address}</p>
       <div id="event-list">
-        {eventItemList.map((eventItem) => {
+        {eventItems.map((eventItem) => {
           return <div>{eventItem.title}</div>;
         })}
-        <AddEventItemComponent />
+        <AddEventItemComponent planItemId={planItem.docId} />
       </div>
     </div>
   );
@@ -135,21 +109,37 @@ export const EventItemComponent = (props: { eventItem: EventItem }) => {
   return <div>{props.eventItem.title}</div>;
 };
 
-export const AddEventItemComponent = (props: { eventItem?: EventItem }) => {
-  console.log(props);
+export const AddEventItemComponent = (props: {
+  planItemId: string;
+  eventItem?: EventItem;
+}) => {
+  const [title, setTitle] = useState("");
+  const [period, setPeriod] = useState<TimeBased>({
+    endTime: null,
+    startTime: null,
+  });
+
+  const onSubmit = () => {
+    createEventItem({ period, planItemId: props.planItemId, title }).then(
+      (result) => {
+        console.log(result);
+      }
+    );
+  };
 
   return (
     <div id="add-event-item-component">
       <div className="flex-column">
         <div className="input-form">
           <label>Adding event</label>
-          <input />
+          <input value={title} onChange={(e) => setTitle(e.target.value)} />
+          <button onClick={onSubmit}>submit</button>
         </div>
         <SelectPeriodComponent
           size="sm"
           toggleCalendar={true}
           onRangeUpdated={(period) => {
-            console.log(period);
+            setPeriod(period);
           }}
         />
       </div>

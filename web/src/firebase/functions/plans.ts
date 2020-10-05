@@ -15,6 +15,11 @@ const functionsCreatePlanItem = firebaseFunctions.httpsCallable(
   "createPlanItem"
 );
 
+const functionsCreateEventItem = firebaseFunctions.httpsCallable(
+  "createEventItem"
+);
+const functionsEventItems = firebaseFunctions.httpsCallable("eventItems");
+
 console.log("functions plan requested");
 
 export const getPlan = async (docId: string): Promise<Plan> => {
@@ -172,7 +177,9 @@ export const updatePlanItem = async (props: {
   planItem: PlanItem;
 }): Promise<DatabaseActionResult> => {
   console.log("update plan item");
+  const createTime = new Date().getTime();
   const request: UpdateRequest<PlanItem> = {
+    createTime,
     docId: props.planItem.docId,
     item: props.planItem,
   };
@@ -199,4 +206,43 @@ export const getPlanItems = async (planDocId: string): Promise<PlanItem[]> => {
   }
 
   return planItems;
+};
+
+export const createEventItem = async (props: {
+  planItemId: string;
+  period: TimeBased;
+  title: string;
+}): Promise<DatabaseActionResult> => {
+  const uid = await getAuthUser().then((user) => user!.uid);
+  const request: CreateEventItemRequest = {
+    uid,
+    planItemDocId: props.planItemId,
+    endTime: props.period.endTime,
+    startTime: props.period.startTime,
+    title: props.title,
+  };
+
+  const result = (await functionsCreateEventItem(request)).data;
+  if (!result) {
+    throw new Error("cannot create event item");
+  }
+
+  return (result as unknown) as DatabaseActionResult;
+};
+
+export const getEventItems = async (
+  planItemDodId: string
+): Promise<EventItem[]> => {
+  console.log("get event item from plan item doc id :" + planItemDodId);
+
+  const request = await createDocIdRequest(planItemDodId);
+  const result = await functionsEventItems(request);
+
+  const eventItems = result.data as EventItem[];
+
+  if (!eventItems) {
+    throw new Error("cannot get event items");
+  }
+
+  return eventItems;
 };

@@ -9,5 +9,4 @@ const db = app.firestore();
 
 export const plansCollection = db.collection("plans");
 export const planItemsCollection = db.collection("planItems");
-
-export const getTimestampNow = admin.firestore.Timestamp.now;
+export const eventItemsCollection = db.collection("eventItems");

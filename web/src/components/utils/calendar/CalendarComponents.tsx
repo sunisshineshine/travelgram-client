@@ -10,7 +10,6 @@ export const CalendarComponent = (props: {
   // callback for user selecting date
   onDateSelected: DateCallBack;
 }) => {
-  console.log("rendered");
   const today = new Date();
 
   const monthNames = [

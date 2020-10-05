@@ -1,4 +1,4 @@
-import { plansCollection, getTimestampNow } from "../initialize";
+import { plansCollection } from "../initialize";
 import { returnPlan } from "../migrations/PlanMigrations";
 import { deletePlanItemWithDocId } from "./PlanItems";
 
@@ -13,7 +13,7 @@ export const createPlanWithTitle = async (
   }
   // create plan object
   const docId = plansCollection.doc().id;
-  const createTime = getTimestampNow();
+  const createTime = new Date().getTime();
   const plan: Plan = {
     docId,
     uid,

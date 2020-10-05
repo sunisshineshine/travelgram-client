@@ -4,8 +4,11 @@ import {
   returnPlanItems,
 } from "../migrations/PlanItemMigrations";
 import { returnPlan, returnPlans } from "../migrations/PlanMigrations";
-import * as PLANITEMS from "./PlanItems";
+
 import * as PLANS from "./Plans.";
+import * as PLANITEMS from "./PlanItems";
+import * as EVENTITEMS from "./EventItems";
+import { returnEventItems } from "../migrations/EventItemMigrations";
 
 export const plan = functions.https.onCall((data, context) => {
   console.log("get plan detail request");
@@ -108,5 +111,25 @@ export const planItems = functions.https.onCall(
     ).then((planItemsReturned: PlanItem[]) =>
       returnPlanItems(planItemsReturned)
     );
+  }
+);
+
+export const eventItems = functions.https.onCall(
+  (data, context): Promise<EventItem[]> => {
+    const request = data as DocIdRequest;
+    console.log(request);
+
+    return EVENTITEMS.getEventItemsFromPlanItem(
+      request
+    ).then((returnedEventItems) => returnEventItems(returnedEventItems));
+  }
+);
+
+export const createEventItem = functions.https.onCall(
+  (data, context): Promise<DatabaseActionResult> => {
+    const request = data as CreateEventItemRequest;
+    console.log(request);
+
+    return EVENTITEMS.createEventItemWithTitle(request);
   }
 );

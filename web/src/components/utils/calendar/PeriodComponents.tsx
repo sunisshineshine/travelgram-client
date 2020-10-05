@@ -31,8 +31,6 @@ export const SelectPeriodComponent = (props: {
     if (period.startTime) {
       temp += period.startTime;
     }
-    console.log("force rendering with :");
-    console.log(value);
     forceChange(temp);
   };
 
@@ -122,8 +120,6 @@ export const PeriodComponent = (props: { period?: TimeBased }) => {
 
 export const PeriodStringComponent = (props: { period?: TimeBased }) => {
   const { period } = props;
-  console.log("from period string, provided period");
-  console.log(period);
   if (!period) {
     return (
       <div id="period-string-component" className="flex-row">

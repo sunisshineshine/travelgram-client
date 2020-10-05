@@ -17,6 +17,9 @@ export const createPlanItemWithUidPlaceIdTitle = async (
   console.log("creating place Item title: " + title);
 
   const planItemDocId = planItemsCollection.doc().id;
+
+  const createTime = new Date().getTime();
+
   const placeItem: PlanItem = {
     docId: planItemDocId,
     placeId,
@@ -28,6 +31,8 @@ export const createPlanItemWithUidPlaceIdTitle = async (
     address,
     lat,
     lng,
+    createTime,
+    eventItemIds: [],
   };
 
   const planSnapshot = await plansCollection.doc(planDocId).get();

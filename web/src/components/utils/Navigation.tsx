@@ -22,7 +22,6 @@ export const NavItemsContextProvider = (props: {
 };
 
 export const NavigationnComponent = () => {
-  console.log("nav");
   const [navItems] = useContext(NavItemsContext)!;
   return (
     <div className="navigation-component">

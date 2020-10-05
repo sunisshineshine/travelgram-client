@@ -9,13 +9,30 @@ export const returnPlanItems = async (
 export const returnPlanItem = async (target: PlanItem): Promise<PlanItem> => {
   let planItem = Object.assign(target, {});
   planItem = await planItemMigration20200927(planItem);
+  planItem = await planItemMigration20201005(planItem);
   return planItem;
 };
 
-// migration for timebased, placebased it require null instead of undefined
-export const planItemMigration20200927 = async (
-  old: PlanItem
+const planItemMigration20201005 = async (
+  target: PlanItem
 ): Promise<PlanItem> => {
+  if (target.eventItemIds) {
+    return target;
+  }
+  console.log("plan item migration 20201005 adding events items");
+  console.log("origin : ");
+  console.log(target);
+  target.eventItemIds = [];
+
+  await planItemsCollection.doc(target.docId).set(target);
+
+  console.log("plan item updated");
+  console.log(target);
+  return target;
+};
+
+// migration for timebased, placebased it require null instead of undefined
+const planItemMigration20200927 = async (old: PlanItem): Promise<PlanItem> => {
   console.log("in migration");
   console.log(old.address);
   if (

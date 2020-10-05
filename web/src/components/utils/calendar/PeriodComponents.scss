@@ -1,0 +1,20 @@
+@use "../../../style/theme" as theme;
+
+#select-period-component {
+  width: 100%;
+
+  #calendar-component {
+    margin-top: theme.$dimen-lg;
+  }
+}
+
+#period-component {
+  height: 40px;
+  margin-top: theme.$dimen-xs;
+  #period-start {
+    width: 100%;
+  }
+  #period-end {
+    width: 100%;
+  }
+}

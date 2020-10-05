@@ -1,9 +1,9 @@
 import React, { useContext, useState } from "react";
 import { deletePlan, updatePlanItem } from "../../firebase/functions/plans";
-import { DateComponent } from "../utils/DateComponent";
+import { PeriodStringComponent } from "../utils/calendar/PeriodComponents";
 import { InputStringModal } from "../utils/InputStringModal";
 import { LoadingStateContext } from "../utils/LoadingModal";
-import "./plan.css";
+import "./plan.scss";
 
 export const PlanListComponent = (props: {
   plans: Plan[];
@@ -37,16 +37,18 @@ export const PlanComponent = (props: {
 
   return (
     <div
-      className="plan-component"
+      id="plan-component"
       onClick={() => {
         props.onClick(plan);
       }}
     >
-      <DateComponent
-        time={{ endTime: plan.endTime, startTime: plan.startTime }}
+      <PeriodStringComponent
+        period={{ endTime: plan.endTime, startTime: plan.startTime }}
       />
-      <div className="row-container">
-        <p className="title">{props.plan.title}</p>
+      <div id="content" className="flex-row border-radius-sm border-primary">
+        <p id="title" className="font-title">
+          {props.plan.title}
+        </p>
         <p
           className="delete-button"
           onClick={(e) => {
@@ -54,7 +56,7 @@ export const PlanComponent = (props: {
             onDeleteButtonClicked();
           }}
         >
-          delete
+          ❌
         </p>
       </div>
     </div>
@@ -105,7 +107,7 @@ export const PlanItemComponent = (props: { planItem: PlanItem }) => {
     },
   ];
   return (
-    <div className="plan-item-component">
+    <div id="plan-item-component">
       {/* title change modal */}
       <InputStringModal
         activated={changingTitle}

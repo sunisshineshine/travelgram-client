@@ -1,37 +1,9 @@
 @use "../../../style/theme" as theme;
 
-#calendar-select-range-component {
-  width: 100%;
-  #date-display {
-    height: 40px;
-    margin-top: theme.$dimen-xs;
-    #date-display-start {
-      width: 100%;
-    }
-    #date-display-end {
-      width: 100%;
-    }
-  }
-  #calendar-component {
-    margin-top: theme.$dimen-lg;
-  }
-}
-
-.calendar-select-range-component .row-container {
-  justify-content: space-evenly;
-}
-
-#day-component {
-  width: 100%;
-  height: 20px;
-}
-
 #date-component {
   width: 100%;
   height: 50px;
-}
 
-#date-component {
   div {
     height: 100%;
     width: 100%;
@@ -63,17 +35,14 @@
   }
 }
 
-#date-display-component {
+#date-string-component {
   height: 100%;
-  justify-content: center;
   #date-string {
     margin-left: theme.$dimen-sm;
   }
 }
 
-#calendar-component {
-  padding: theme.$dimen-sm;
-  #calendar {
-    margin-top: theme.$dimen-xs;
-  }
+#day-component {
+  width: 100%;
+  height: 20px;
 }

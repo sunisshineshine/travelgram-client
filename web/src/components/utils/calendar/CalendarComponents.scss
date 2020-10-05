@@ -1,0 +1,9 @@
+@use "../../../style/theme" as theme;
+
+#calendar-component {
+  padding: theme.$dimen-sm;
+
+  #calendar {
+    margin-top: theme.$dimen-xs;
+  }
+}

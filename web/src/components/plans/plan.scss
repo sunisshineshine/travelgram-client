@@ -1,0 +1,33 @@
+@use "../../style/theme";
+
+#plan-component {
+  margin-bottom: 10px;
+  padding-left: 0.5em;
+
+  #period-string-component {
+    margin-left: theme.$dimen-sm;
+    margin-bottom: theme.$dimen-xs;
+  }
+
+  #title {
+    width: 100%;
+  }
+
+  #content:hover {
+    background-color: theme.$color-primary-light;
+    color: white;
+    transition: 0.3s;
+  }
+
+  .delete-button {
+    align-self: center;
+    margin-left: auto;
+    margin-right: theme.$dimen-sm;
+    padding: 0.2em;
+    cursor: pointer;
+  }
+}
+
+#plan-item-component {
+  padding: 10px;
+}

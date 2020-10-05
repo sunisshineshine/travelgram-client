@@ -1,0 +1,22 @@
+@use '../../style/theme' as theme;
+
+#place-search-bar {
+  #search-input {
+    width: 100%;
+    margin-left: theme.$dimen-sm;
+    cursor: text;
+  }
+
+  #search-input:focus {
+    border-bottom: 1px theme.$color-primary solid;
+  }
+}
+
+#place-search-bar :focus {
+  border: none;
+}
+
+.prediction-component .active,
+.prediction-component div:hover {
+  background-color: cornflowerblue;
+}

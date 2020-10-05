@@ -8,7 +8,7 @@ import { getPlaceDetail } from "../firebase/functions/places";
 import * as PLANS from "../firebase/functions/plans";
 
 import "./Home.css";
-import { PlaceSearchBar } from "../components/places/PlaceSearchBar";
+import { PlaceSearchBarComponent } from "../components/places/PlaceSearchBarComponent";
 import { goPlans } from "../constants/paths";
 export const HomePage = () => {
   goPlans();
@@ -67,7 +67,7 @@ export const HomePage = () => {
               <PlaceComponent key={index} index={index} placeId={placeId} />
             );
           })}
-        <PlaceSearchBar onAdded={placeAdded} />
+        <PlaceSearchBarComponent onAdded={placeAdded} />
       </div>
     );
   }

@@ -1,12 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
-import { PlaceSearchBar } from "../../components/places/PlaceSearchBar";
-import { PlanItemComponent } from "../../components/plans/plan";
-import { PlanTitleComponent } from "../../components/plans/PlanTitleComponent";
+import { PlaceSearchBarComponent } from "../../components/places/PlaceSearchBarComponent";
+import {
+  PlanItemComponent,
+  PlanTitleComponent,
+} from "../../components/plans/plan";
 import { LoadingStateContext } from "../../components/utils/LoadingModal";
 import * as PATHS from "../../constants/paths";
 import * as PLANS from "../../firebase/functions/plans";
 
-import "./PlanDetailPage.css";
+import "./PlanDetailPage.scss";
 
 export const PlanDetailPage = () => {
   const [title, setTitle] = useState("now loading plan detail...");
@@ -98,19 +100,29 @@ export const PlanDetailPage = () => {
     PLANS.deletePlan(plan.docId).then(PATHS.goPlans);
   };
 
+  if (!plan) {
+    return <div>getting plan data from server</div>;
+  }
   return (
-    <div className="plan-detail-page">
-      {plan && (
-        <>
-          <PlanTitleComponent plan={plan} />
-          <button onClick={PATHS.goPlans}>go back to plan select</button>
-          <button onClick={onDeleteButtonClciked}>delete this plan</button>
-          {planItems.map((planItem, index) => {
-            return <PlanItemComponent key={index} planItem={planItem} />;
-          })}
-          <PlaceSearchBar onAdded={onPlaceAdded} />
-        </>
-      )}
+    <div id="plan-detail-page" className="border-primary border-radius">
+      <PlanTitleComponent plan={plan} />
+      <button onClick={PATHS.goPlans}>go back to plan select</button>
+      <button onClick={onDeleteButtonClciked}>delete this plan</button>
+
+      <div id="plan-item-list">
+        {/* case of plan item list is empty */}
+        {!planItems[0] && (
+          <div>
+            this plan doesn't have any item. please search place to add.
+          </div>
+        )}
+        {/* plan item exist */}
+        {planItems.map((planItem, index) => {
+          return <PlanItemComponent key={index} planItem={planItem} />;
+        })}
+      </div>
+
+      <PlaceSearchBarComponent onAdded={onPlaceAdded} />
     </div>
   );
 };

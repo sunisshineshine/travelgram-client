@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import * as PLACES from "../../firebase/functions/places";
-import "./PlaceSearchBar.css";
+import "./PlaceSearchBarComponent.scss";
 
 let scheduledQuery = "";
 let lastQueried = "";
@@ -29,7 +29,7 @@ const getPredictions = (
   }, 500);
 };
 
-export const PlaceSearchBar = (props: {
+export const PlaceSearchBarComponent = (props: {
   onAdded: (place: google.maps.places.PlaceResult) => void;
 }) => {
   const [input, setInput] = useState("");
@@ -117,7 +117,7 @@ export const PlaceSearchBar = (props: {
     const { index, prediction } = props;
     return (
       <div
-        className={"prediction-component border-bottom"}
+        className={"prediction-component"}
         onClick={() => {
           console.log(index);
           submitPlace(index);
@@ -132,18 +132,26 @@ export const PlaceSearchBar = (props: {
   };
 
   return (
-    <div className="place-search-bar border">
-      <input
-        id="input"
-        autoComplete="off"
-        value={input}
-        onChange={(e) => {
-          setInput(e.target.value);
-        }}
-        onKeyUp={(e) => {
-          onQueryChanged({ key: e.key });
-        }}
-      />
+    <div id="place-search-bar-component">
+      <div
+        id="place-search-bar"
+        className="flex-row border-primary border-radius"
+      >
+        <div className="icon">🔍</div>
+        <input
+          id="search-input"
+          className="input"
+          autoComplete="off"
+          value={input}
+          onBlur={clearPredictions}
+          onChange={(e) => {
+            setInput(e.target.value);
+          }}
+          onKeyUp={(e) => {
+            onQueryChanged({ key: e.key });
+          }}
+        />
+      </div>
       <div className="search-place-predictions">
         {predictions &&
           predictions.map((prediction, index) => (

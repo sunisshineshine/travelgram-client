@@ -3,15 +3,39 @@ import { CalendarComponent } from "./CalendarComponents";
 import { DateStringComponent } from "./DateComponents";
 import "./PeriodComponents.scss";
 
+type Size = "lg" | "md" | "sm";
+
 export const SelectPeriodComponent = (props: {
-  title: string;
+  title?: string;
   date?: Date;
   selectedRange?: TimeBased;
+  toggleCalendar?: boolean;
+  size?: Size;
   onRangeUpdated: TimebasedCallBack;
 }) => {
   const [selectedPeriod, setPeriod] = useState<TimeBased | undefined>(
     props.selectedRange
   );
+
+  const [displayCalendar, setDisplay] = useState(
+    !props.toggleCalendar ? true : false
+  );
+
+  const [value, forceChange] = useState(0);
+  const forceRender = (period: TimeBased) => {
+    let temp = 0;
+    if (period.endTime) {
+      temp += period.endTime;
+    }
+
+    if (period.startTime) {
+      temp += period.startTime;
+    }
+    console.log("force rendering with :");
+    console.log(value);
+    forceChange(temp);
+  };
+
   const onDateSelected: DateCallBack = (date: Date) => {
     console.log(date);
     let range = selectedPeriod;
@@ -46,13 +70,29 @@ export const SelectPeriodComponent = (props: {
     }
     props.onRangeUpdated(range);
     setPeriod(range);
+
+    forceRender(range);
   };
 
   return (
     <div id="select-period-component">
-      <label className="text-label">{props.title}</label>
-      <PeriodComponent period={selectedPeriod} />
-      <div id="calendar-display">
+      <div
+        onClick={() => {
+          if (props.toggleCalendar != undefined) {
+            setDisplay((prev) => !prev);
+          }
+        }}
+      >
+        {props.size == "sm" ? (
+          <PeriodStringComponent period={selectedPeriod} />
+        ) : (
+          <PeriodComponent period={selectedPeriod} />
+        )}
+      </div>
+      <div
+        id="calendar-display"
+        style={{ display: displayCalendar ? "block" : "none" }}
+      >
         <CalendarComponent
           highlightRange={selectedPeriod}
           onDateSelected={onDateSelected}
@@ -80,11 +120,21 @@ export const PeriodComponent = (props: { period?: TimeBased }) => {
   );
 };
 
-export const PeriodStringComponent = (props: { period: TimeBased }) => {
-  const { period: time } = props;
+export const PeriodStringComponent = (props: { period?: TimeBased }) => {
+  const { period } = props;
+  console.log("from period string, provided period");
+  console.log(period);
+  if (!period) {
+    return (
+      <div id="period-string-component" className="flex-row">
+        <p className="icon">📅</p>
+        <p>period not selected</p>
+      </div>
+    );
+  }
 
-  const startDate = time.startTime && new Date(time.startTime);
-  const endDate = time.endTime && new Date(time.endTime);
+  const startDate = period.startTime && new Date(period.startTime);
+  const endDate = period.endTime && new Date(period.endTime);
   const startDateStr = startDate
     ? (startDate.getMonth() + 1).toString() +
       "/" +

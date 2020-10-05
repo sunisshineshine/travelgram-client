@@ -3,6 +3,10 @@
 #select-period-component {
   width: 100%;
 
+  #period-string-component {
+    align-items: center;
+  }
+
   #calendar-component {
     margin-top: theme.$dimen-lg;
   }

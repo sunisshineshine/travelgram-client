@@ -95,12 +95,8 @@ $font-size-xl: 24px;
   cursor: pointer;
 }
 
-.text-label {
-  margin-left: $dimen-md;
-  color: $color-primary;
-  font-size: $font-size-xs;
-  font-style: italic;
-  font-weight: bold;
+.icon {
+  font-size: $font-size-md;
 }
 
 .font-title {
@@ -155,10 +151,45 @@ $font-size-xl: 24px;
   }
 }
 
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+p,
+div {
+  margin: 0;
+  padding: 0;
+}
+
 body {
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
   color: dimgray;
 }
 
 p {
   height: fit-content;
+}
+
+input {
+  border: none;
+  outline: none;
+  padding-left: $dimen-xs;
+  padding-bottom: $dimen-xs;
+  font-size: $font-size-lg;
+}
+
+label {
+  margin-left: $dimen-md;
+  color: $color-primary;
+  font-size: $font-size-xs;
+  font-style: italic;
+  font-weight: bold;
+}
+
+h1,
+h2,
+h3 {
+  color: $color-primary;
 }

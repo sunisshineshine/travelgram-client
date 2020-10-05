@@ -24,10 +24,33 @@
     margin-left: auto;
     margin-right: theme.$dimen-sm;
     padding: 0.2em;
-    cursor: pointer;
+  }
+}
+#plan-item-component {
+  padding: 10px;
+
+  #event-list {
+    margin-left: theme.$dimen-lg;
   }
 }
 
-#plan-item-component {
-  padding: 10px;
+#add-event-item-component {
+  width: 500px;
+  height: fit-content;
+
+  #select-period-component {
+    margin-top: theme.$dimen-xs;
+    margin-left: auto;
+    margin-right: theme.$dimen-xs;
+    align-items: center;
+
+    #period-string-component {
+      width: fit-content;
+      margin-left: auto;
+      margin-right: theme.$dimen-xs;
+    }
+  }
+  input {
+    width: 100%;
+  }
 }

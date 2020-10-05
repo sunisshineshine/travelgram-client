@@ -1,7 +1,9 @@
 import React, { useContext, useState } from "react";
-import { deletePlan, updatePlanItem } from "../../firebase/functions/plans";
-import { PeriodStringComponent } from "../utils/calendar/PeriodComponents";
-import { InputStringModal } from "../utils/InputStringModal";
+import { deletePlan } from "../../firebase/functions/plans";
+import {
+  PeriodStringComponent,
+  SelectPeriodComponent,
+} from "../utils/calendar/PeriodComponents";
 import { LoadingStateContext } from "../utils/LoadingModal";
 import "./plan.scss";
 
@@ -63,10 +65,19 @@ export const PlanComponent = (props: {
   );
 };
 
-import "./PlanItemComponent.css";
+export const PlanTitleComponent = (props: { plan: Plan }) => {
+  const { plan } = props;
+  return (
+    <div id="plan-title-component">
+      <PeriodStringComponent
+        period={{ startTime: plan.startTime, endTime: plan.endTime }}
+      />
+      <h1>{plan.title}</h1>
+    </div>
+  );
+};
 
 export const PlanItemComponent = (props: { planItem: PlanItem }) => {
-  const [changingTitle, setChangingTitle] = useState(false);
   const { planItem } = props;
 
   const eventItemList: EventItem[] = [
@@ -108,35 +119,40 @@ export const PlanItemComponent = (props: { planItem: PlanItem }) => {
   ];
   return (
     <div id="plan-item-component">
-      {/* title change modal */}
-      <InputStringModal
-        activated={changingTitle}
-        title="changing title "
-        placeholder={planItem.title}
-        onCall={(input) => {
-          const item = planItem;
-          item.title = input;
-          updatePlanItem({ planItem: item }).then(() => {
-            window.location.reload();
-          });
-        }}
-      />
-      <p className="title" onClick={() => setChangingTitle(true)}>
-        {planItem.title}
-      </p>
+      <h2 id="title">{planItem.title}</h2>
       <p>{planItem.address}</p>
-      {eventItemList.map((eventItem) => {
-        return <div>{eventItem.title}</div>;
-      })}
+      <div id="event-list">
+        {eventItemList.map((eventItem) => {
+          return <div>{eventItem.title}</div>;
+        })}
+        <AddEventItemComponent />
+      </div>
     </div>
   );
 };
 
-interface EventItem extends FirebaseDocumentObject, TimeBased {
-  planItemDocId: string;
-  title: string;
-}
-
 export const EventItemComponent = (props: { eventItem: EventItem }) => {
   return <div>{props.eventItem.title}</div>;
+};
+
+export const AddEventItemComponent = (props: { eventItem?: EventItem }) => {
+  console.log(props);
+
+  return (
+    <div id="add-event-item-component">
+      <div className="flex-column">
+        <div className="input-form">
+          <label>Adding event</label>
+          <input />
+        </div>
+        <SelectPeriodComponent
+          size="sm"
+          toggleCalendar={true}
+          onRangeUpdated={(period) => {
+            console.log(period);
+          }}
+        />
+      </div>
+    </div>
+  );
 };

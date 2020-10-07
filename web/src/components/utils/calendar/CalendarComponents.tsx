@@ -87,6 +87,19 @@ export const CalendarComponent = (props: {
     setWeeks(weeksArray);
   };
 
+  const isSameDate = (props: {
+    standard?: number;
+    target: number;
+  }): boolean => {
+    const standard = new Date(props.standard || 0);
+    const target = new Date(props.target);
+    return (
+      standard.getFullYear() === target.getFullYear() &&
+      standard.getMonth() === target.getMonth() &&
+      standard.getDate() === target.getDate()
+    );
+  };
+
   return (
     <div id="calendar-component" className="border-radius border-primary">
       <div id="top-bar" className="flex-row justify-content-space-between">
@@ -112,14 +125,20 @@ export const CalendarComponent = (props: {
                 style={{ marginBottom: "5px" }}
               >
                 {week.map((date) => {
-                  const isStart =
-                    props.highlightRange?.startTime === date.getTime();
-                  const isEnd =
-                    props.highlightRange?.endTime === date.getTime();
+                  const isStart = isSameDate({
+                    standard: props.highlightRange?.startTime || undefined,
+                    target: date.getTime(),
+                  });
+                  const isEnd = isSameDate({
+                    standard: props.highlightRange?.endTime || undefined,
+                    target: date.getTime(),
+                  });
                   return (
                     <DateComponent
                       key={Math.random()}
                       date={date}
+                      isStart={isStart}
+                      isEnd={isEnd}
                       isSelected={
                         props.highlightRange &&
                         props.highlightRange.startTime &&
@@ -127,10 +146,10 @@ export const CalendarComponent = (props: {
                         date.getTime() >= props.highlightRange.startTime &&
                         date.getTime() <= props.highlightRange.endTime
                           ? true
+                          : isStart || isEnd
+                          ? true
                           : false
                       }
-                      isStart={isStart}
-                      isEnd={isEnd}
                       isToday={date === today}
                       isDisabled={date.getMonth() != month}
                       onClcicked={props.onDateSelected}

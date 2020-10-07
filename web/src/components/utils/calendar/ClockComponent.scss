@@ -1,0 +1,27 @@
+@use '../../../style/theme';
+
+#clock-component {
+  margin-top: theme.$dimen-xs;
+  color: theme.$color-primary;
+  #clock-select {
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    #divider {
+      padding-bottom: 10px;
+      font-size: 40px;
+    }
+  }
+
+  input {
+    color: theme.$color-primary;
+    font-size: 40px;
+    width: 50px;
+  }
+
+  #save-button {
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

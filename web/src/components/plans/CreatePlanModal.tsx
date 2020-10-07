@@ -71,7 +71,7 @@ export const CreatePlanModal = (props: {
 
         <div className="time-input">
           <SelectPeriodComponent
-            title="SELECT YOUR TRAVEL PERIOD"
+            title="SET YOUR PLAN PERIOD"
             onRangeUpdated={onRangeChanged}
           />
         </div>

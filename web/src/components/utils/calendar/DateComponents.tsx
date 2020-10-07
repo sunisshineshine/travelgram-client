@@ -1,4 +1,5 @@
 import React from "react";
+import { displayClockNumber } from "./ClockComponent";
 
 import "./DateComponents.scss";
 
@@ -56,6 +57,12 @@ export const DateStringComponent = (props: { date?: Date | number }) => {
         {date ? (
           <p>
             {date.getFullYear()}/{date.getMonth() + 1}/{date.getDate()}
+            {date.getHours() || date.getMinutes()
+              ? " " +
+                displayClockNumber(date.getHours()) +
+                ":" +
+                displayClockNumber(date.getMinutes())
+              : ""}
           </p>
         ) : (
           <div>not selected</div>

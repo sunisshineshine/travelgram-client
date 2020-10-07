@@ -35,6 +35,13 @@ export const CalendarComponent = (props: {
   const [month, setMonth] = useState(
     props.date?.getMonth() || today.getMonth()
   );
+
+  useEffect(() => {
+    if (props.date) {
+      setMonth(props.date.getMonth());
+    }
+  }, [props.date]);
+
   // update when user change month
   useEffect(() => {
     updateCalendar();

@@ -99,7 +99,7 @@ export const PlanItemComponent = (props: { planItem: PlanItem }) => {
         {eventItems.map((eventItem) => {
           return <div>{eventItem.title}</div>;
         })}
-        <AddEventItemComponent planItemId={planItem.docId} />
+        {/* <AddEventItemComponent planItemId={planItem.docId} /> */}
       </div>
     </div>
   );
@@ -137,7 +137,6 @@ export const AddEventItemComponent = (props: {
         </div>
         <SelectPeriodComponent
           size="sm"
-          toggleCalendar={true}
           onRangeUpdated={(period) => {
             setPeriod(period);
           }}

@@ -1,4 +1,4 @@
-import React, { ReactComponentElement, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CalendarComponent } from "./CalendarComponents";
 import { ClockComponent } from "./ClockComponent";
 import { DateStringComponent } from "./DateComponents";
@@ -23,6 +23,10 @@ export const SelectPeriodComponent = (props: {
   const [selectedPeriod, setPeriod] = useState<TimeBased | undefined>(
     props.selectedRange
   );
+  useEffect(() => {
+    setPeriod(props.selectedRange);
+  }, [props.selectedRange]);
+
   const [currentSelectingMethod, setMethod] = useState<TimeSelectMethod>(
     "NONE"
   );
@@ -94,7 +98,6 @@ export const SelectPeriodComponent = (props: {
     const setClock = (time: number, clock: Clock): number => {
       return time + clock.hours * 60 * 60 * 1000 + clock.minutes * 60 * 1000;
     };
-    console.log(selectedPeriod?.startTime);
     switch (currentSelectingMethod) {
       case "START_CLOCK":
         if (!period?.startTime) {
@@ -140,27 +143,57 @@ export const SelectPeriodComponent = (props: {
             <PeriodStringComponent
               period={selectedPeriod}
               onStartClicked={() => {
-                setMethod("START_DATE");
+                currentSelectingMethod == "START_DATE" ||
+                currentSelectingMethod === "START_CLOCK"
+                  ? setMethod("NONE")
+                  : setMethod("START_DATE");
               }}
-              onEndClicked={() => setMethod("END_DATE")}
+              onEndClicked={() =>
+                currentSelectingMethod == "END_DATE" ||
+                currentSelectingMethod === "END_CLOCK"
+                  ? setMethod("NONE")
+                  : setMethod("END_DATE")
+              }
             />
           ) : (
             <PeriodComponent
               period={selectedPeriod}
               onStartClicked={() => {
-                setMethod("START_DATE");
+                currentSelectingMethod == "START_DATE" ||
+                currentSelectingMethod === "START_CLOCK"
+                  ? setMethod("NONE")
+                  : setMethod("START_DATE");
               }}
-              onEndClicked={() => setMethod("END_DATE")}
+              onEndClicked={() =>
+                currentSelectingMethod == "END_DATE" ||
+                currentSelectingMethod === "END_CLOCK"
+                  ? setMethod("NONE")
+                  : setMethod("END_DATE")
+              }
             />
           )}
         </div>
-        <div id="select-period">
+        <div
+          id="select-period"
+          style={{
+            display: calendarDisplay || clockDisplay ? "block" : "none",
+          }}
+        >
           <label>{message}</label>
           <div
             id="calendar-display"
             style={{ display: calendarDisplay ? "block" : "none" }}
           >
             <CalendarComponent
+              date={
+                currentSelectingMethod === "START_DATE"
+                  ? selectedPeriod?.startTime
+                    ? new Date(selectedPeriod.startTime)
+                    : undefined
+                  : selectedPeriod?.endTime
+                  ? new Date(selectedPeriod.endTime)
+                  : undefined
+              }
               highlightRange={selectedPeriod}
               onDateSelected={onDateSelected}
             />
@@ -209,7 +242,11 @@ export const PeriodStringComponent = (props: PeriodComponentPropTypes) => {
   const { period } = props;
   if (!period) {
     return (
-      <div id="period-string-component" className="flex-row">
+      <div
+        id="period-string-component"
+        className="flex-row"
+        onClick={props.onStartClicked}
+      >
         <p className="icon">📅</p>
         <p>period not selected</p>
       </div>
@@ -222,11 +259,11 @@ export const PeriodStringComponent = (props: PeriodComponentPropTypes) => {
     ? (startDate.getMonth() + 1).toString() +
       "/" +
       startDate.getDate().toString()
-    : null;
+    : "not selected";
 
   const endDateStr = endDate
     ? (endDate.getMonth() + 1).toString() + "/" + endDate.getDate().toString()
-    : null;
+    : "not selected";
 
   return (
     <div id="period-string-component" className="flex-row">
@@ -236,9 +273,9 @@ export const PeriodStringComponent = (props: PeriodComponentPropTypes) => {
         className="flex-row align-items-center"
         style={{ marginLeft: "5px", height: "fit-" }}
       >
-        <p>{startDateStr}</p>
+        <p onClick={props.onStartClicked}>{startDateStr}</p>
         <p>{(startDate || startDateStr) && "~"} </p>
-        <p>{endDateStr}</p>
+        <p onClick={props.onEndClicked}>{endDateStr}</p>
       </div>
     </div>
   );

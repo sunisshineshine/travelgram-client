@@ -6,7 +6,8 @@
   "scripts": {
     "start": "parcel public/index.html",
     "compile": "tsc --noEmit -w",
-    "build": "parcel build public/index.html --out-dir build"
+    "build": "parcel build public/index.html --out-dir build",
+    "update-interfaces": "cd src/interfaces && git pull origin master && git add . && git commit -m `` && git push origin master"
   },
   "keywords": [],
   "author": "",

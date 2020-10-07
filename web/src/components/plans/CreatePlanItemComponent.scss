@@ -1,0 +1,12 @@
+@use '../../style/theme';
+
+#create-plan-item-component {
+  margin-top: theme.$dimen-lg;
+  #select-period-component {
+    margin-left: theme.$dimen-sm;
+    width: 500px;
+  }
+  #place-search-bar-component {
+    margin-top: theme.$dimen-xs;
+  }
+}

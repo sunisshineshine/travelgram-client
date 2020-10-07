@@ -6,7 +6,7 @@ import * as PLANS from "../../firebase/functions/plans";
 import * as PATHS from "../../constants/paths";
 import { CreatePlanModal } from "../../components/plans/CreatePlanModal";
 
-import "./PlansPage.css";
+import "./PlansPage.scss";
 import { LoadingStateContext } from "../../components/utils/LoadingModal";
 
 export const PlansPage = () => {

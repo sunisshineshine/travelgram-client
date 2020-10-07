@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { PlaceSearchBarComponent } from "../../components/places/PlaceSearchBarComponent";
+import { CreatePlanItemComponent } from "../../components/plans/CreatePlanItemComponent";
 import {
   PlanItemComponent,
   PlanTitleComponent,
@@ -19,6 +19,7 @@ export const PlanDetailPage = () => {
   const [plan, setPlan] = useState<Plan>();
   const [planItems, setPlanItems] = useState<PlanItem[]>([]);
 
+  // getting plan
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const planDocId = urlParams.get("id");
@@ -29,10 +30,6 @@ export const PlanDetailPage = () => {
     }
     updatePlan(planDocId);
   }, []);
-
-  useEffect(() => {
-    updatePlanItems();
-  }, [plan]);
 
   const updatePlan = async (planDocId: string) => {
     setLoadingState({ activated: true, message: "getting plan detail" });
@@ -51,6 +48,11 @@ export const PlanDetailPage = () => {
       });
   };
 
+  // getting planitems from plan
+  useEffect(() => {
+    updatePlanItems();
+  }, [plan]);
+
   const updatePlanItems = async () => {
     if (!plan) {
       return;
@@ -65,33 +67,6 @@ export const PlanDetailPage = () => {
     console.log(planItems);
   };
 
-  const onPlaceAdded = (place: google.maps.places.PlaceResult) => {
-    if (!plan) {
-      return;
-    }
-    setLoadingState({ activated: true, message: "adding plan" });
-    const title = place.name;
-
-    const placeReq: PlaceBased = {
-      placeId: place.place_id || null,
-      address: place.formatted_address || null,
-      lat: ((place.geometry?.location.lat as unknown) as number) || null,
-      lng: ((place.geometry?.location.lng as unknown) as number) || null,
-    };
-
-    console.log("place added : " + title);
-    PLANS.createPlanItem({
-      title,
-      planDocId: plan.docId,
-      timeReq: { endTime: null, startTime: null },
-      placeReq,
-    })
-      .then(() => {
-        updatePlanItems();
-      })
-      .catch((error) => console.error(error));
-  };
-
   const onDeleteButtonClciked = () => {
     if (!plan) {
       return;
@@ -103,6 +78,7 @@ export const PlanDetailPage = () => {
   if (!plan) {
     return <div>getting plan data from server</div>;
   }
+
   return (
     <div id="plan-detail-page" className="border-primary border-radius">
       <PlanTitleComponent plan={plan} />
@@ -122,7 +98,12 @@ export const PlanDetailPage = () => {
         })}
       </div>
 
-      <PlaceSearchBarComponent onAdded={onPlaceAdded} />
+      {plan && (
+        <CreatePlanItemComponent
+          plan={plan}
+          onPlanItemAdded={updatePlanItems}
+        />
+      )}
     </div>
   );
 };

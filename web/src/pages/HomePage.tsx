@@ -67,7 +67,7 @@ export const HomePage = () => {
               <PlaceComponent key={index} index={index} placeId={placeId} />
             );
           })}
-        <PlaceSearchBarComponent onAdded={placeAdded} />
+        <PlaceSearchBarComponent onSearched={placeAdded} />
       </div>
     );
   }

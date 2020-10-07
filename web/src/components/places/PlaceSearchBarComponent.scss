@@ -1,14 +1,44 @@
 @use '../../style/theme' as theme;
 
-#place-search-bar {
-  #search-input {
-    width: 100%;
-    margin-left: theme.$dimen-sm;
-    cursor: text;
+#place-search-bar-component {
+  #place-search-bar {
+    #search-input {
+      width: 100%;
+      margin-left: theme.$dimen-sm;
+      cursor: text;
+    }
+    #search-input::placeholder {
+      font-size: theme.$font-size-sm;
+      font-style: italic;
+    }
+
+    #search-input:focus {
+      border-bottom: 1px theme.$color-primary solid;
+    }
   }
 
-  #search-input:focus {
-    border-bottom: 1px theme.$color-primary solid;
+  #predictions-component {
+    margin-top: theme.$dimen-sm;
+    margin-left: 25px;
+
+    #prediction-component {
+      padding: theme.$dimen-xs;
+      padding-bottom: theme.$dimen-xs;
+      #place-name {
+        padding-left: theme.$dimen-xs;
+      }
+    }
+
+    .selected {
+      #place-name {
+        color: white;
+      }
+      #description {
+        color: white;
+      }
+
+      background-color: theme.$color-primary-light;
+    }
   }
 }
 

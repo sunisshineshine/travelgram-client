@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import * as PLACES from "../../firebase/functions/places";
+import { LoadingStateContext } from "../utils/LoadingModal";
 import "./PlaceSearchBarComponent.scss";
 
 let scheduledQuery = "";
@@ -30,7 +31,7 @@ const getPredictions = (
 };
 
 export const PlaceSearchBarComponent = (props: {
-  onAdded: (place: google.maps.places.PlaceResult) => void;
+  onSearched: (place: google.maps.places.PlaceResult) => void;
 }) => {
   const [input, setInput] = useState("");
   const [predictions, setPredictions] = useState<
@@ -38,11 +39,11 @@ export const PlaceSearchBarComponent = (props: {
   >([]);
   const [selectedPosition, setPosition] = useState(-1);
 
-  const onQueryChanged = (props: { key: string }) => {
+  const onKeyPressed = (props: { key: string }) => {
     const { key } = props;
     switch (key) {
       case "Enter":
-        submitPlace(selectedPosition);
+        searchPlace(selectedPosition);
         return;
 
       case "ArrowDown":
@@ -55,51 +56,46 @@ export const PlaceSearchBarComponent = (props: {
 
       default:
         setPosition(-1);
-
-        if (input == "") {
-          clearPredictions();
-        } else {
-          getPredictions(input, setPredictions);
-        }
-        return;
     }
   };
 
-  // todo : sync with list and database
-  const submitPlace = (position: number) => {
-    if (position == -1) {
-      position = 0;
-    }
-
-    if (predictions.length == 0) {
+  const setLoading = useContext(LoadingStateContext)![1];
+  const searchPlace = (position: number) => {
+    if (position == -1 || predictions.length === 0) {
       return;
     }
 
     const selectedPrediction = predictions[position];
     if (selectedPrediction != null) {
+      setLoading({ activated: true, message: "searching place" });
       PLACES.getPlaceDetail(selectedPrediction.place_id).then((place) => {
+        setLoading({ activated: false });
         clearPredictions();
-        props.onAdded(place);
+        props.onSearched(place);
       });
     }
   };
 
   const selectPrediction = (direction: "down" | "up" | "clear") => {
-    if (direction == "down") {
-      setPosition((prev) => prev + 1);
-      if (selectedPosition >= predictions.length) {
-        setPosition(predictions.length);
-      }
+    let position = selectedPosition;
+    switch (direction) {
+      case "down":
+        position += 1;
+        if (position >= predictions.length) {
+          position = 0;
+        }
+        break;
+      case "up":
+        position -= 1;
+        if (position <= -1) {
+          position = -1;
+        }
+        break;
     }
-    if (direction == "up") {
-      // direction : up
-      setPosition((prev) => prev - 1);
-      if (selectedPosition <= -1) {
-        setPosition(-1);
-      }
-    }
-    if (direction == "clear") {
-      setPosition(-1);
+    setPosition(position);
+    const place = predictions[position].structured_formatting.main_text;
+    if (place && predictions) {
+      setInput(place);
     }
   };
 
@@ -110,57 +106,84 @@ export const PlaceSearchBarComponent = (props: {
     setPosition(-1);
   };
 
-  const PredictionComponent = (props: {
-    index: number;
-    prediction: google.maps.places.AutocompletePrediction;
-  }) => {
-    const { index, prediction } = props;
-    return (
-      <div
-        className={"prediction-component"}
-        onClick={() => {
-          console.log(index);
-          submitPlace(index);
-        }}
-      >
-        <div className={selectedPosition == index ? "active" : ""}>
-          <p>{prediction.structured_formatting.main_text}</p>
-          <p>{prediction.description}</p>
-        </div>
-      </div>
-    );
-  };
-
   return (
-    <div id="place-search-bar-component">
-      <div
-        id="place-search-bar"
-        className="flex-row border-primary border-radius"
-      >
+    <div
+      id="place-search-bar-component"
+      className="border-primary border-radius"
+    >
+      <div id="place-search-bar" className="flex-row ">
         <div className="icon">🔍</div>
         <input
           id="search-input"
           className="input"
           autoComplete="off"
           value={input}
-          onBlur={clearPredictions}
+          placeholder="search place at here.."
+          // onBlur={clearPredictions}
           onChange={(e) => {
             setInput(e.target.value);
+            if (e.target.value === "") {
+              clearPredictions();
+            } else {
+              getPredictions(input, setPredictions);
+            }
           }}
           onKeyUp={(e) => {
-            onQueryChanged({ key: e.key });
+            onKeyPressed({ key: e.key });
           }}
         />
       </div>
-      <div className="search-place-predictions">
-        {predictions &&
-          predictions.map((prediction, index) => (
-            <PredictionComponent
-              prediction={prediction}
-              index={index}
-              key={index}
-            />
-          ))}
+      <PredictionsComponent
+        selected={selectedPosition}
+        predictions={predictions}
+      />
+    </div>
+  );
+};
+
+const PredictionsComponent = (props: {
+  selected: number;
+  predictions: google.maps.places.AutocompletePrediction[];
+}) => {
+  const { predictions } = props;
+  const [selected, setSelected] = useState(props.selected);
+  useEffect(() => {
+    setSelected(props.selected);
+  }, [props.selected]);
+
+  return (
+    <div
+      id="predictions-component"
+      style={{ display: predictions.length > 0 ? "block" : "none" }}
+    >
+      {predictions.map((prediction, index) => (
+        <PredictionComponent
+          highlight={index === selected}
+          prediction={prediction}
+        />
+      ))}
+    </div>
+  );
+};
+
+const PredictionComponent = (props: {
+  highlight: boolean;
+  prediction: google.maps.places.AutocompletePrediction;
+}) => {
+  const { highlight, prediction } = props;
+  return (
+    <div
+      id="prediction-component"
+      className={highlight ? "selected" : ""}
+      // className="selected"
+      // onClick={() => {
+      //   console.log(index);
+      //   submitPlace(index);
+      // }}
+    >
+      <div>
+        <h3 id="place-name">{prediction.structured_formatting.main_text}</h3>
+        <p id="description">{prediction.description}</p>
       </div>
     </div>
   );

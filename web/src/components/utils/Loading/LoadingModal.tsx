@@ -5,10 +5,11 @@ import React, {
   useContext,
   useState,
 } from "react";
-import "./LoadingModal.css";
+import "./LoadingModal.scss";
 
 interface LoadingPageProps {
   activated: boolean;
+  icon?: "auth" | "place" | "travel";
   message?: string;
 }
 
@@ -24,30 +25,37 @@ export const LoadingContextProvider = (props: {
     message: "loading page",
   });
 
-  const TempComponent = () => {
-    console.log("loading state initiated");
-    return <div>hello</div>;
-  };
-
   return (
     <LoadingStateContext.Provider value={[loadingState, setLoadingState]}>
-      <TempComponent />
       {props.children}
     </LoadingStateContext.Provider>
   );
 };
 
-export const LoadingModal = () => {
+export const LoadingModalComponent = () => {
   const loadingState = useContext(LoadingStateContext)![0];
+  const getIcon = (): string | undefined => {
+    switch (loadingState.icon) {
+      case "auth":
+        return "🔒";
+      case "place":
+        return "🗺️";
+      case "travel":
+        return "✈️";
+      default:
+        return undefined;
+    }
+  };
 
   return (
     <div
-      className="loading-modal"
+      id="loading-modal-component"
       style={{ display: loadingState.activated ? "block" : "none" }}
     >
       <div className="content">
-        <h1>{loadingState.message}</h1>
-        <h2>yogurtravel by jiny suny</h2>
+        <p className="icon">{getIcon()}</p>
+        <p>{loadingState.message}</p>
+        <p>🧳 YOGURTRAVEL</p>
       </div>
     </div>
   );

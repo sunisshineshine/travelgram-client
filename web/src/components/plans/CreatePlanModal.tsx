@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import "./CreatePlanModal.scss";
 
 import * as PLANS from "../../firebase/functions/plans";
-import { LoadingStateContext } from "../utils/LoadingModal";
+import { LoadingStateContext } from "../utils/Loading/LoadingModal";
 import { SelectPeriodComponent } from "../utils/calendar/PeriodComponents";
 
 export const CreatePlanModal = (props: {

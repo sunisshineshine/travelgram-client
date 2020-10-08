@@ -17,24 +17,20 @@ import { TopBanner } from "./components/banners/TopBanner";
 import { goLoginPage } from "./navigator";
 import {
   LoadingContextProvider,
-  LoadingModal,
+  LoadingModalComponent,
   LoadingStateContext,
-} from "./components/utils/LoadingModal";
+} from "./components/utils/Loading/LoadingModal";
 import {
   NavigationnComponent as NavigationComponent,
   NavItemsContextProvider,
 } from "./components/utils/Navigation";
 export const App = () => {
   const [user, setUser] = useState<User | null>(null);
-  console.log("getting loading state");
-  const setLoadingState = useContext(LoadingStateContext)?.[1];
+  const setLoadingState = useContext(LoadingStateContext)![1];
   useEffect(() => {
-    if (!setLoadingState) {
-      console.log(setLoadingState);
-      return;
-    }
     setLoadingState({
       activated: true,
+      icon: "auth",
       message: "now getting user information",
     });
     getAuthUser()
@@ -49,7 +45,7 @@ export const App = () => {
 
   return (
     <div className="app">
-      <LoadingModal />
+      <LoadingModalComponent />
       <TopBanner />
       <NavigationComponent />
       <div className="main-content-page">

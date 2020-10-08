@@ -20,8 +20,6 @@ const functionsCreateEventItem = firebaseFunctions.httpsCallable(
 );
 const functionsEventItems = firebaseFunctions.httpsCallable("eventItems");
 
-console.log("functions plan requested");
-
 export const getPlan = async (docId: string): Promise<Plan> => {
   console.log("get plan with " + docId);
   const user = await getAuthUser();

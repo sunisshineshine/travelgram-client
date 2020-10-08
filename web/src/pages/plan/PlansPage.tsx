@@ -7,7 +7,7 @@ import * as PATHS from "../../constants/paths";
 import { CreatePlanModal } from "../../components/plans/CreatePlanModal";
 
 import "./PlansPage.scss";
-import { LoadingStateContext } from "../../components/utils/LoadingModal";
+import { LoadingStateContext } from "../../components/utils/Loading/LoadingModal";
 
 export const PlansPage = () => {
   const setLoadingState = useContext(LoadingStateContext)![1];

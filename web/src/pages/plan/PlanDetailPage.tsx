@@ -1,11 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import { CreatePlanItemComponent } from "../../components/plans/CreatePlanItemComponent";
 import {
-  PlanItemComponent,
   PlanItemListComponent,
   PlanTitleComponent,
 } from "../../components/plans/plan";
-import { LoadingStateContext } from "../../components/utils/LoadingModal";
+import { LoadingStateContext } from "../../components/utils/Loading/LoadingModal";
 import * as PATHS from "../../constants/paths";
 import * as PLANS from "../../firebase/functions/plans";
 
@@ -81,18 +80,17 @@ export const PlanDetailPage = () => {
   }
 
   return (
-    <div id="plan-detail-page" className="border-primary border-radius">
+    <div id="plan-detail-page">
       <PlanTitleComponent plan={plan} />
-      <button onClick={PATHS.goPlans}>go back to plan select</button>
-      <button onClick={onDeleteButtonClciked}>delete this plan</button>
-      <PlanItemListComponent planItems={planItems} />
-
-      {plan && (
-        <CreatePlanItemComponent
-          plan={plan}
-          onPlanItemAdded={updatePlanItems}
-        />
-      )}
+      <div className="border-primary border-radius">
+        <PlanItemListComponent plan={plan} planItems={planItems} />
+        {plan && (
+          <CreatePlanItemComponent
+            plan={plan}
+            onPlanItemAdded={updatePlanItems}
+          />
+        )}
+      </div>
     </div>
   );
 };

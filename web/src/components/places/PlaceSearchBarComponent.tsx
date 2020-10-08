@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 
 import * as PLACES from "../../firebase/functions/places";
-import { LoadingStateContext } from "../utils/LoadingModal";
+import { LoadingStateContext } from "../utils/Loading/LoadingModal";
 import "./PlaceSearchBarComponent.scss";
 
 let scheduledQuery = "";

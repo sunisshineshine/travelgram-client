@@ -2,4 +2,9 @@
 
 #plan-detail-page {
   padding: theme.$dimen-lg;
+
+  #plan-title-component {
+    margin-left: theme.$dimen-lg;
+    margin-bottom: theme.$dimen-sm;
+  }
 }

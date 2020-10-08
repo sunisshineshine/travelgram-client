@@ -4,12 +4,13 @@ import {
   deletePlan,
   getEventItems,
 } from "../../firebase/functions/plans";
+import { DateDividerComponent } from "../utils/calendar/DateDividerComponent";
 import {
   PeriodComponent,
   PeriodStringComponent,
   SelectPeriodComponent,
 } from "../utils/calendar/PeriodComponents";
-import { LoadingStateContext } from "../utils/LoadingModal";
+import { LoadingStateContext } from "../utils/Loading/LoadingModal";
 import "./plan.scss";
 
 export const PlanListComponent = (props: {
@@ -83,8 +84,11 @@ export const PlanTitleComponent = (props: { plan: Plan }) => {
   );
 };
 
-export const PlanItemListComponent = (props: { planItems: PlanItem[] }) => {
-  const { planItems } = props;
+export const PlanItemListComponent = (props: {
+  plan: Plan;
+  planItems: PlanItem[];
+}) => {
+  const { plan, planItems } = props;
   const [dates, setDates] = useState<Map<number, PlanItem[]>>();
   useEffect(() => {
     const datesMap = new Map<number, PlanItem[]>();
@@ -125,8 +129,9 @@ export const PlanItemListComponent = (props: { planItems: PlanItem[] }) => {
       {Array.from(dates?.entries() || []).map(([dateTime, planItems]) => {
         return (
           <div id="period-items-group">
-            <PeriodStringComponent
-              period={{ startTime: dateTime, endTime: dateTime }}
+            <DateDividerComponent
+              base={plan.startTime ? new Date(plan.startTime) : undefined}
+              date={new Date(dateTime)}
             />
             {planItems.map((planItem, index) => {
               return <PlanItemComponent key={index} planItem={planItem} />;
@@ -149,7 +154,12 @@ export const PlanItemComponent = (props: { planItem: PlanItem }) => {
     });
   }, []);
   return (
-    <div id="plan-item-component">
+    <div
+      id="plan-item-component"
+      onMouseEnter={() => {
+        console.error("mouse over");
+      }}
+    >
       {/* <PeriodStringComponent
         period={{ startTime: planItem.startTime, endTime: planItem.endTime }}
       /> */}

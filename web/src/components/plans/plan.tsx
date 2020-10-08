@@ -5,11 +5,11 @@ import {
   getEventItems,
 } from "../../firebase/functions/plans";
 import { DateDividerComponent } from "../utils/calendar/DateDividerComponent";
+import { PeriodClockComponent } from "../utils/calendar/period/PeriodClockComponent";
 import {
-  PeriodComponent,
   PeriodStringComponent,
   SelectPeriodComponent,
-} from "../utils/calendar/PeriodComponents";
+} from "../utils/calendar/period/PeriodComponents";
 import { LoadingStateContext } from "../utils/Loading/LoadingModal";
 import "./plan.scss";
 
@@ -160,16 +160,23 @@ export const PlanItemComponent = (props: { planItem: PlanItem }) => {
         console.error("mouse over");
       }}
     >
-      {/* <PeriodStringComponent
-        period={{ startTime: planItem.startTime, endTime: planItem.endTime }}
-      /> */}
-      <h2 id="title">{planItem.title}</h2>
-      <p>{planItem.address}</p>
-      <div id="event-list">
-        {eventItems.map((eventItem) => {
-          return <div>{eventItem.title}</div>;
-        })}
-        {/* <AddEventItemComponent planItemId={planItem.docId} /> */}
+      <div className="flex-row">
+        <PeriodClockComponent
+          period={{
+            startTime: planItem.startTime,
+            endTime: planItem.startTime,
+          }}
+        />
+        <div id="plan-item">
+          <h2 id="title">{planItem.title}</h2>
+          <p>{planItem.address}</p>
+          <div id="event-list">
+            {eventItems.map((eventItem) => {
+              return <div>{eventItem.title}</div>;
+            })}
+            {/* <AddEventItemComponent planItemId={planItem.docId} /> */}
+          </div>
+        </div>
       </div>
     </div>
   );

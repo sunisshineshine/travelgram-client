@@ -1,4 +1,5 @@
 import React from "react";
+import { monthNames } from "./calendarUtils";
 import "./DateDeviderComponent.scss";
 
 export const DateDividerComponent = (props: { base?: Date; date: Date }) => {
@@ -7,21 +8,6 @@ export const DateDividerComponent = (props: { base?: Date; date: Date }) => {
   if (date.getTime() === 0) {
     return <div>date is not defined</div>;
   }
-  const monthNames = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-  //   const days = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
   const differFromBase = (): string | undefined => {
     if (!base) {

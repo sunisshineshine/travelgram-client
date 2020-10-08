@@ -26,7 +26,8 @@ const onSignOutButtonClicked = () => {
 const UserState = (props: { user: User }) => {
   const { user } = props;
   return (
-    <div className="user-state">
+    <div id="user-state" className="flex-row" style={{ color: "white" }}>
+      <p className="icon">🔒</p>
       <p>{user.email}</p>
       <button onClick={onSignOutButtonClicked}>sign-out</button>
     </div>

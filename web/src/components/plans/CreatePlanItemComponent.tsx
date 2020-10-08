@@ -4,7 +4,7 @@ import "./CreatePlanItemComponent.scss";
 import * as PLANS from "../../firebase/functions/plans";
 
 import { PlaceSearchBarComponent } from "../places/PlaceSearchBarComponent";
-import { SelectPeriodComponent } from "../utils/calendar/PeriodComponents";
+import { SelectPeriodComponent } from "../utils/calendar/period/PeriodComponents";
 import { LoadingStateContext } from "../utils/Loading/LoadingModal";
 
 export const CreatePlanItemComponent = (props: {

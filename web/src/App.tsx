@@ -7,13 +7,12 @@ import "./App.scss";
 import * as PATHS from "./constants/paths";
 import { PlansPage } from "./pages/plan/PlansPage";
 
-import { HomePage } from "./pages/HomePage";
-import { LoginPage } from "./pages/LoginPage";
-import { SignupPage } from "./pages/SignupPage";
+import { LoginPage } from "./pages/auth/LoginPage";
+import { SignupPage } from "./pages/auth/SignupPage";
 import { PlanDetailPage } from "./pages/plan/PlanDetailPage";
 import { User } from "firebase";
 import { getAuthUser } from "./firebase/auth";
-import { TopBanner } from "./components/banners/TopBanner";
+import { TopBannerComponent } from "./components/banners/TopBannerComponent";
 import { goLoginPage } from "./navigator";
 import {
   LoadingContextProvider,
@@ -46,7 +45,7 @@ export const App = () => {
   return (
     <div className="app">
       <LoadingModalComponent />
-      <TopBanner />
+      <TopBannerComponent />
       <NavigationComponent />
       <div className="main-content-page">
         <Router>
@@ -59,9 +58,6 @@ export const App = () => {
             </Route>
             {user && (
               <>
-                <Route exact path={PATHS.HOME}>
-                  <HomePage />
-                </Route>
                 <Route exact path={PATHS.PLANS}>
                   <PlansPage />
                 </Route>

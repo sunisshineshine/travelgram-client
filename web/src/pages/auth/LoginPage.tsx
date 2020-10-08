@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import {
   doLoginWithEmailAndPassword,
   EmailPasswordRequest,
-} from "../firebase/auth";
-import { goHome, goSignUpPage } from "../navigator";
+} from "../../firebase/auth";
+import { goHome, goSignUpPage } from "../../navigator";
 
 export const LoginPage = () => {
   const [message, setMessage] = useState("Please Login");

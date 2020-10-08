@@ -3,7 +3,7 @@ import "./CreatePlanModal.scss";
 
 import * as PLANS from "../../firebase/functions/plans";
 import { LoadingStateContext } from "../utils/Loading/LoadingModal";
-import { SelectPeriodComponent } from "../utils/calendar/PeriodComponents";
+import { SelectPeriodComponent } from "../utils/calendar/period/PeriodComponents";
 
 export const CreatePlanModal = (props: {
   visible: boolean;

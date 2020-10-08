@@ -1,0 +1,8 @@
+@use '../../../../style/theme';
+
+#period-clock-component {
+  #period-clock {
+    padding: theme.$dimen-sm;
+    height: fit-content;
+  }
+}

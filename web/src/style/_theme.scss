@@ -24,6 +24,16 @@ $font-size-md: 16px;
 $font-size-lg: 20px;
 $font-size-xl: 24px;
 
+.font-lg {
+  font-size: $font-size-lg;
+  font-weight: 600;
+}
+
+.font-md {
+  font-size: $font-size-md;
+  font-weight: 500;
+}
+
 .flex-row {
   display: flex;
   flex-direction: row;

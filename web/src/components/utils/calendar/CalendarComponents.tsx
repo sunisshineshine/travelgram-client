@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./CalendarComponents.scss";
+import { days, monthNames } from "./calendarUtils";
 import { DateComponent, DayComponent } from "./DateComponents";
 
 export const CalendarComponent = (props: {
@@ -11,22 +12,6 @@ export const CalendarComponent = (props: {
   onDateSelected: DateCallBack;
 }) => {
   const today = new Date();
-
-  const monthNames = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-  const days = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
   // year and month for current calendar
   const [year, setYear] = useState(

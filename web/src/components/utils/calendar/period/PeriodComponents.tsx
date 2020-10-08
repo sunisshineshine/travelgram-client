@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { CalendarComponent } from "./CalendarComponents";
-import { ClockComponent } from "./ClockComponent";
-import { DateStringComponent } from "./DateComponents";
+import { CalendarComponent } from "../CalendarComponents";
+import { ClockComponent } from "../ClockComponent";
+import { DateStringComponent } from "../DateComponents";
 import "./PeriodComponents.scss";
 
 type Size = "lg" | "md" | "sm";

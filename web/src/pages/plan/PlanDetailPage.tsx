@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { CreatePlanItemComponent } from "../../components/plans/CreatePlanItemComponent";
 import {
   PlanItemComponent,
+  PlanItemListComponent,
   PlanTitleComponent,
 } from "../../components/plans/plan";
 import { LoadingStateContext } from "../../components/utils/LoadingModal";
@@ -84,19 +85,7 @@ export const PlanDetailPage = () => {
       <PlanTitleComponent plan={plan} />
       <button onClick={PATHS.goPlans}>go back to plan select</button>
       <button onClick={onDeleteButtonClciked}>delete this plan</button>
-
-      <div id="plan-item-list">
-        {/* case of plan item list is empty */}
-        {!planItems[0] && (
-          <div>
-            this plan doesn't have any item. please search place to add.
-          </div>
-        )}
-        {/* plan item exist */}
-        {planItems.map((planItem, index) => {
-          return <PlanItemComponent key={index} planItem={planItem} />;
-        })}
-      </div>
+      <PlanItemListComponent planItems={planItems} />
 
       {plan && (
         <CreatePlanItemComponent

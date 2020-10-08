@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./ClockComponent.scss";
 
 export const displayClockNumber = (number: number): string => {
@@ -14,6 +14,12 @@ export const ClockComponent = (props: {
 }) => {
   const [hours, setHours] = useState<number>(props.clock?.hours || 0);
   const [minutes, setMinutes] = useState<number>(props.clock?.minutes || 0);
+  useEffect(() => {
+    if (props.clock) {
+      setHours(props.clock.hours);
+      setMinutes(props.clock.minutes);
+    }
+  }, [props.clock]);
 
   const clearState = () => {
     setHours(0);
@@ -36,10 +42,13 @@ export const ClockComponent = (props: {
     } else {
       currentHours = currentHours * 10 + input;
     }
-    if (currentHours >= 24) {
+    if (currentHours > 24) {
       // setMessage("cannot change hours to over 24");
       return;
     } else {
+      if (currentHours === 24) {
+        setMinutes(0);
+      }
       setHours(currentHours);
     }
   };
@@ -49,6 +58,11 @@ export const ClockComponent = (props: {
     let currentMinutes = minutes;
     if (e.key === "Backspace") {
       setMinutes((minutes) => (minutes >= 10 ? Math.floor(minutes / 10) : 0));
+    }
+
+    if (hours >= 24) {
+      setMinutes(0);
+      return;
     }
     const input = parseInt(e.key);
     if (!(0 <= input && input < 10)) {

@@ -23,13 +23,12 @@ export const CreatePlanItemComponent = (props: {
       );
       setItemPeriod({
         startTime: startDate.getTime(),
-        endTime: endDate.getTime(),
+        endTime: endDate.getTime() - 1,
       });
     }
   }, [plan]);
 
   const [place, setPlace] = useState<google.maps.places.PlaceResult>();
-
   const setLoading = useContext(LoadingStateContext)![1];
   const createPlanItem = (place: google.maps.places.PlaceResult) => {
     setLoading({ activated: true, message: "adding plan" });
@@ -63,6 +62,7 @@ export const CreatePlanItemComponent = (props: {
         size="sm"
         selectedRange={period}
         onRangeUpdated={(time) => {
+          setItemPeriod(time);
           console.log(time);
         }}
       />

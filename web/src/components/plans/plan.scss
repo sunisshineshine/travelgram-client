@@ -1,11 +1,17 @@
 @use "../../style/theme";
 
+#plan-item-list-component {
+  #period-items-group {
+    margin-top: theme.$dimen-lg;
+    margin-left: theme.$dimen-sm;
+  }
+}
+
 #plan-component {
   margin-bottom: 10px;
   padding-left: 0.5em;
 
   #period-string-component {
-    margin-left: theme.$dimen-sm;
     margin-bottom: theme.$dimen-xs;
   }
 

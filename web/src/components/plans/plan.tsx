@@ -5,6 +5,7 @@ import {
   getEventItems,
 } from "../../firebase/functions/plans";
 import {
+  PeriodComponent,
   PeriodStringComponent,
   SelectPeriodComponent,
 } from "../utils/calendar/PeriodComponents";
@@ -16,6 +17,7 @@ export const PlanListComponent = (props: {
   onClicked: (plan: Plan) => void;
 }) => {
   const { plans } = props;
+
   return (
     <div className="plan-list">
       {plans.map((plan, index) => (
@@ -81,6 +83,61 @@ export const PlanTitleComponent = (props: { plan: Plan }) => {
   );
 };
 
+export const PlanItemListComponent = (props: { planItems: PlanItem[] }) => {
+  const { planItems } = props;
+  const [dates, setDates] = useState<Map<number, PlanItem[]>>();
+  useEffect(() => {
+    const datesMap = new Map<number, PlanItem[]>();
+    planItems.map((planItem) => {
+      const { startTime, endTime } = planItem;
+      const startDate = new Date(startTime || 0);
+
+      const start = new Date(
+        startDate.getFullYear(),
+        startDate.getMonth(),
+        startDate.getDate()
+      ).getTime();
+      const endDate = new Date(endTime || 0);
+      const end = new Date(
+        endDate.getFullYear(),
+        endDate.getMonth(),
+        endDate.getDate()
+      ).getTime();
+
+      if (start == end) {
+        datesMap.set(start, [...(datesMap.get(start) || []), planItem]);
+      } else {
+        // plan item will be displayed both start and end date
+        datesMap.set(start, [...(datesMap.get(start) || []), planItem]);
+        datesMap.set(end, [...(datesMap.get(end) || []), planItem]);
+      }
+    });
+    setDates(datesMap);
+  }, [planItems]);
+
+  return (
+    <div id="plan-item-list-component">
+      {/* case of plan item list is empty */}
+      {(!planItems[0] || !dates) && (
+        <div>this plan doesn't have any item. please search place to add.</div>
+      )}
+      {/* plan item exist */}
+      {Array.from(dates?.entries() || []).map(([dateTime, planItems]) => {
+        return (
+          <div id="period-items-group">
+            <PeriodStringComponent
+              period={{ startTime: dateTime, endTime: dateTime }}
+            />
+            {planItems.map((planItem, index) => {
+              return <PlanItemComponent key={index} planItem={planItem} />;
+            })}
+          </div>
+        );
+      })}
+    </div>
+  );
+};
+
 export const PlanItemComponent = (props: { planItem: PlanItem }) => {
   const { planItem } = props;
 
@@ -93,6 +150,9 @@ export const PlanItemComponent = (props: { planItem: PlanItem }) => {
   }, []);
   return (
     <div id="plan-item-component">
+      {/* <PeriodStringComponent
+        period={{ startTime: planItem.startTime, endTime: planItem.endTime }}
+      /> */}
       <h2 id="title">{planItem.title}</h2>
       <p>{planItem.address}</p>
       <div id="event-list">

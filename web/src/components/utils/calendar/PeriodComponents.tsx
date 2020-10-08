@@ -23,9 +23,17 @@ export const SelectPeriodComponent = (props: {
   const [selectedPeriod, setPeriod] = useState<TimeBased | undefined>(
     props.selectedRange
   );
+  // when parents update => props update
   useEffect(() => {
     setPeriod(props.selectedRange);
   }, [props.selectedRange]);
+
+  // child update => parents update
+  useEffect(() => {
+    if (selectedPeriod) {
+      props.onRangeUpdated(selectedPeriod);
+    }
+  }, [selectedPeriod]);
 
   const [currentSelectingMethod, setMethod] = useState<TimeSelectMethod>(
     "NONE"
@@ -65,12 +73,6 @@ export const SelectPeriodComponent = (props: {
     forceRender();
   }, [currentSelectingMethod]);
 
-  useEffect(() => {
-    if (selectedPeriod) {
-      props.onRangeUpdated(selectedPeriod);
-    }
-  }, [selectedPeriod]);
-
   const onDateSelected: DateCallBack = (date: Date) => {
     switch (currentSelectingMethod) {
       case "START_DATE":
@@ -96,7 +98,12 @@ export const SelectPeriodComponent = (props: {
       return;
     }
     const setClock = (time: number, clock: Clock): number => {
-      return time + clock.hours * 60 * 60 * 1000 + clock.minutes * 60 * 1000;
+      let result =
+        time + clock.hours * 60 * 60 * 1000 + clock.minutes * 60 * 1000;
+      if (clock.hours === 24) {
+        result -= 1;
+      }
+      return result;
     };
     switch (currentSelectingMethod) {
       case "START_CLOCK":
@@ -104,14 +111,14 @@ export const SelectPeriodComponent = (props: {
           return;
         }
         period.startTime = setClock(period?.startTime, clock);
-        setMethod("NONE");
+        setMethod("END_DATE");
         break;
       case "END_CLOCK":
         if (!period?.endTime) {
           return;
         }
         period.endTime = setClock(period?.endTime, clock);
-        setMethod("NONE");
+        setMethod("START_DATE");
         break;
     }
     setPeriod(period);
@@ -179,7 +186,17 @@ export const SelectPeriodComponent = (props: {
             display: calendarDisplay || clockDisplay ? "block" : "none",
           }}
         >
-          <label>{message}</label>
+          <div className="flex-row justify-content-space-between">
+            <label>{message}</label>
+            <div
+              className="close-button-sm"
+              onClick={() => {
+                setMethod("NONE");
+              }}
+            >
+              CLOSE
+            </div>
+          </div>
           <div
             id="calendar-display"
             style={{ display: calendarDisplay ? "block" : "none" }}
@@ -202,7 +219,14 @@ export const SelectPeriodComponent = (props: {
             id="clock-display"
             style={{ display: clockDisplay ? "block" : "none" }}
           >
-            <ClockComponent onSubmit={onClockSelected} />
+            <ClockComponent
+              clock={
+                currentSelectingMethod === "END_CLOCK"
+                  ? { hours: 24, minutes: 0 }
+                  : undefined
+              }
+              onSubmit={onClockSelected}
+            />
           </div>
         </div>
       </div>
@@ -270,12 +294,17 @@ export const PeriodStringComponent = (props: PeriodComponentPropTypes) => {
       <p className="icon">📅</p>
       <div
         id="period-string"
-        className="flex-row align-items-center"
-        style={{ marginLeft: "5px", height: "fit-" }}
+        style={{ marginLeft: "5px", height: "fit-content" }}
       >
-        <p onClick={props.onStartClicked}>{startDateStr}</p>
-        <p>{(startDate || startDateStr) && "~"} </p>
-        <p onClick={props.onEndClicked}>{endDateStr}</p>
+        {startDateStr === endDateStr ? (
+          <p onClick={props.onStartClicked}>{startDateStr}</p>
+        ) : (
+          <div className="flex-row align-items-center">
+            <p onClick={props.onStartClicked}>{startDateStr}</p>
+            <p>{(startDate || startDateStr) && "~"} </p>
+            <p onClick={props.onEndClicked}>{endDateStr}</p>
+          </div>
+        )}
       </div>
     </div>
   );

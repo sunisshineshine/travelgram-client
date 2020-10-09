@@ -18,60 +18,83 @@ export const days = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 export const getPeriodString = (props: {
   period: TimeBased;
   displayYear?: boolean;
-  isClock?: boolean;
+  displayClock?: boolean;
 }): string => {
   const { startTime, endTime } = props.period;
+  const { displayYear, displayClock } = props;
 
-  const startDate = startTime && new Date(startTime);
-  const endDate = endTime && new Date(endTime);
+  const startDateString = getDateString({ time: startTime, displayYear });
+  const startClockString = getClockString({ time: startTime });
 
-  if (!startDate) {
-    if (endDate) {
-      return `not selected ~ ${getDateString({
-        time: endDate.getTime(),
-        displayYear: props.displayYear,
-      })}`;
-    } else {
-      return `not selected`;
-    }
-  }
-  if (!endDate) {
-    if (startDate) {
-      return `${getDateString({
-        time: startDate.getTime(),
-        displayYear: props.displayYear,
-      })} ~ not selected`;
-    } else {
-      return `not selected`;
-    }
-  }
-  const startStr = getDateString({
-    time: startDate.getTime(),
-    displayYear: props.displayYear,
-  });
+  const endDateString = getDateString({ time: endTime, displayYear });
+  const endClockString = getClockString({ time: endTime });
 
-  const endStr = getDateString({
-    time: endDate.getTime(),
-    displayYear: props.displayYear,
-  });
-  //   if start and end date is same
-  if (startDate.toDateString() === endDate.toDateString()) {
-    if (props.isClock) {
-      return "All day";
+  // date is same
+  if (startDateString === endDateString) {
+    // clock also same
+    if (startClockString === endClockString) {
+      return startClockString;
     } else {
-      return `${startStr}`;
+      // date is same but clock is different
+      const startDate = startTime && new Date(startTime);
+      const endDate = startTime && new Date(startTime);
+      // check all day period
+      if (
+        startDate &&
+        endDate &&
+        endTime &&
+        startDate.getHours() == 0 &&
+        startDate.getMinutes() == 0 &&
+        new Date(endTime + 1).getDate() != endDate.getDate()
+      ) {
+        return "All day";
+      } else {
+        // not all day
+        return `${startTime ? startClockString : ""}~${
+          endTime ? endClockString : ""
+        }`;
+      }
     }
   } else {
-    return `${startStr} ~ ${endStr}`;
+    // date is different
+    if (displayClock) {
+      // date is same but clock is different
+      const startDate = startTime && new Date(startTime);
+      const endDate = startTime && new Date(startTime);
+      // check all day period
+      if (
+        startDate &&
+        endDate &&
+        endTime &&
+        startDate.getHours() == 0 &&
+        startDate.getMinutes() == 0 &&
+        new Date(endTime + 1).getDate() != endDate.getDate()
+      ) {
+        return "All day";
+      } else {
+        // not all day
+        return `${startTime ? startDateString : ""} ${
+          startTime ? startClockString : ""
+        }\n ~ ${endTime ? endDateString : ""} ${endTime ? endClockString : ""}`;
+      }
+    }
+    return `${startTime ? startDateString : ""}~${
+      endTime ? endDateString : ""
+    }`;
   }
 };
 
 export const getDateString = (props: {
-  time: number;
+  time: number | null;
   displayYear?: boolean;
 }): string => {
-  const date = new Date(props.time);
+  const { time } = props;
 
+  if (!time) {
+    return "not selected";
+  }
+
+  const date = new Date(time);
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
   const dateOfMonth = date.getDate();
@@ -80,5 +103,35 @@ export const getDateString = (props: {
     return `${year}/${month}/${dateOfMonth}`;
   } else {
     return `${month}/${dateOfMonth}`;
+  }
+};
+
+export const getClockString = (props: {
+  time: number | null;
+  displayDate?: boolean;
+}): string => {
+  const { time, displayDate } = props;
+
+  if (!time) {
+    return "not selected";
+  }
+
+  const date = new Date(time);
+  if (displayDate) {
+    return `${getDateString({ time })} ${displayClockNumber(
+      date.getHours()
+    )}:${displayClockNumber(date.getMinutes())}`;
+  } else {
+    return `${displayClockNumber(date.getHours())}:${displayClockNumber(
+      date.getMinutes()
+    )}`;
+  }
+};
+
+export const displayClockNumber = (number: number): string => {
+  if (number <= 10) {
+    return `0${number}`;
+  } else {
+    return `${number}`;
   }
 };

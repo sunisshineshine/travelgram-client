@@ -7,9 +7,15 @@ export const PeriodClockComponent = (props: { period: TimeBased }) => {
   const { period } = props;
 
   return (
-    <div id="period-clock-component" className="align-items-center">
+    <div
+      id="period-clock-component"
+      className="align-items-center"
+      onClick={() => {
+        console.log(period);
+      }}
+    >
       <p id="period-clock" className="font-md">
-        {getPeriodString({ period, isClock: true })}
+        {getPeriodString({ period, displayClock: true })}
       </p>
     </div>
   );

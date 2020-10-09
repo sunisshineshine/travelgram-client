@@ -50,6 +50,9 @@ export const App = () => {
       <div className="main-content-page">
         <Router>
           <Switch>
+            <Route exact path="/">
+              {() => PATHS.goPlans()}
+            </Route>
             <Route path={PATHS.LOGIN_PAGE}>
               <LoginPage />
             </Route>

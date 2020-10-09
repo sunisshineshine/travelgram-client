@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { displayClockNumber } from "./calendarUtils";
 import "./ClockComponent.scss";
 
-export const displayClockNumber = (number: number): string => {
-  if (number <= 10) {
-    return `0${number}`;
-  } else {
-    return `${number}`;
-  }
-};
 export const ClockComponent = (props: {
   clock?: Clock;
   onSubmit: ClockCallBack;

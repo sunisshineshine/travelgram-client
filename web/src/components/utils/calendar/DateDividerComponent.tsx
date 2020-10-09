@@ -5,10 +5,6 @@ import "./DateDeviderComponent.scss";
 export const DateDividerComponent = (props: { base?: Date; date: Date }) => {
   const { base, date } = props;
 
-  if (date.getTime() === 0) {
-    return <div>date is not defined</div>;
-  }
-
   const differFromBase = (): string | undefined => {
     if (!base) {
       return undefined;
@@ -29,12 +25,18 @@ export const DateDividerComponent = (props: { base?: Date; date: Date }) => {
     <div id="date-divider-component" className="flex-row">
       <p id="divider" />
       <div id="date-string">
-        <p id="counter">{differFromBase()}</p>
-        <p>
-          {`${
-            monthNames[date.getMonth()]
-          } ${date.getDate()}, ${date.getFullYear()}`}
-        </p>
+        {date.getTime() === 0 ? (
+          "date not selected"
+        ) : (
+          <>
+            <p id="counter">{differFromBase()}</p>
+            <p>
+              {`${
+                monthNames[date.getMonth()]
+              } ${date.getDate()}, ${date.getFullYear()}`}
+            </p>
+          </>
+        )}
       </div>
       <p id="divider" />
     </div>

@@ -1,0 +1,23 @@
+@use "../../style/theme";
+
+#plan-item-list-component {
+  #period-items-group {
+    margin-top: theme.$dimen-lg;
+    margin-left: theme.$dimen-sm;
+  }
+}
+#plan-item-component {
+  padding: 10px;
+
+  #plan-item {
+    margin-left: theme.$dimen-sm;
+
+    #title {
+      margin-left: theme.$dimen-xs;
+    }
+  }
+
+  #event-list {
+    margin-left: theme.$dimen-lg;
+  }
+}

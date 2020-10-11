@@ -215,17 +215,14 @@ export const getPlanItems = async (planDocId: string): Promise<PlanItem[]> => {
 };
 
 export const createEventItem = async (props: {
+  content: string;
   planItemId: string;
-  period: TimeBased;
-  title: string;
 }): Promise<DatabaseActionResult> => {
   const uid = await getAuthUser().then((user) => user!.uid);
   const request: CreateEventItemRequest = {
     uid,
     planItemDocId: props.planItemId,
-    endTime: props.period.endTime,
-    startTime: props.period.startTime,
-    title: props.title,
+    content: props.content,
   };
 
   const result = (await functionsCreateEventItem(request)).data;

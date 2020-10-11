@@ -1,7 +1,8 @@
-$dimen-sm: 8px;
 $color-primary-dark: #00308f;
 $color-primary: #1974d2;
 $color-primary-light: #3cc8ff;
+
+$color-gray: gray;
 
 .color-gray {
   color: gray;
@@ -81,6 +82,11 @@ $font-size-xl: 24px;
   padding: $dimen-sm;
 }
 
+.border-radius-xs {
+  border-radius: $dimen-xs;
+  padding: $dimen-xs;
+}
+
 .border-primary {
   border: 1px solid $color-primary;
 }
@@ -112,6 +118,7 @@ $font-size-xl: 24px;
 }
 
 .icon {
+  text-align: center;
   font-size: $font-size-md;
 }
 
@@ -134,6 +141,18 @@ $font-size-xl: 24px;
   font-size: $font-size-lg;
 }
 
+.bg-circle-gray {
+  color: white;
+  background-color: $color-gray;
+  border-radius: 50%;
+}
+
+.bg-circle-primary-light {
+  color: white;
+  background-color: $color-primary-light;
+  border-radius: 50%;
+}
+
 .input-form {
   display: flex;
   flex-direction: column;
@@ -150,19 +169,9 @@ $font-size-xl: 24px;
     border: solid $color-primary 1px;
     border-radius: $dimen-sm;
     padding: $dimen-md;
-    outline: none;
-    font-size: $font-size-md;
-    font-weight: 500;
-    color: $color-primary;
   }
 
   input:focus {
     text-decoration: underline;
-  }
-
-  ::placeholder {
-    color: $color-primary-light;
-    font-size: $font-size-xs;
-    font-style: italic;
   }
 }

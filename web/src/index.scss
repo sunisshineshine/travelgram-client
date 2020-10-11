@@ -27,6 +27,17 @@ input {
   padding-left: theme.$dimen-xs;
   padding-bottom: theme.$dimen-xs;
   font-size: theme.$font-size-lg;
+  color: theme.$color-primary;
+}
+
+input:focus {
+  text-decoration: underline;
+}
+
+::placeholder {
+  color: theme.$color-gray;
+  font-size: theme.$font-size-xs;
+  font-style: italic;
 }
 
 label {

@@ -1,0 +1,32 @@
+@use "../../style/theme";
+
+#event-item-list-component {
+  margin-top: theme.$dimen-sm;
+  margin-left: theme.$dimen-lg;
+}
+
+#event-item-component {
+  padding: theme.$dimen-xs;
+}
+
+#add-event-item-component {
+  display: none;
+  transition: opacity 0.5s ease-out;
+  height: 0;
+  opacity: 0;
+
+  margin-top: theme.$dimen-sm;
+  width: 500px;
+  height: fit-content;
+
+  input {
+    font-size: theme.$font-size-sm;
+    margin-right: 10px;
+    width: 100%;
+  }
+}
+
+#add-event-item-component.activated {
+  display: flex;
+  opacity: 1;
+}

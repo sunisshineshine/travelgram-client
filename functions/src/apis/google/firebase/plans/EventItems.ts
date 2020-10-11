@@ -51,9 +51,9 @@ export const getEventItemsFromPlanItem = async (
 export const createEventItemWithTitle = async (
   request: CreateEventItemRequest
 ): Promise<DatabaseActionResult> => {
-  console.log("create event item with title : " + request.title);
+  console.log("create event item with title : " + request.content);
 
-  const { endTime, planItemDocId, startTime, title, uid } = request;
+  const { planItemDocId, content, uid } = request;
 
   const eventItemId = eventItemsCollection.doc().id;
 
@@ -62,11 +62,9 @@ export const createEventItemWithTitle = async (
   const eventItem: EventItem = {
     createTime,
     docId: eventItemId,
-    endTime,
-    planItemDocId,
-    startTime,
-    title,
     uid,
+    planItemDocId,
+    content,
   };
 
   const createEventItem = await eventItemsCollection

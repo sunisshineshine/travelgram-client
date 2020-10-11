@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { getEventItems } from "../../firebase/functions/plans";
 import { DateDividerComponent } from "../utils/calendar/DateDividerComponent";
 import { PeriodClockComponent } from "../utils/calendar/period/PeriodClockComponent";
-import { AddEventItemComponent } from "./eventItem";
+import { LoadingStateContext } from "../utils/Loading/LoadingModal";
+import { AddEventItemComponent, EventItemListComponent } from "./eventItem";
+import "./planItem.scss";
 
 export const PlanItemListComponent = (props: {
   plan: Plan;
@@ -110,16 +112,35 @@ export const PlanItemComponent = (props: { planItem: PlanItem }) => {
 
   const [eventItems, setEventItems] = useState<EventItem[]>([]);
 
-  useEffect(() => {
+  const setLoading = useContext(LoadingStateContext)![1];
+  const updateEvents = () => {
+    setLoading({
+      activated: true,
+      icon: "travel",
+      message: "Updating items",
+    });
+
     getEventItems(planItem.docId).then((results) => {
+      setLoading({ activated: false });
       setEventItems(results);
     });
+  };
+  useEffect(() => {
+    updateEvents();
   }, []);
+
+  const [isAddEventActivated, setActivated] = useState(false);
+  useEffect(() => {
+    console.log("hi");
+  }, [isAddEventActivated]);
   return (
     <div
       id="plan-item-component"
       onMouseEnter={() => {
-        console.error("mouse over");
+        setActivated(true);
+      }}
+      onMouseLeave={() => {
+        setActivated(false);
       }}
     >
       <div className="flex-row">
@@ -132,12 +153,12 @@ export const PlanItemComponent = (props: { planItem: PlanItem }) => {
         <div id="plan-item">
           <h2 id="title">{planItem.title}</h2>
           <p>{planItem.address}</p>
-          <div id="event-list">
-            {eventItems.map((eventItem) => {
-              return <div>{eventItem.content}</div>;
-            })}
-            {/* <AddEventItemComponent planItemId={planItem.docId} /> */}
-          </div>
+          <EventItemListComponent eventItems={eventItems} />
+          <AddEventItemComponent
+            planItemId={planItem.docId}
+            isMouseHover={isAddEventActivated}
+            onEventAdded={updateEvents}
+          />
         </div>
       </div>
     </div>

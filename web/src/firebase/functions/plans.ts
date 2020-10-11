@@ -176,7 +176,15 @@ export const updatePlanItem = async (props: {
 }): Promise<DatabaseActionResult> => {
   console.log("update plan item");
   const createTime = new Date().getTime();
+
+  const uid = await getAuthUser().then((user) => {
+    if (!user) {
+      throw new Error("please login first");
+    }
+    return user.uid;
+  });
   const request: UpdateRequest<PlanItem> = {
+    uid,
     createTime,
     docId: props.planItem.docId,
     item: props.planItem,

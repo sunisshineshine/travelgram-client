@@ -1,9 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { CreatePlanItemComponent } from "../../components/plans/CreatePlanItemComponent";
-import {
-  PlanItemListComponent,
-  PlanTitleComponent,
-} from "../../components/plans/plan";
+import { PlanTitleComponent } from "../../components/plans/plan";
+import { PlanItemListComponent } from "../../components/plans/planItem";
 import { LoadingStateContext } from "../../components/utils/Loading/LoadingModal";
 import * as PATHS from "../../constants/paths";
 import * as PLANS from "../../firebase/functions/plans";
@@ -25,7 +23,7 @@ export const PlanDetailPage = () => {
     const planDocId = urlParams.get("id");
     console.log("current selected plan's id" + planDocId);
     if (planDocId == null) {
-      window.location.pathname = PATHS.PLANS;
+      window.location.pathname = PATHS.PLANS_PAGE;
       throw new Error("planDocId is null");
     }
     updatePlan(planDocId);
@@ -67,13 +65,13 @@ export const PlanDetailPage = () => {
     console.log(planItems);
   };
 
-  const onDeleteButtonClciked = () => {
-    if (!plan) {
-      return;
-    }
-    setLoadingState({ activated: true, message: "now deleting plan" });
-    PLANS.deletePlan(plan.docId).then(PATHS.goPlans);
-  };
+  // const onDeleteButtonClciked = () => {
+  //   if (!plan) {
+  //     return;
+  //   }
+  //   setLoadingState({ activated: true, message: "now deleting plan" });
+  //   PLANS.deletePlan(plan.docId).then(PATHS.goPlans);
+  // };
 
   if (!plan) {
     return <div>getting plan data from server</div>;

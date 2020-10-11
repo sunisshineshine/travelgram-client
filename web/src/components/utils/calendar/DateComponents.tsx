@@ -1,5 +1,5 @@
 import React from "react";
-import { displayClockNumber } from "./ClockComponent";
+import { displayClockNumber } from "./calendarUtils";
 
 import "./DateComponents.scss";
 

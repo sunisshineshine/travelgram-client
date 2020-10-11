@@ -1,11 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { goPlans } from "../../constants/paths";
 import {
   doLoginWithEmailAndPassword,
   EmailPasswordRequest,
+  getAuthUser,
 } from "../../firebase/auth";
 import { goHome, goSignUpPage } from "../../navigator";
 
 export const LoginPage = () => {
+  useEffect(() => {
+    getAuthUser().then((user) => {
+      if (user) {
+        goPlans();
+      }
+    });
+  }, []);
+
   const [message, setMessage] = useState("Please Login");
 
   const doLogin = (request: EmailPasswordRequest) => {
@@ -25,7 +35,7 @@ export const LoginPage = () => {
   };
 
   return (
-    <div>
+    <div id="login-page">
       <h1>Log-in Page</h1>
       <button id="main-button" onClick={goHome}>
         Back to Main

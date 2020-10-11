@@ -13,7 +13,6 @@ import { PlanDetailPage } from "./pages/plan/PlanDetailPage";
 import { User } from "firebase";
 import { getAuthUser } from "./firebase/auth";
 import { TopBannerComponent } from "./components/banners/TopBannerComponent";
-import { goLoginPage } from "./navigator";
 import {
   LoadingContextProvider,
   LoadingModalComponent,
@@ -25,58 +24,61 @@ import {
 } from "./components/utils/Navigation";
 export const App = () => {
   const [user, setUser] = useState<User | null>(null);
-  const setLoadingState = useContext(LoadingStateContext)![1];
   useEffect(() => {
-    setLoadingState({
-      activated: true,
-      icon: "auth",
-      message: "now getting user information",
-    });
+    setLoading(true);
     getAuthUser()
-      .then((user) => {
-        setLoadingState({ activated: false });
-        setUser(user);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+      .then((user) => setUser(user))
+      .then(() => setLoading(false));
   }, []);
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    if (loading) {
+      setLoadingState({
+        activated: true,
+        icon: "auth",
+        message: "now getting user information",
+      });
+    } else {
+      setLoadingState({ activated: false });
+    }
+  }, [loading]);
+  const setLoadingState = useContext(LoadingStateContext)![1];
 
   return (
     <div className="app">
       <LoadingModalComponent />
       <TopBannerComponent />
       <NavigationComponent />
-      <div className="main-content-page">
-        <Router>
-          <Switch>
-            <Route exact path="/">
-              {() => PATHS.goPlans()}
-            </Route>
-            <Route path={PATHS.LOGIN_PAGE}>
-              <LoginPage />
-            </Route>
-            <Route path={PATHS.SIGN_UP_PAGE}>
-              <SignupPage />
-            </Route>
-            {user && (
-              <>
-                <Route exact path={PATHS.PLANS}>
+      {!loading && (
+        <div className="main-content-page">
+          <Router>
+            <Switch>
+              {user && <Route path="not-exist-path">test</Route>}
+              <Route path={PATHS.LOGIN_PAGE}>
+                <LoginPage />
+              </Route>
+              <Route path={PATHS.SIGN_UP_PAGE}>
+                <SignupPage />
+              </Route>
+              {user && (
+                <Route exact path={PATHS.PLANS_PAGE}>
                   <PlansPage />
                 </Route>
-                <Route path={PATHS.PLAN_DETAIL}>
+              )}
+              {user && (
+                <Route exact path={PATHS.PLAN_DETAIL_PAGE}>
                   <PlanDetailPage />
                 </Route>
-              </>
-            )}
-            <Route>
-              <div>
-                <button onClick={goLoginPage}> go to login page</button>
-              </div>
-            </Route>
-          </Switch>
-        </Router>
-      </div>
+              )}
+              <Route>
+                {() => {
+                  PATHS.goLoginPage();
+                }}
+              </Route>
+            </Switch>
+          </Router>
+        </div>
+      )}
     </div>
   );
 };

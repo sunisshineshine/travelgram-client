@@ -1,0 +1,7 @@
+@use '../theme';
+
+.caption {
+  width: fit-content;
+  color: theme.$color-gray;
+  font-size: theme.$font-size-xs;
+}

@@ -9,6 +9,12 @@
     width: 100%;
   }
 
+  .caption {
+    margin-right: auto;
+    margin-left: auto;
+    color: inherit;
+  }
+
   .start {
     background-color: theme.$color-primary;
     color: white;

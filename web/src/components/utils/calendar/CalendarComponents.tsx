@@ -142,7 +142,7 @@ export const CalendarComponent = (props: {
                           ? true
                           : false
                       }
-                      isToday={date === today}
+                      isToday={date.toDateString() === today.toDateString()}
                       isDisabled={date.getMonth() != month}
                       onClcicked={props.onDateSelected}
                     />

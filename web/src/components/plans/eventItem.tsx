@@ -1,4 +1,6 @@
-import React, { useContext, useState } from "react";
+import React from "react";
+
+import { useContext, useState } from "react";
 import { createEventItem } from "../../firebase/functions/plans";
 import { LoadingStateContext } from "../utils/Loading/LoadingModal";
 
@@ -40,7 +42,7 @@ export const AddEventItemComponent = (props: {
       icon: "travel",
       message: "Adding Event Item",
     });
-    createEventItem({ content, planItemId }).then((result) => {
+    createEventItem({ content, planItemId }).then(() => {
       setContent("");
       setLoading({ activated: false });
       props.onEventAdded();

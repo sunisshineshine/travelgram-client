@@ -4,8 +4,8 @@ import "./CreatePlanItemComponent.scss";
 import * as PLANS from "../../firebase/functions/plans";
 
 import { PlaceSearchBarComponent } from "../places/PlaceSearchBarComponent";
-import { SelectPeriodComponent } from "../utils/calendar/period/PeriodComponents";
 import { LoadingStateContext } from "../utils/Loading/LoadingModal";
+import { SelectDatePeriodComponent } from "../utils/calendar/period/SelectDateComponent";
 
 export const CreatePlanItemComponent = (props: {
   plan: Plan;
@@ -34,7 +34,6 @@ export const CreatePlanItemComponent = (props: {
     setLoading({ activated: true, message: "adding plan" });
 
     const title = place.name;
-
     const placeReq: PlaceBased = {
       placeId: place.place_id || null,
       address: place.formatted_address || null,
@@ -58,7 +57,7 @@ export const CreatePlanItemComponent = (props: {
 
   return (
     <div id="create-plan-item-component">
-      <SelectPeriodComponent
+      <SelectDatePeriodComponent
         size="sm"
         selectedRange={period}
         onRangeUpdated={(time) => {

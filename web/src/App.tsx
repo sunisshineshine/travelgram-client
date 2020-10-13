@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import "./style/_theme.scss";
+import "./style/classes/_font.scss";
 import "./App.scss";
 
 import * as PATHS from "./constants/paths";

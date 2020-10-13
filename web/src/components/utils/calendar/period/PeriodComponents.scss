@@ -1,22 +1,5 @@
 @use "../../../../style/theme" as theme;
 
-#select-period-component {
-  width: 100%;
-
-  #period-string-component {
-    align-items: center;
-  }
-
-  #select-period {
-    margin-top: theme.$dimen-lg;
-  }
-
-  .close-button-sm {
-    margin-right: theme.$dimen-xs;
-    margin-bottom: theme.$dimen-xs;
-  }
-}
-
 #period-component {
   height: 40px;
   margin-top: theme.$dimen-xs;

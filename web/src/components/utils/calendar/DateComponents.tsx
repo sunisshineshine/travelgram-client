@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { displayClockNumber } from "./calendarUtils";
 
 import "./DateComponents.scss";
@@ -29,6 +29,21 @@ export const DateComponent = (props: {
     className += " disabled";
   }
 
+  const displayCaption = (): string => {
+    // if (props.isStart && props.isEnd) {
+    //   return "";
+    // } else if (props.isStart) {
+    //   return "start";
+    // } else if (props.isEnd) {
+    //   return "end";
+    // } else
+    if (props.isToday) {
+      return "today";
+    }
+
+    return "";
+  };
+
   return (
     <div
       id="date-component"
@@ -38,6 +53,7 @@ export const DateComponent = (props: {
     >
       <div className={className}>
         <p className="align-center">{props.date.getDate()}</p>
+        <p className="caption">{displayCaption()}</p>
       </div>
     </div>
   );

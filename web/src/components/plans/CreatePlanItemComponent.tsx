@@ -5,30 +5,29 @@ import * as PLANS from "../../firebase/functions/plans";
 
 import { PlaceSearchBarComponent } from "../places/PlaceSearchBarComponent";
 import { LoadingStateContext } from "../utils/Loading/LoadingModal";
-import { SelectDatePeriodComponent } from "../utils/calendar/period/SelectDateComponent";
+import { SelectFromPeriodComponent } from "../utils/calendar/period/SelectFromPeriodComponent";
+import { getAllDayPeriod } from "../utils/calendar/calendarUtils";
 
 export const CreatePlanItemComponent = (props: {
   plan: Plan;
   onPlanItemAdded: () => void;
 }) => {
   const { plan } = props;
-  const [period, setItemPeriod] = useState<TimeBased>();
-  useEffect(() => {
-    if (plan.startTime) {
-      const startDate = new Date(plan.startTime);
-      const endDate = new Date(
-        startDate.getFullYear(),
-        startDate.getMonth(),
-        startDate.getDate() + 1
-      );
-      setItemPeriod({
-        startTime: startDate.getTime(),
-        endTime: endDate.getTime() - 1,
-      });
-    }
-  }, [plan]);
+  const [planPeriod, setPlanPeriod] = useState<TimeBased>({
+    startTime: plan.startTime,
+    endTime: plan.endTime,
+  });
 
-  const [place, setPlace] = useState<google.maps.places.PlaceResult>();
+  const [selectedPeriod, setSelectedPeriod] = useState(
+    planPeriod.startTime
+      ? getAllDayPeriod({ time: planPeriod.startTime })
+      : undefined
+  );
+  const onPeriodUpdated: TimebasedCallBack = (period: TimeBased) => {
+    setSelectedPeriod(period);
+  };
+
+  const [searchedPlace, setPlace] = useState<google.maps.places.PlaceResult>();
   const setLoading = useContext(LoadingStateContext)![1];
   const createPlanItem = (place: google.maps.places.PlaceResult) => {
     setLoading({ activated: true, message: "adding plan" });
@@ -45,7 +44,7 @@ export const CreatePlanItemComponent = (props: {
     PLANS.createPlanItem({
       title,
       planDocId: plan.docId,
-      timeReq: period || { endTime: null, startTime: null },
+      timeReq: selectedPeriod || { endTime: null, startTime: null },
       placeReq,
     })
       .then(() => {
@@ -57,15 +56,12 @@ export const CreatePlanItemComponent = (props: {
 
   return (
     <div id="create-plan-item-component">
-      <SelectDatePeriodComponent
-        size="sm"
-        selectedRange={period}
-        onRangeUpdated={(time) => {
-          setItemPeriod(time);
-          console.log(time);
-        }}
+      <SelectFromPeriodComponent
+        basePeriod={planPeriod}
+        selectedPeriod={selectedPeriod}
+        onPeriodUpdate={onPeriodUpdated}
       />
-      {place?.name}
+      {searchedPlace?.name}
       <PlaceSearchBarComponent onSearched={createPlanItem} />
     </div>
   );

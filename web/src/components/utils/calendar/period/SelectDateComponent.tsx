@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { CalendarComponent } from "../CalendarComponents";
-import { PeriodStringComponent, PeriodComponent } from "./PeriodComponents";
 import "./SelectDateComponent.scss";
 
 // type TimeSelectMethod = "NONE" | "START_DATE" | "END_DATE";
 
 export const SelectDatePeriodComponent = (props: {
   title?: string;
+  isDisplayPeriod?: boolean;
   date?: Date;
   selectedRange?: TimeBased;
+  baseRange?: TimeBased;
   size?: Size;
   onRangeUpdated: TimebasedCallBack;
 }) => {
@@ -27,35 +28,17 @@ export const SelectDatePeriodComponent = (props: {
     }
   }, [selectedPeriod]);
 
-  // const [currentSelectingMethod, setMethod] = useState<TimeSelectMethod>(
-  //   "NONE"
-  // );
-  // const [message, setMessage] = useState("");
-  // const [calendarDisplay, setCalendarDisplay] = useState(false);
-  // const [clockDisplay, setClockDisplay] = useState(true);
-
-  // useEffect(() => {
-  //   switch (currentSelectingMethod) {
-  //     case "NONE":
-  //       setCalendarDisplay(false);
-  //       setClockDisplay(false);
-  //       setMessage("");
-  //       break;
-  //     case "START_DATE":
-  //       setCalendarDisplay(true);
-  //       setClockDisplay(false);
-  //       setMessage("SET YOUR START DATE");
-  //       break;
-  //     case "END_DATE":
-  //       setCalendarDisplay(true);
-  //       setClockDisplay(false);
-  //       setMessage("SET YOUR END DATE");
-  //       break;
-  //   }
-  //   forceRender();
-  // }, [currentSelectingMethod]);
-
   const onDateSelected: DateCallBack = (date: Date) => {
+    const { baseRange } = props;
+    if (baseRange) {
+      if (baseRange.startTime && baseRange.startTime > date.getTime()) {
+        return;
+      }
+      if (baseRange.endTime && baseRange.endTime < date.getTime()) {
+        return;
+      }
+    }
+
     let period: TimeBased = { startTime: null, endTime: null };
     if (!selectedPeriod) {
       // period not initialized
@@ -96,22 +79,6 @@ export const SelectDatePeriodComponent = (props: {
     console.log("selected period changed :", period);
     setPeriod(period);
     forceRender();
-    // switch (currentSelectingMethod) {
-    //   case "START_DATE":
-    //     setPeriod({
-    //       startTime: date.getTime(),
-    //       endTime: null,
-    //     });
-    //     setMethod("END_DATE");
-    //     break;
-    //   case "END_DATE":
-    //     setPeriod({
-    //       startTime: selectedPeriod?.startTime || null,
-    //       endTime: date.getTime(),
-    //     });
-    //     setMethod("START_DATE");
-    //     break;
-    // }
   };
 
   const setEmptyState = useState(0)[1];
@@ -135,26 +102,12 @@ export const SelectDatePeriodComponent = (props: {
     <div id="select-period-component">
       <div>
         <label>{props.title}</label>
-        <div>
-          <PeriodComponent
-            period={selectedPeriod}
-            // onStartClicked={() => {
-            //   currentSelectingMethod == "START_DATE"
-            //     ? setMethod("NONE")
-            //     : setMethod("START_DATE");
-            // }}
-            // onEndClicked={() =>
-            //   currentSelectingMethod == "END_DATE"
-            //     ? setMethod("NONE")
-            //     : setMethod("END_DATE")
-            // }
-          />
-        </div>
         <div id="select-period">
           <div id="calendar-display">
             <CalendarComponent
               date={props.date}
-              highlightRange={selectedPeriod}
+              selectedRange={selectedPeriod}
+              baseRange={props.baseRange}
               onDateSelected={onDateSelected}
             />
           </div>
@@ -163,35 +116,3 @@ export const SelectDatePeriodComponent = (props: {
     </div>
   );
 };
-
-// const onClockSelected: ClockCallBack = (clock: Clock) => {
-//   const period = selectedPeriod;
-//   if (!period) {
-//     return;
-//   }
-//   const setClock = (time: number, clock: Clock): number => {
-//     let result =
-//       time + clock.hours * 60 * 60 * 1000 + clock.minutes * 60 * 1000;
-//     if (clock.hours === 24) {
-//       result -= 1;
-//     }
-//     return result;
-//   };
-//   switch (currentSelectingMethod) {
-//     case "START_CLOCK":
-//       if (!period?.startTime) {
-//         return;
-//       }
-//       period.startTime = setClock(period?.startTime, clock);
-//       setMethod("END_DATE");
-//       break;
-//     case "END_CLOCK":
-//       if (!period?.endTime) {
-//         return;
-//       }
-//       period.endTime = setClock(period?.endTime, clock);
-//       setMethod("START_DATE");
-//       break;
-//   }
-//   setPeriod(period);
-// };

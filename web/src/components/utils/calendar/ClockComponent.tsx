@@ -21,8 +21,6 @@ export const ClockComponent = (props: {
   };
 
   const handleHoursChanged = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    console.log(e.key);
-
     let currentHours = hours;
     if (e.key === "Backspace") {
       setHours((hours) => (hours >= 10 ? Math.floor(hours / 10) : 0));
@@ -48,7 +46,6 @@ export const ClockComponent = (props: {
   };
 
   const handleMinutesChanged = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    console.log(e.key);
     let currentMinutes = minutes;
     if (e.key === "Backspace") {
       setMinutes((minutes) => (minutes >= 10 ? Math.floor(minutes / 10) : 0));

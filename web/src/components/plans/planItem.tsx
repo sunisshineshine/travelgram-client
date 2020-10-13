@@ -49,8 +49,6 @@ export const PlanItemListComponent = (props: {
         endDate.getMonth(),
         endDate.getDate()
       ).getTime();
-      console.log(start, new Date(end));
-      console.log(endTime);
 
       if (start == end) {
         datesMap.set(start, [...(datesMap.get(start) || []), planItem]);
@@ -130,9 +128,7 @@ export const PlanItemComponent = (props: { planItem: PlanItem }) => {
   }, []);
 
   const [isAddEventActivated, setActivated] = useState(false);
-  useEffect(() => {
-    console.log("hi");
-  }, [isAddEventActivated]);
+  // useEffect(() => {}, [isAddEventActivated]);
   return (
     <div
       id="plan-item-component"

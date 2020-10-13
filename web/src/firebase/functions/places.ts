@@ -43,6 +43,7 @@ export const getPlaceDetail = (
 
   return functionsPlaceDetail(request)
     .then((result) => {
+      console.log("Successfully getting place result");
       console.log(result.data);
       return (result.data as unknown) as google.maps.places.PlaceResult;
     })

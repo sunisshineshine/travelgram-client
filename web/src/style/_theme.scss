@@ -1,6 +1,6 @@
 $color-primary-dark: #00308f;
-$color-primary: #1974d2;
-$color-primary-light: #3cc8ff;
+$color-primary: #50a5ff;
+$color-primary-light: #abe7ff;
 
 $color-gray: gray;
 
@@ -92,7 +92,7 @@ $font-size-xl: 24px;
 }
 
 .border-right-primary {
-  border-right: 1px solid $color-primary;
+  border-right: 1px solid $color-primary-light;
 }
 
 .border-bottom-primary {
@@ -149,7 +149,7 @@ $font-size-xl: 24px;
 
 .bg-circle-primary-light {
   color: white;
-  background-color: $color-primary-light;
+  background-color: $color-primary;
   border-radius: 50%;
 }
 

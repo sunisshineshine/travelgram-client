@@ -27,6 +27,12 @@
     color: white;
   }
 
+  .semi-selected {
+    border-radius: 0;
+    background-color: theme.$color-primary-light;
+    color: white;
+  }
+
   .selected.start {
     border-top-left-radius: theme.$dimen-md;
     border-bottom-left-radius: theme.$dimen-md;

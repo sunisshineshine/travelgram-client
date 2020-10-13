@@ -15,7 +15,7 @@ export const PeriodClockComponent = (props: { period: TimeBased }) => {
       }}
     >
       <p id="period-clock" className="font-md">
-        {getPeriodString({ period, displayClock: true })}
+        {getPeriodString({ period, displayClock: true, type: "CLOCK" })}
       </p>
     </div>
   );

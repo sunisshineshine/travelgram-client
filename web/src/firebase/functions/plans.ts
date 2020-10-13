@@ -51,7 +51,6 @@ export const getPlans = async (): Promise<Plan[]> => {
   };
 
   const result = await functionsPlans(request);
-  console.log(result);
   return (result.data as unknown) as Plan[];
 };
 
@@ -123,7 +122,6 @@ export const getPlanItem = async (docId: string): Promise<PlanItem> => {
   };
 
   const result = await functionsPlanItem(request);
-  console.log(result);
   const data = result.data;
   if (!data) {
     throw new Error("data is not exist");

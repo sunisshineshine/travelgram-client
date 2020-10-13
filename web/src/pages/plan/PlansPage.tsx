@@ -12,8 +12,8 @@ import { LoadingStateContext } from "../../components/utils/Loading/LoadingModal
 export const PlansPage = () => {
   const setLoadingState = useContext(LoadingStateContext)![1];
   const [plans, setPlans] = useState<Plan[]>([]);
-  const [modalVisible, setVisible] = useState(false);
-  console.log(modalVisible);
+  const [isDisplayCreateModal, setDisplayCreateModal] = useState(false);
+
   const setNavItems = useContext(NavItemsContext)![1];
   useEffect(() => {
     updatePlans();
@@ -31,8 +31,10 @@ export const PlansPage = () => {
       .then((plans) => {
         setLoadingState({ activated: false });
         setPlans(plans);
-        console.log("plan has updated");
-        console.log(plans.map((plan) => plan.title));
+        console.log(
+          "plan list updated",
+          plans.map((plan) => plan.title)
+        );
       })
       .catch((error) => {
         console.error(error);
@@ -40,7 +42,7 @@ export const PlansPage = () => {
   };
 
   const onCreatePlanButtonClicked = () => {
-    setVisible((prev) => !prev);
+    setDisplayCreateModal((prev) => !prev);
   };
 
   const onPlanClicked = (plan: Plan) => {
@@ -53,7 +55,7 @@ export const PlansPage = () => {
   };
 
   const onModalClosed = () => {
-    setVisible(false);
+    setDisplayCreateModal(false);
     updatePlans();
   };
 
@@ -61,7 +63,10 @@ export const PlansPage = () => {
     <div className="plans-page">
       {/* <CreatePlanModal visible={true} onClosed={onModalClosed} /> */}
 
-      <CreatePlanModal visible={modalVisible} onClosed={onModalClosed} />
+      <CreatePlanModal
+        visible={isDisplayCreateModal}
+        onClosed={onModalClosed}
+      />
       <p className="title">Please choose your plan</p>
       <PlanListComponent onClicked={onPlanClicked} plans={plans} />
       <button onClick={onCreatePlanButtonClicked}>create plan</button>

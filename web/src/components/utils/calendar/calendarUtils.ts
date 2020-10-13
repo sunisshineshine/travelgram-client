@@ -17,11 +17,12 @@ export const days = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
 
 export const getPeriodString = (props: {
   period: TimeBased;
+  type: "DATE" | "CLOCK";
   displayYear?: boolean;
   displayClock?: boolean;
 }): string => {
   const { startTime, endTime } = props.period;
-  const { displayYear, displayClock } = props;
+  const { type, displayYear, displayClock } = props;
 
   const startDateString = getDateString({ time: startTime, displayYear });
   const startClockString = getClockString({ time: startTime });
@@ -31,29 +32,34 @@ export const getPeriodString = (props: {
 
   // date is same
   if (startDateString === endDateString) {
-    // clock also same
-    if (startClockString === endClockString) {
-      return startClockString;
-    } else {
-      // date is same but clock is different
-      const startDate = startTime && new Date(startTime);
-      const endDate = startTime && new Date(startTime);
-      // check all day period
-      if (
-        startDate &&
-        endDate &&
-        endTime &&
-        startDate.getHours() == 0 &&
-        startDate.getMinutes() == 0 &&
-        new Date(endTime + 1).getDate() != endDate.getDate()
-      ) {
-        return "All day";
-      } else {
-        // not all day
-        return `${startTime ? startClockString : ""}~${
-          endTime ? endClockString : ""
-        }`;
-      }
+    switch (type) {
+      case "DATE":
+        return getDateString({ time: startTime });
+      case "CLOCK":
+        if (startClockString === endClockString) {
+          // clock also same
+          return startClockString;
+        } else {
+          // date is same but clock is different
+          const startDate = startTime && new Date(startTime);
+          const endDate = startTime && new Date(startTime);
+          // check all day period
+          if (
+            startDate &&
+            endDate &&
+            endTime &&
+            startDate.getHours() == 0 &&
+            startDate.getMinutes() == 0 &&
+            new Date(endTime + 1).getDate() != endDate.getDate()
+          ) {
+            return "All day";
+          } else {
+            // not all day
+            return `${startTime ? startClockString : ""}~${
+              endTime ? endClockString : ""
+            }`;
+          }
+        }
     }
   } else {
     // date is different
@@ -134,4 +140,21 @@ export const displayClockNumber = (number: number): string => {
   } else {
     return `${number}`;
   }
+};
+
+export const getAllDayPeriod = (props: { time: number }): TimeBased => {
+  const date = new Date(props.time);
+  return {
+    startTime: new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate()
+    ).getTime(),
+    endTime:
+      new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate() + 1
+      ).getTime() - 1,
+  };
 };

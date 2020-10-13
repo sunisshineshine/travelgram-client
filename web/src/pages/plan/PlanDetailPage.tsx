@@ -11,7 +11,6 @@ import "./PlanDetailPage.scss";
 export const PlanDetailPage = () => {
   const [title, setTitle] = useState("now loading plan detail...");
 
-  console.log(title);
   const setLoadingState = useContext(LoadingStateContext)![1];
 
   const [plan, setPlan] = useState<Plan>();
@@ -34,8 +33,7 @@ export const PlanDetailPage = () => {
     PLANS.getPlan(planDocId)
       .then((plan) => {
         setLoadingState({ activated: false });
-        console.log("plan recieved");
-        console.log(plan);
+        console.log("plan recieved", plan);
         setTitle(plan.title);
         setPlan(plan);
       })
@@ -58,20 +56,10 @@ export const PlanDetailPage = () => {
     setLoadingState({ activated: true, message: "updating plan Items" });
     console.log("plan items will be updated with :" + plan.docId);
     const planItems = await PLANS.getPlanItems(plan.docId);
-    console.log(planItems);
     setPlanItems(planItems);
     setLoadingState({ activated: false });
-    console.log("plan items updated :");
-    console.log(planItems);
+    console.log("plan items updated", planItems);
   };
-
-  // const onDeleteButtonClciked = () => {
-  //   if (!plan) {
-  //     return;
-  //   }
-  //   setLoadingState({ activated: true, message: "now deleting plan" });
-  //   PLANS.deletePlan(plan.docId).then(PATHS.goPlans);
-  // };
 
   if (!plan) {
     return <div>getting plan data from server</div>;

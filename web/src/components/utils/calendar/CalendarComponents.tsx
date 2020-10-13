@@ -7,8 +7,9 @@ export const CalendarComponent = (props: {
   // base date is optional
   date?: Date;
   // highlightRange is optinal
-  highlightRange?: TimeBased;
+  selectedRange?: TimeBased;
   // callback for user selecting date
+  baseRange?: TimeBased;
   onDateSelected: DateCallBack;
 }) => {
   const today = new Date();
@@ -54,7 +55,6 @@ export const CalendarComponent = (props: {
   const [weeks, setWeeks] = useState<Week[]>([]);
 
   const updateCalendar = () => {
-    console.log("update ui");
     const firstDate = new Date(year, month, 1);
     const lastDate = new Date(year, month + 1, -1);
     let i = 1 - firstDate.getDay();
@@ -117,33 +117,48 @@ export const CalendarComponent = (props: {
                 style={{ marginBottom: "5px" }}
               >
                 {week.map((date) => {
+                  const { baseRange, selectedRange } = props;
                   const isStart = isSameDate({
-                    standard: props.highlightRange?.startTime || undefined,
+                    standard: props.selectedRange?.startTime || undefined,
                     target: date.getTime(),
                   });
                   const isEnd = isSameDate({
-                    standard: props.highlightRange?.endTime || undefined,
+                    standard: props.selectedRange?.endTime || undefined,
                     target: date.getTime(),
                   });
+                  const isSelcted =
+                    selectedRange &&
+                    selectedRange.startTime &&
+                    selectedRange.endTime &&
+                    date.getTime() >= selectedRange.startTime &&
+                    date.getTime() <= selectedRange.endTime
+                      ? true
+                      : isStart || isEnd
+                      ? true
+                      : false;
+
+                  const isDisabled =
+                    date.getMonth() != month ||
+                    (baseRange &&
+                      !(baseRange &&
+                      baseRange.startTime &&
+                      baseRange.endTime &&
+                      date.getTime() >= baseRange.startTime &&
+                      date.getTime() <= baseRange.endTime
+                        ? true
+                        : isStart || isEnd
+                        ? true
+                        : false));
+
                   return (
                     <DateComponent
                       key={Math.random()}
                       date={date}
                       isStart={isStart}
                       isEnd={isEnd}
-                      isSelected={
-                        props.highlightRange &&
-                        props.highlightRange.startTime &&
-                        props.highlightRange.endTime &&
-                        date.getTime() >= props.highlightRange.startTime &&
-                        date.getTime() <= props.highlightRange.endTime
-                          ? true
-                          : isStart || isEnd
-                          ? true
-                          : false
-                      }
+                      isSelected={isSelcted}
                       isToday={date.toDateString() === today.toDateString()}
-                      isDisabled={date.getMonth() != month}
+                      isDisabled={isDisabled}
                       onClcicked={props.onDateSelected}
                     />
                   );

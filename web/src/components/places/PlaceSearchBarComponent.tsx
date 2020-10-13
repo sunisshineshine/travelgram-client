@@ -20,11 +20,10 @@ const getPredictions = (
 
       PLACES.getPlaceAutocompletions(query)
         .then((predictions) => {
-          console.log(predictions);
           onResult(predictions);
         })
         .catch((reason) => {
-          console.log(reason);
+          console.error("cannot get place search predictions", reason);
         });
     }
   }, 500);
@@ -106,11 +105,10 @@ export const PlaceSearchBarComponent = (props: {
     setPosition(-1);
   };
 
+  const [isFocused, setFocused] = useState(false);
+
   return (
-    <div
-      id="place-search-bar-component"
-      className="border-primary border-radius"
-    >
+    <div id="place-search-bar-component">
       <div id="place-search-bar" className="flex-row ">
         <div className="icon">🔍</div>
         <input
@@ -118,6 +116,8 @@ export const PlaceSearchBarComponent = (props: {
           className="input"
           autoComplete="off"
           value={input}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
           placeholder="search place at here.."
           // onBlur={clearPredictions}
           onChange={(e) => {
@@ -133,10 +133,12 @@ export const PlaceSearchBarComponent = (props: {
           }}
         />
       </div>
-      <PredictionsComponent
-        selected={selectedPosition}
-        predictions={predictions}
-      />
+      <div style={{ display: isFocused ? "block" : "none" }}>
+        <PredictionsComponent
+          selected={selectedPosition}
+          predictions={predictions}
+        />
+      </div>
     </div>
   );
 };
@@ -154,14 +156,22 @@ const PredictionsComponent = (props: {
   return (
     <div
       id="predictions-component"
-      style={{ display: predictions.length > 0 ? "block" : "none" }}
+      // style={{ display: predictions.length > 0 ? "block" : "none" }}
     >
-      {predictions.map((prediction, index) => (
-        <PredictionComponent
-          highlight={index === selected}
-          prediction={prediction}
-        />
-      ))}
+      {predictions.length > 0 ? (
+        <div id="predictions">
+          {predictions.map((prediction, index) => (
+            <PredictionComponent
+              highlight={index === selected}
+              prediction={prediction}
+            />
+          ))}
+        </div>
+      ) : (
+        <div>
+          <p>searched place not exist.</p>
+        </div>
+      )}
     </div>
   );
 };

@@ -6,6 +6,7 @@ import "./DateComponents.scss";
 export const DateComponent = (props: {
   date: Date;
   isSelected: boolean;
+  isSemiSelected?: boolean;
   isToday?: boolean;
   isStart?: boolean;
   isEnd?: boolean;
@@ -27,6 +28,9 @@ export const DateComponent = (props: {
   }
   if (props.isDisabled) {
     className += " disabled";
+  }
+  if (props.isSemiSelected && !props.isSelected) {
+    className += " semi-selected";
   }
 
   const displayCaption = (): string => {

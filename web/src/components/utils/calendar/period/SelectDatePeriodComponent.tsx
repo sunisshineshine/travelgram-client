@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { CalendarComponent } from "../CalendarComponents";
-import "./SelectDateComponent.scss";
+import { getAllDayPeriod } from "../calendarUtils";
+import "./SelectDatePeriodComponent.scss";
 
 // type TimeSelectMethod = "NONE" | "START_DATE" | "END_DATE";
 
@@ -58,7 +59,7 @@ export const SelectDatePeriodComponent = (props: {
             // selected date is later than starttime
             period = {
               startTime: selectedPeriod.startTime,
-              endTime: date.getTime(),
+              endTime: getAllDayPeriod({ time: date.getTime() }).endTime,
             };
           } else {
             // selected date is earlier than starttime

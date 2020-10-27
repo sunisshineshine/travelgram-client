@@ -1,5 +1,5 @@
 import React from "react";
-import { DateStringComponent } from "../DateComponents";
+// import { DateStringComponent } from "../DateComponents";
 import "./PeriodComponents.scss";
 
 interface PeriodComponentPropTypes {
@@ -58,8 +58,8 @@ export const PeriodStringComponent = (props: PeriodComponentPropTypes) => {
     : "not selected";
 
   return (
-    <div id="period-string-component" className="flex-row">
-      <p className="icon">📅</p>
+    <div id="period-string-component">
+      <p id="calendar-icon">📅</p>
       <div
         id="period-string"
         style={{ marginLeft: "5px", height: "fit-content" }}
@@ -67,11 +67,11 @@ export const PeriodStringComponent = (props: PeriodComponentPropTypes) => {
         {startDateStr === endDateStr ? (
           <p onClick={props.onStartClicked}>{startDateStr}</p>
         ) : (
-          <div className="flex-row align-items-center">
+          <>
             <p onClick={props.onStartClicked}>{startDateStr}</p>
             <p>{(startDate || startDateStr) && "~"} </p>
             <p onClick={props.onEndClicked}>{endDateStr}</p>
-          </div>
+          </>
         )}
       </div>
     </div>

@@ -9,8 +9,6 @@ import * as PLANS from "../../firebase/functions/plans";
 import "./PlanDetailPage.scss";
 
 export const PlanDetailPage = () => {
-  const [title, setTitle] = useState("now loading plan detail...");
-
   const setLoadingState = useContext(LoadingStateContext)![1];
 
   const [plan, setPlan] = useState<Plan>();
@@ -34,7 +32,6 @@ export const PlanDetailPage = () => {
       .then((plan) => {
         setLoadingState({ activated: false });
         console.log("plan recieved", plan);
-        setTitle(plan.title);
         setPlan(plan);
       })
       .catch((error) => {

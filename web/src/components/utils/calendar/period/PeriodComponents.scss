@@ -1,12 +1,28 @@
-@use "../../../../style/theme" as theme;
+// @use "../../../../style/theme" as theme;
 
 #period-component {
   height: 40px;
-  margin-top: theme.$dimen-xs;
+  // margin-top: theme.$dimen-xs;
   #period-start {
     width: 100%;
   }
   #period-end {
     width: 100%;
+  }
+}
+
+#period-string-component {
+  display: flex;
+  flex-direction: row;
+  margin: 4px;
+
+  #calendar-icon {
+    padding-bottom: 4px;
+  }
+
+  #period-string {
+    padding-top: 4px;
+    display: flex;
+    flex-direction: row;
   }
 }

@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { getEventItems } from "../../firebase/functions/plans";
 import { DateDividerComponent } from "../utils/calendar/DateDividerComponent";
 import { PeriodClockComponent } from "../utils/calendar/period/PeriodClockComponent";
+import { SelectClockPeriodComponent } from "../utils/calendar/period/SelectClockPeriodComponent";
 import { LoadingStateContext } from "../utils/Loading/LoadingModal";
 import { AddEventItemComponent, EventItemListComponent } from "./eventItem";
 import "./planItem.scss";
@@ -140,12 +141,20 @@ export const PlanItemComponent = (props: { planItem: PlanItem }) => {
       }}
     >
       <div className="flex-row">
-        <PeriodClockComponent
-          period={{
-            startTime: planItem.startTime,
-            endTime: planItem.endTime,
-          }}
-        />
+        <div>
+          <PeriodClockComponent
+            period={{
+              startTime: planItem.startTime,
+              endTime: planItem.endTime,
+            }}
+          />
+          <SelectClockPeriodComponent
+            period={{
+              startTime: planItem.startTime,
+              endTime: planItem.endTime,
+            }}
+          />
+        </div>
         <div id="plan-item">
           <h2 id="title">{planItem.title}</h2>
           <p>{planItem.address}</p>

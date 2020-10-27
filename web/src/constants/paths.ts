@@ -1,10 +1,18 @@
-export const HOME = "/";
-export const LOGIN_PAGE = "/pages/login";
+export const HOME_PATH = "/";
+export const goHome = () => {
+  window.location.pathname = HOME_PATH;
+};
+
+export const LOGIN_PATH = "/pages/login";
 export const goLoginPage = () => {
-  history.pushState(null, "", LOGIN_PAGE);
+  history.pushState(null, "", LOGIN_PATH);
   window.location.reload();
 };
-export const SIGN_UP_PAGE = "/pages/signup";
+
+export const SIGNUP_PATH = "/pages/signup";
+export const goSignUpPage = () => {
+  window.location.pathname = SIGNUP_PATH;
+};
 
 export const PLANS_PAGE = "/plans";
 export const goPlans = () => {

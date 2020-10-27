@@ -5,10 +5,10 @@ import React, {
   useContext,
   useState,
 } from "react";
-import "./LoadingModal.scss";
+// import "./LoadingModal.scss";
 
 interface LoadingPageProps {
-  activated: boolean;
+  activated: boolean | "blur";
   icon?: "auth" | "place" | "travel";
   message?: string;
 }
@@ -52,11 +52,13 @@ export const LoadingModalComponent = () => {
       id="loading-modal-component"
       style={{ display: loadingState.activated ? "block" : "none" }}
     >
-      <div className="content">
-        <p className="icon">{getIcon()}</p>
-        <p>{loadingState.message}</p>
-        <p>🧳 YOGURTRAVEL</p>
-      </div>
+      {loadingState.activated != "blur" && (
+        <div className="content">
+          <p className="icon">{getIcon()}</p>
+          <p>{loadingState.message}</p>
+          <p>🧳 YOGURTRAVEL</p>
+        </div>
+      )}
     </div>
   );
 };

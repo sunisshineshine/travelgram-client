@@ -29,9 +29,10 @@ export const createUserWithEmailPassword = async (
 };
 
 export const doLoginWithEmailAndPassword = async (
-  props: EmailPasswordRequest
+  request: EmailPasswordRequest
 ): Promise<ActionResult> => {
-  const { email, password } = props;
+  console.log(`try login`, request);
+  const { email, password } = request;
   return firebaseApp
     .auth()
     .signInWithEmailAndPassword(email, password)

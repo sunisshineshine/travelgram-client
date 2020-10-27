@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { LoadingStateContext } from "../../Loading/LoadingModal";
 import { getAllDayPeriod, getPeriodString } from "../calendarUtils";
-import { SelectDatePeriodComponent } from "./SelectDateComponent";
+import { SelectDatePeriodComponent } from "./SelectDatePeriodComponent";
 import "./SelectFromPeriodComponent.scss";
 
 export const SelectFromPeriodComponent = (props: {
@@ -10,6 +11,14 @@ export const SelectFromPeriodComponent = (props: {
 }) => {
   const { basePeriod, selectedPeriod } = props;
   const [isDisplayClanedar, setDisplayCalendar] = useState(false);
+  const setLoading = useContext(LoadingStateContext)![1];
+  useEffect(() => {
+    if (isDisplayClanedar) {
+      setLoading({ activated: "blur" });
+    } else {
+      setLoading({ activated: false });
+    }
+  }, [isDisplayClanedar]);
 
   const onNextButtonClicked = () => {
     if (!selectedPeriod) {
@@ -48,7 +57,10 @@ export const SelectFromPeriodComponent = (props: {
   };
 
   return (
-    <div id="select-from-period-component">
+    <div
+      id="select-from-period-component"
+      className={isDisplayClanedar ? "focused" : ""}
+    >
       {selectedPeriod ? (
         <div className="flex-row">
           <p onClick={onPrevButtonClicked}>◀</p>

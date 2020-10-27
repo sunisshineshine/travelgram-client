@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { displayClockNumber } from "./calendarUtils";
 
 import "./DateComponents.scss";
@@ -52,7 +52,9 @@ export const DateComponent = (props: {
     <div
       id="date-component"
       onClick={() => {
-        props.onClcicked(props.date);
+        if (!props.isDisabled) {
+          props.onClcicked(props.date);
+        }
       }}
     >
       <div className={className}>

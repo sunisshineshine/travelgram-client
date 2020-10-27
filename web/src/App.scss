@@ -1,7 +1,43 @@
-.app {
-  .main-content-page {
-    width: 60%;
-    margin-left: auto;
-    margin-right: auto;
+@use './style/theme/theme';
+
+#app {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  #side-container {
+    flex: 3;
+    position: sticky;
+
+    padding-right: theme.$dimen-lg;
+    height: 100%;
+
+    background-color: theme.$color-primary;
+
+    text-align: right;
+
+    #main-title {
+      margin-top: 60px;
+    }
+
+    #user-state-component {
+      margin-top: 16px;
+    }
+
+    button,
+    p,
+    h1,
+    h2,
+    h3,
+    label {
+      color: white;
+      border-color: white;
+    }
+  }
+
+  #content-container {
+    flex: 7;
+    padding: 16px;
+    padding-top: 80px;
   }
 }

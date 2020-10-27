@@ -1,0 +1,145 @@
+@use '../theme/colors';
+// @use './dimens';
+@use '../theme/fonts';
+
+html,
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+p,
+div {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  color: colors.$color-primary;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+// h1 for primary title
+h1 {
+  font-size: 60px;
+  font-weight: 500;
+  color: colors.$color-primary;
+}
+
+// h1 for primary title
+h2 {
+  font-size: 32px;
+  font-weight: 500;
+  color: colors.$color-primary;
+}
+
+// h3 for heading text
+h3 {
+  font-size: 24px;
+  font-weight: 500;
+  font-style: italic;
+  color: colors.$color-primary;
+}
+
+p {
+  font-size: 18px;
+}
+
+label {
+  font-size: 16px;
+  font-weight: 600;
+  font-style: italic;
+  color: colors.$color-primary;
+}
+
+input {
+  border: 1px colors.$color-primary solid;
+  border-radius: 8px;
+  outline: none;
+
+  padding: 4px;
+  padding-left: 8px;
+  margin: 4px;
+
+  font-size: 16px;
+  color: colors.$color-primary;
+}
+
+input:focus {
+  font-style: italic;
+  text-decoration: underline;
+}
+
+button {
+  min-width: 80px;
+  padding: 4px;
+  margin: 4px;
+
+  border: 1px colors.$color-primary solid;
+  border-radius: 8px;
+  outline: none;
+
+  color: inherit;
+  background-color: transparent;
+
+  font-size: 16px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.text-button {
+  border: none;
+  font-size: 18px;
+  font-weight: 600;
+  padding: 0;
+  min-width: 0;
+}
+
+.input-form {
+  display: flex;
+  flex-direction: column;
+  label {
+    margin-left: 12px;
+  }
+  input {
+  }
+}
+
+// p {
+//   height: fit-content;
+// }
+
+// input {
+//   border: none;
+//   outline: none;
+//   padding-left: theme.$dimen-xs;
+//   padding-bottom: theme.$dimen-xs;
+//   font-size: theme.$font-size-lg;
+//   color: colors.$color-primary;
+// }
+
+// input:focus {
+//   text-decoration: underline;
+// }
+
+// ::placeholder {
+//   color: colors.$color-gray;
+//   font-size: colors.$font-size-xs;
+//   font-style: italic;
+// }
+
+// label {
+//   margin-left: theme.$dimen-md;
+//   color: colors.$color-primary;
+//   font-size: theme.$font-size-xs;
+//   font-style: italic;
+//   font-weight: bold;
+// }
+
+// h1,
+// h2,
+// h3 {
+//   color: theme.$color-primary;
+// }

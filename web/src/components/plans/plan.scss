@@ -1,27 +1,38 @@
-@use "../../style/theme";
+@use "../../style/theme/theme";
 
 #plan-component {
   margin-bottom: 10px;
-  padding-left: 0.5em;
 
   #period-string-component {
-    margin-bottom: theme.$dimen-xs;
+    // margin-bottom: theme.$dimen-xs;
   }
 
-  #title {
-    width: 100%;
+  #plan-container {
+    display: flex;
+    flex-direction: row;
+
+    border: 1px theme.$color-primary solid;
+    border-radius: 8px;
+
+    padding: 8px;
+
+    #plan-title {
+      width: 100%;
+    }
+
+    #action-buttons {
+      display: flex;
+      flex-direction: row;
+    }
   }
 
-  #content:hover {
+  #plan-container:hover {
     background-color: theme.$color-primary;
-    color: white;
     transition: 0.3s;
-  }
-
-  .delete-button {
-    align-self: center;
-    margin-left: auto;
-    margin-right: theme.$dimen-sm;
-    padding: 0.2em;
+    #plan-title,
+    #action-buttons {
+      transition: 0.3s;
+      color: white !important;
+    }
   }
 }

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
+import { goHome, goLoginPage } from "../../constants/paths";
 import {
   createUserWithEmailPassword,
   EmailPasswordRequest,
 } from "../../firebase/auth";
-import { goHome, goLoginPage } from "../../navigator";
 
 export const SignupPage = () => {
   const [message, setMessage] = useState("please fill the form");

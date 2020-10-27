@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import "./CreatePlanItemComponent.scss";
 
 import * as PLANS from "../../firebase/functions/plans";
@@ -13,10 +13,10 @@ export const CreatePlanItemComponent = (props: {
   onPlanItemAdded: () => void;
 }) => {
   const { plan } = props;
-  const [planPeriod, setPlanPeriod] = useState<TimeBased>({
+  const planPeriod: TimeBased = {
     startTime: plan.startTime,
     endTime: plan.endTime,
-  });
+  };
 
   const [selectedPeriod, setSelectedPeriod] = useState(
     planPeriod.startTime
@@ -27,7 +27,6 @@ export const CreatePlanItemComponent = (props: {
     setSelectedPeriod(period);
   };
 
-  const [searchedPlace, setPlace] = useState<google.maps.places.PlaceResult>();
   const setLoading = useContext(LoadingStateContext)![1];
   const createPlanItem = (place: google.maps.places.PlaceResult) => {
     setLoading({ activated: true, message: "adding plan" });
@@ -61,7 +60,6 @@ export const CreatePlanItemComponent = (props: {
         selectedPeriod={selectedPeriod}
         onPeriodUpdate={onPeriodUpdated}
       />
-      {searchedPlace?.name}
       <PlaceSearchBarComponent onSearched={createPlanItem} />
     </div>
   );

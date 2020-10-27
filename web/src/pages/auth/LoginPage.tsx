@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { goPlans } from "../../constants/paths";
+import { goHome, goPlans, goSignUpPage } from "../../constants/paths";
 import {
   doLoginWithEmailAndPassword,
   EmailPasswordRequest,
   getAuthUser,
 } from "../../firebase/auth";
-import { goHome, goSignUpPage } from "../../navigator";
+
+import "./LoginPage.scss";
 
 export const LoginPage = () => {
   useEffect(() => {
@@ -16,9 +17,11 @@ export const LoginPage = () => {
     });
   }, []);
 
-  const [message, setMessage] = useState("Please Login");
+  const [message, setMessage] = useState("Please login with your email");
 
   const doLogin = (request: EmailPasswordRequest) => {
+    setMessage(`Try login ...`);
+
     doLoginWithEmailAndPassword(request)
       .then((result) => {
         if (result.ok) {
@@ -30,39 +33,36 @@ export const LoginPage = () => {
         }
       })
       .catch((error) => {
-        console.log(error);
+        console.error(error);
+        setMessage(`${error}`);
       });
   };
 
   return (
     <div id="login-page">
-      <h1>Log-in Page</h1>
-      <button id="main-button" onClick={goHome}>
-        Back to Main
-      </button>
-      <p id="login-message">{message}</p>
+      <h3 id="login-message">{message}</h3>
       <div id="login-form">
-        <LoginInputForm submit={doLogin} />
-        <p>
-          Do you have no account?{" "}
-          <button id="signup-button" onClick={goSignUpPage}>
-            SignUp!
+        <LoginFormComponent submit={doLogin} />
+        <div id="signup-container">
+          <label>Don't have account?</label>
+          <button id="signup-button" className="text-button">
+            SIGN UP
           </button>
-        </p>
+        </div>
       </div>
     </div>
   );
 };
 
-const LoginInputForm = (props: {
-  submit: (props: EmailPasswordRequest) => void;
-}) => {
+function LoginFormComponent(props: {
+  submit: (request: EmailPasswordRequest) => void;
+}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   return (
-    <div className="login-input-form">
-      <div id="login-email-form">
-        <label>email : </label>
+    <div id="login-form-component">
+      <div id="email-form" className="input-form">
+        <label>email</label>
         <input
           id="login-email-input"
           onChange={(e) => {
@@ -70,12 +70,18 @@ const LoginInputForm = (props: {
           }}
         />
       </div>
-      <div id="login-password-form">
-        <label>password : </label>
+      <div id="password-form" className="input-form">
+        <label>password</label>
         <input
           id="login-password-input"
+          type="password"
           onChange={(e) => {
             setPassword(e.target.value);
+          }}
+          onKeyPress={(e) => {
+            if (e.key == "Enter") {
+              props.submit({ email, password });
+            }
           }}
         />
       </div>
@@ -88,8 +94,8 @@ const LoginInputForm = (props: {
           });
         }}
       >
-        Log-in
+        LOGIN
       </button>
     </div>
   );
-};
+}

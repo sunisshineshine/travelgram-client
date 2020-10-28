@@ -133,7 +133,7 @@ export const getPlanItem = async (docId: string): Promise<PlanItem> => {
 export const createPlanItem = async (props: {
   planDocId: string;
   title: string;
-  timeReq: TimeBased;
+  timeReq: Period;
   placeReq: PlaceBased;
 }): Promise<DatabaseActionResult> => {
   const { placeReq, planDocId, timeReq, title } = props;

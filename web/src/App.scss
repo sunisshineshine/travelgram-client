@@ -29,7 +29,8 @@
     h1,
     h2,
     h3,
-    label {
+    label,
+    aUse {
       color: white;
       border-color: white;
     }
@@ -39,5 +40,9 @@
     flex: 7;
     padding: 16px;
     padding-top: 80px;
+
+    #pages-container {
+      width: 600px;
+    }
   }
 }

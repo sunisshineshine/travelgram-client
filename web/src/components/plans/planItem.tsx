@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { getEventItems } from "../../firebase/functions/plans";
 import { DateDividerComponent } from "../utils/calendar/DateDividerComponent";
-import { PeriodClockComponent } from "../utils/calendar/period/PeriodClockComponent";
-import { SelectClockPeriodComponent } from "../utils/calendar/period/SelectClockPeriodComponent";
+import { PeriodClockComponent } from "../utils/calendar/period/PeriodComponents";
 import { LoadingStateContext } from "../utils/Loading/LoadingModal";
 import { AddEventItemComponent, EventItemListComponent } from "./eventItem";
 import "./planItem.scss";
@@ -62,7 +61,6 @@ export const PlanItemListComponent = (props: {
             startDate.getMonth(),
             startDate.getDate() + i
           );
-          console.log(currentDate, endDate);
           i += 1;
 
           if (currentDate.getTime() > end) {
@@ -106,7 +104,7 @@ export const PlanItemListComponent = (props: {
   );
 };
 
-export const PlanItemComponent = (props: { planItem: PlanItem }) => {
+export function PlanItemComponent(props: { planItem: PlanItem }) {
   const { planItem } = props;
 
   const [eventItems, setEventItems] = useState<EventItem[]>([]);
@@ -140,32 +138,30 @@ export const PlanItemComponent = (props: { planItem: PlanItem }) => {
         setActivated(false);
       }}
     >
-      <div className="flex-row">
-        <div>
-          <PeriodClockComponent
-            period={{
-              startTime: planItem.startTime,
-              endTime: planItem.endTime,
-            }}
-          />
-          <SelectClockPeriodComponent
-            period={{
-              startTime: planItem.startTime,
-              endTime: planItem.endTime,
-            }}
-          />
-        </div>
-        <div id="plan-item">
-          <h2 id="title">{planItem.title}</h2>
-          <p>{planItem.address}</p>
-          <EventItemListComponent eventItems={eventItems} />
-          <AddEventItemComponent
-            planItemId={planItem.docId}
-            isMouseHover={isAddEventActivated}
-            onEventAdded={updateEvents}
-          />
-        </div>
+      <div id="period-container">
+        <PeriodClockComponent
+          period={{
+            startTime: planItem.startTime,
+            endTime: planItem.endTime,
+          }}
+        />
+        {/* <SelectClockPeriodComponent
+          period={{
+            startTime: planItem.startTime,
+            endTime: planItem.endTime,
+          }}
+        /> */}
+      </div>
+      <div id="plan-item">
+        <p className="title">{planItem.title}</p>
+        <p className="address">{planItem.address}</p>
+        <EventItemListComponent eventItems={eventItems} />
+        <AddEventItemComponent
+          planItemId={planItem.docId}
+          isMouseHover={isAddEventActivated}
+          onEventAdded={updateEvents}
+        />
       </div>
     </div>
   );
-};
+}

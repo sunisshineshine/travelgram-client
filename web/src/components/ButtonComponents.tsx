@@ -28,16 +28,26 @@ export function EditButton(props: { onClick: (ev: React.MouseEvent) => void }) {
 
 export function NextButton(props: { onClick: (ev: React.MouseEvent) => void }) {
   return (
-    <button id="next-button" className="text-button" onClick={props.onClick}>
-      ⏩
+    <button
+      id="next-button"
+      className="text-button"
+      onClick={props.onClick}
+      style={{ fontStyle: "italic" }}
+    >
+      Next
     </button>
   );
 }
 
 export function PrevButton(props: { onClick: (ev: React.MouseEvent) => void }) {
   return (
-    <button id="prev-button" className="text-button" onClick={props.onClick}>
-      ⏪
+    <button
+      id="prev-button"
+      className="text-button"
+      onClick={props.onClick}
+      style={{ fontStyle: "italic" }}
+    >
+      Prev
     </button>
   );
 }

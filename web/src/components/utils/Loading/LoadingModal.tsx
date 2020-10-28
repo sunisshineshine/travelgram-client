@@ -32,7 +32,7 @@ export const LoadingContextProvider = (props: {
   );
 };
 
-export const LoadingModalComponent = () => {
+export function LoadingModalComponent() {
   const loadingState = useContext(LoadingStateContext)![0];
   const getIcon = (): string | undefined => {
     switch (loadingState.icon) {
@@ -61,4 +61,4 @@ export const LoadingModalComponent = () => {
       )}
     </div>
   );
-};
+}

@@ -5,15 +5,15 @@ import * as PLANS from "../../firebase/functions/plans";
 
 import { PlaceSearchBarComponent } from "../places/PlaceSearchBarComponent";
 import { LoadingStateContext } from "../utils/Loading/LoadingModal";
-import { SelectFromPeriodComponent } from "../utils/calendar/period/SelectFromPeriodComponent";
 import { getAllDayPeriod } from "../utils/calendar/calendarUtils";
+import { SelectPeriodStringComponent } from "../utils/calendar/period/SelectPeriodComponents";
 
 export const CreatePlanItemComponent = (props: {
   plan: Plan;
   onPlanItemAdded: () => void;
 }) => {
   const { plan } = props;
-  const planPeriod: TimeBased = {
+  const planPeriod: Period = {
     startTime: plan.startTime,
     endTime: plan.endTime,
   };
@@ -23,7 +23,7 @@ export const CreatePlanItemComponent = (props: {
       ? getAllDayPeriod({ time: planPeriod.startTime })
       : undefined
   );
-  const onPeriodUpdated: TimebasedCallBack = (period: TimeBased) => {
+  const onPeriodUpdated: PeriodCallBack = (period: Period) => {
     setSelectedPeriod(period);
   };
 
@@ -39,7 +39,7 @@ export const CreatePlanItemComponent = (props: {
       lng: ((place.geometry?.location.lng as unknown) as number) || null,
     };
 
-    console.log("place added : " + title);
+    console.log(`place added : ${title}`);
     PLANS.createPlanItem({
       title,
       planDocId: plan.docId,
@@ -55,10 +55,10 @@ export const CreatePlanItemComponent = (props: {
 
   return (
     <div id="create-plan-item-component">
-      <SelectFromPeriodComponent
+      <SelectPeriodStringComponent
         basePeriod={planPeriod}
         selectedPeriod={selectedPeriod}
-        onPeriodUpdate={onPeriodUpdated}
+        onPeriodUpdated={onPeriodUpdated}
       />
       <PlaceSearchBarComponent onSearched={createPlanItem} />
     </div>

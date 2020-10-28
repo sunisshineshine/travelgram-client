@@ -1,4 +1,4 @@
-@use "../../style/theme";
+@use "../../style/theme/theme";
 
 #event-item-list-component {
   margin-top: theme.$dimen-sm;
@@ -6,11 +6,15 @@
 }
 
 #event-item-component {
-  padding: theme.$dimen-xs;
+  padding: 4px;
+  font-weight: 600;
+  display: flex;
+  flex-direction: row;
 }
 
 #add-event-item-component {
   display: none;
+  flex-direction: row;
   transition: opacity 0.5s ease-out;
   height: 0;
   opacity: 0;
@@ -20,9 +24,12 @@
   height: fit-content;
 
   input {
+    border-color: theme.$color-gray;
+    padding: 8px;
     font-size: theme.$font-size-sm;
+    color: theme.$color-gray;
     margin-right: 10px;
-    width: 100%;
+    width: 400px;
   }
 }
 

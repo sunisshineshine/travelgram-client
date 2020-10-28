@@ -1,0 +1,33 @@
+@use '../../../../style/theme/theme';
+
+#select-date-period-component {
+  width: 100%;
+
+  #period-string-component {
+    align-items: center;
+  }
+
+  #select-period {
+    margin-top: theme.$dimen-lg;
+  }
+
+  .close-button-sm {
+    margin-right: theme.$dimen-xs;
+    margin-bottom: theme.$dimen-xs;
+  }
+}
+
+#select-period-string-component {
+  #period-container {
+    display: flex;
+    flex-direction: row;
+
+    .text-button {
+      margin: 0 16px;
+    }
+
+    p {
+      margin-right: 4px;
+    }
+  }
+}

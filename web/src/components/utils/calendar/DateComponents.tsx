@@ -71,7 +71,7 @@ export function DateComponent(props: {
 
 export function DateStringComponent(props: {
   date?: Date | number;
-  isDisplayClock: boolean;
+  isDisplayClock?: boolean;
 }) {
   const date =
     typeof props.date === "number" ? new Date(props.date) : props.date;
@@ -103,13 +103,7 @@ export function DayComponent(props: { content: string }) {
   return (
     <div
       id="day-component"
-      className={
-        props.content === "Su"
-          ? "color-red"
-          : props.content === "Sa"
-          ? "color-blue"
-          : ""
-      }
+      className={props.content === "Su" ? "color-red" : ""}
     >
       <p className="align-center">{props.content}</p>
     </div>

@@ -1,12 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import { CreatePlanItemComponent } from "../../components/plans/CreatePlanItemComponent";
 import { PlanTitleComponent } from "../../components/plans/plan";
+// import { PlanTitleComponent } from "../../components/plans/plan";
 import { PlanItemListComponent } from "../../components/plans/planItem";
 import { LoadingStateContext } from "../../components/utils/Loading/LoadingModal";
 import * as PATHS from "../../constants/paths";
 import * as PLANS from "../../firebase/functions/plans";
 
-import "./PlanDetailPage.scss";
+// import "./PlanDetailPage.scss";
 
 export const PlanDetailPage = () => {
   const setLoadingState = useContext(LoadingStateContext)![1];

@@ -1,8 +1,12 @@
-@use '../../style/theme' as theme;
+@use '../../style/theme/theme';
 
 #place-search-bar-component {
   #place-search-bar {
+    display: flex;
+    flex-direction: row;
+
     #search-input {
+      padding: 8px;
       width: 100%;
       margin-left: theme.$dimen-sm;
       cursor: text;
@@ -13,7 +17,6 @@
     }
 
     #search-input:focus {
-      border-bottom: 1px theme.$color-primary solid;
     }
   }
 
@@ -22,14 +25,35 @@
     margin-left: 25px;
 
     #prediction-component {
-      padding: theme.$dimen-xs;
-      padding-bottom: theme.$dimen-xs;
+      padding: 4px;
+
+      border-radius: 4px;
+
       #place-name {
-        padding-left: theme.$dimen-xs;
+        padding-left: 4px;
+      }
+
+      #description {
+        color: theme.$color-gray;
+        font-size: 14px;
+        font-weight: 500;
+        font-style: none !important;
+        padding-top: 2px;
       }
     }
 
-    .selected {
+    #prediction-component.selected {
+      #place-name {
+        color: white;
+      }
+      #description {
+        color: white;
+      }
+
+      background-color: theme.$color-primary;
+    }
+
+    #prediction-component:hover {
       #place-name {
         color: white;
       }

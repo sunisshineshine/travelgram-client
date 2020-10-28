@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 // import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 // import * as PATHS from "./constants/paths";
@@ -28,6 +28,7 @@ import { UserStateComponent } from "./components/auth/UserStateComponent";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import {
   goLoginPage,
+  goPlans,
   HOME_PATH,
   LOGIN_PATH,
   PLANS_PAGE,
@@ -45,6 +46,9 @@ import { getAuthUser } from "./firebase/auth";
 export function App() {
   const [user, setUser] = useState<User | null>(null);
   useEffect(() => {
+    if (location.pathname == HOME_PATH) {
+      goPlans();
+    }
     updateUser();
   }, []);
 
@@ -68,28 +72,10 @@ export function App() {
 
     setUser(user);
   }
-  // useEffect(() => {
-  //   setLoading(true);
-  //   getAuthUser()
-  //     .then((user) => setUser(user))
-  //     .then(() => setLoading(false));
-  // }, []);
-  // const [loading, setLoading] = useState(true);
-  // useEffect(() => {
-  //   if (loading) {
-  //     setLoadingState({
-  //       activated: true,
-  //       icon: "auth",
-  //       message: "now getting user information",
-  //     });
-  //   } else {
-  //     setLoadingState({ activated: false });
-  //   }
-  // }, [loading]);
-  // const setLoadingState = useContext(LoadingStateContext)![1];
 
   return (
     <div id="app">
+      {/* <LoadingModalComponent /> */}
       <div id="side-container">
         <TitleComponent />
         <UserStateComponent />
@@ -97,24 +83,29 @@ export function App() {
       </div>
       <div id="content-container">
         <BrowserRouter>
-          <Switch>
-            <Route path={LOGIN_PATH}>
-              <LoginPage />
-            </Route>
-            <Route path={SIGNUP_PATH}>
-              <SignupPage />
-            </Route>
-            {user && (
-              <>
-                <Route exact path={HOME_PATH || PLANS_PAGE}>
-                  <PlansPage />
-                </Route>
-                {/* <Route path={PLAN_DETAIL_PAGE}>
-                  <PlanDetailPage />
-                </Route> */}
-              </>
-            )}
-          </Switch>
+          <div id="pages-container">
+            <Switch>
+              <Route path={LOGIN_PATH}>
+                <LoginPage />
+              </Route>
+              <Route path={SIGNUP_PATH}>
+                <SignupPage />
+              </Route>
+              {user && (
+                <>
+                  <Route exact path={PLANS_PAGE}>
+                    <PlansPage />
+                  </Route>
+                  <Route exact path={PLAN_DETAIL_PAGE}>
+                    <PlanDetailPage />
+                  </Route>
+                </>
+              )}
+              <Route>
+                <h3>Loading...</h3>
+              </Route>
+            </Switch>
+          </div>
         </BrowserRouter>
       </div>
       {/* <LoadingModalComponent />
@@ -122,8 +113,8 @@ export function App() {
       <NavigationComponent />
       {!loading && (
         <div className="main-content-page">
-          <Router>
-            <Switch>
+        <Router>
+        <Switch>
               {user && <Route path="not-exist-path">test</Route>}
               <Route path={PATHS.LOGIN_PAGE}>
                 <LoginPage />

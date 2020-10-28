@@ -1,15 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
 
 import * as PLACES from "../../firebase/functions/places";
+import { SearchIcon } from "../Icons";
 import { LoadingStateContext } from "../utils/Loading/LoadingModal";
 import "./PlaceSearchBarComponent.scss";
 
 let scheduledQuery = "";
 let lastQueried = "";
-const getPredictions = (
+function getPredictions(
   query: string,
   onResult: (predictions: google.maps.places.AutocompletePrediction[]) => void
-) => {
+) {
   // optimization for searching query
   // user will waiting for 0.5s, query will be searched
   scheduledQuery = query;
@@ -24,10 +25,11 @@ const getPredictions = (
         })
         .catch((reason) => {
           console.error("cannot get place search predictions", reason);
+          onResult([]);
         });
     }
   }, 500);
-};
+}
 
 export const PlaceSearchBarComponent = (props: {
   onSearched: (place: google.maps.places.PlaceResult) => void;
@@ -59,7 +61,7 @@ export const PlaceSearchBarComponent = (props: {
   };
 
   const setLoading = useContext(LoadingStateContext)![1];
-  const searchPlace = (position: number) => {
+  function searchPlace(position: number) {
     if (position == -1 || predictions.length === 0) {
       return;
     }
@@ -73,9 +75,9 @@ export const PlaceSearchBarComponent = (props: {
         props.onSearched(place);
       });
     }
-  };
+  }
 
-  const selectPrediction = (direction: "down" | "up" | "clear") => {
+  function selectPrediction(direction: "down" | "up" | "clear") {
     let position = selectedPosition;
     switch (direction) {
       case "down":
@@ -96,21 +98,21 @@ export const PlaceSearchBarComponent = (props: {
     if (place && predictions) {
       setInput(place);
     }
-  };
+  }
 
-  const clearPredictions = () => {
+  function clearPredictions() {
     setInput("");
     setPredictions([]);
     lastQueried = "";
     setPosition(-1);
-  };
+  }
 
   const [isFocused, setFocused] = useState(false);
 
   return (
     <div id="place-search-bar-component">
       <div id="place-search-bar" className="flex-row ">
-        <div className="icon">🔍</div>
+        <SearchIcon />
         <input
           id="search-input"
           className="input"
@@ -118,7 +120,7 @@ export const PlaceSearchBarComponent = (props: {
           value={input}
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
-          placeholder="search place at here.."
+          placeholder="...search place at here"
           // onBlur={clearPredictions}
           onChange={(e) => {
             setInput(e.target.value);
@@ -137,6 +139,7 @@ export const PlaceSearchBarComponent = (props: {
         <PredictionsComponent
           selected={selectedPosition}
           predictions={predictions}
+          onSelected={searchPlace}
         />
       </div>
     </div>
@@ -146,6 +149,7 @@ export const PlaceSearchBarComponent = (props: {
 const PredictionsComponent = (props: {
   selected: number;
   predictions: google.maps.places.AutocompletePrediction[];
+  onSelected: (position: number) => void;
 }) => {
   const { predictions } = props;
   const [selected, setSelected] = useState(props.selected);
@@ -164,6 +168,9 @@ const PredictionsComponent = (props: {
             <PredictionComponent
               highlight={index === selected}
               prediction={prediction}
+              onSelected={() => {
+                props.onSelected(index);
+              }}
             />
           ))}
         </div>
@@ -179,20 +186,17 @@ const PredictionsComponent = (props: {
 const PredictionComponent = (props: {
   highlight: boolean;
   prediction: google.maps.places.AutocompletePrediction;
+  onSelected: () => void;
 }) => {
   const { highlight, prediction } = props;
   return (
     <div
       id="prediction-component"
       className={highlight ? "selected" : ""}
-      // className="selected"
-      // onClick={() => {
-      //   console.log(index);
-      //   submitPlace(index);
-      // }}
+      onClick={props.onSelected}
     >
       <div>
-        <h3 id="place-name">{prediction.structured_formatting.main_text}</h3>
+        <p id="place-name">{prediction.structured_formatting.main_text}</p>
         <p id="description">{prediction.description}</p>
       </div>
     </div>

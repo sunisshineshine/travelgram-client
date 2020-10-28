@@ -5,29 +5,19 @@ import { days, monthNames } from "./calendarUtils";
 import { DateComponent, DayComponent } from "./DateComponents";
 
 export const CalendarComponent = (props: {
-  // base date is optional
-  date?: Date;
   // highlightRange is optinal
-  selectedRange?: TimeBased;
+  selectedPeriod?: Period;
   // callback for user selecting date
-  baseRange?: TimeBased;
+  basePeriod?: Period;
+  year?: number;
+  month?: number;
   onDateSelected: DateCallBack;
 }) => {
   const today = new Date();
 
   // year and month for current calendar
-  const [year, setYear] = useState(
-    props.date?.getFullYear() || today.getFullYear()
-  );
-  const [month, setMonth] = useState(
-    props.date?.getMonth() || today.getMonth()
-  );
-
-  useEffect(() => {
-    if (props.date) {
-      setMonth(props.date.getMonth());
-    }
-  }, [props.date]);
+  const [year, setYear] = useState(props.year || today.getFullYear());
+  const [month, setMonth] = useState(props.month || today.getMonth());
 
   // update when user change month
   useEffect(() => {
@@ -113,13 +103,16 @@ export const CalendarComponent = (props: {
             return (
               <div className="week-container" key={Math.random()}>
                 {week.map((date) => {
-                  const { baseRange, selectedRange } = props;
+                  const {
+                    basePeriod: baseRange,
+                    selectedPeriod: selectedRange,
+                  } = props;
                   const isStart = isSameDate({
-                    standard: props.selectedRange?.startTime || undefined,
+                    standard: props.selectedPeriod?.startTime || undefined,
                     target: date.getTime(),
                   });
                   const isEnd = isSameDate({
-                    standard: props.selectedRange?.endTime || undefined,
+                    standard: props.selectedPeriod?.endTime || undefined,
                     target: date.getTime(),
                   });
                   const isSelcted =

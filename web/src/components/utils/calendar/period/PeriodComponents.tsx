@@ -1,15 +1,17 @@
 import React from "react";
+import { CalendarIcon } from "../../../Icons";
+import { getPeriodString } from "../calendarUtils";
 import { DateStringComponent } from "../DateComponents";
 // import { DateStringComponent } from "../DateComponents";
 import "./PeriodComponents.scss";
 
 interface PeriodComponentPropTypes {
-  period?: TimeBased;
+  period?: Period;
   onStartClicked?: () => void;
   onEndClicked?: () => void;
 }
 
-export const PeriodComponent = (props: PeriodComponentPropTypes) => {
+export function PeriodComponent(props: PeriodComponentPropTypes) {
   const { period } = props;
 
   return (
@@ -27,9 +29,9 @@ export const PeriodComponent = (props: PeriodComponentPropTypes) => {
       </div>
     </div>
   );
-};
+}
 
-export const PeriodStringComponent = (props: PeriodComponentPropTypes) => {
+export function PeriodStringComponent(props: PeriodComponentPropTypes) {
   const { period } = props;
   if (!period) {
     return (
@@ -38,7 +40,7 @@ export const PeriodStringComponent = (props: PeriodComponentPropTypes) => {
         className="flex-row"
         onClick={props.onStartClicked}
       >
-        <p className="icon">📅</p>
+        <CalendarIcon />
         <p>period not selected</p>
       </div>
     );
@@ -75,4 +77,22 @@ export const PeriodStringComponent = (props: PeriodComponentPropTypes) => {
       </div>
     </div>
   );
-};
+}
+
+export function PeriodClockComponent(props: { period: Period }) {
+  const { period } = props;
+
+  return (
+    <div
+      id="period-clock-component"
+      className="align-items-center"
+      onClick={() => {
+        console.log(period);
+      }}
+    >
+      <p id="period-clock" className="font-md">
+        {getPeriodString({ period, displayClock: true, type: "CLOCK" })}
+      </p>
+    </div>
+  );
+}

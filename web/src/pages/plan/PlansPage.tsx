@@ -1,55 +1,18 @@
-import React, { useContext, useEffect, useState } from "react";
-import { NavItemsContext } from "../../components/utils/NavigatorComponent";
+import React, { useEffect, useState } from "react";
 
 import { PlanListComponent } from "../../components/plans/plan";
 import { CreatePlanModal } from "../../components/plans/CreatePlanModal";
 
 // import "./PlansPage.scss";
-import { LoadingStateContext } from "../../components/utils/Loading/LoadingModal";
-import { getPlans, updatePlanItem } from "../../firebase/functions/plans";
+import { getPlans } from "../../firebase/functions/plans";
 import { goPlanDetail } from "../../constants/paths";
 
 import "./PlansPage.scss";
 
 export const PlansPage = () => {
-  // const setLoadingState = useContext(LoadingStateContext)![1];
+  console.log(`hello?`);
   const [isDisplayCreateModal, setDisplayCreateModal] = useState(false);
 
-  // const setNavItems = useContext(NavItemsContext)![1];
-  // useEffect(() => {
-  //   updatePlans();
-  //   const navItems: NavItem[] = [];
-  //   navItems.push({
-  //     content: "go plan select(here)",
-  //     navigate: PATHS.goPlans,
-  //   });
-  //   // setNavItems(navItems);
-  // }, []);
-
-  // const updatePlans = () => {
-  //   setLoadingState({ activated: true, message: "now updating plan list" });
-  //   PLANS.getPlans()
-  //     .then((plans) => {
-  //       setLoadingState({ activated: false });
-  //       setPlans(plans);
-  //       console.log(
-  //         "plan list updated",
-  //         plans.map((plan) => plan.title)
-  //       );
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  // };
-
-  // const onCreatePlanButtonClicked = () => {
-  //   setDisplayCreateModal((prev) => !prev);
-  // };
-
-  // const onModalClosed = () => {
-  //   setDisplayCreateModal(false);
-  //   updatePlans();
-  // };
   const [plans, setPlans] = useState<Plan[]>([]);
   useEffect(() => {
     updatePlans();

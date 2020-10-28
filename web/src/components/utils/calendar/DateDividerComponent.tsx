@@ -22,7 +22,7 @@ export const DateDividerComponent = (props: { base?: Date; date: Date }) => {
     }
   };
   return (
-    <div id="date-divider-component" className="flex-row">
+    <div id="date-divider-component">
       <p id="divider" />
       <div id="date-string">
         {date.getTime() === 0 ? (

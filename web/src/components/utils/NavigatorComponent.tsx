@@ -1,17 +1,13 @@
-import React, {
-  createContext,
-  Dispatch,
-  SetStateAction,
-  useContext,
-  useState,
-} from "react";
-import { LOGIN_PATH } from "../../constants/paths";
+import React, { createContext, Dispatch, SetStateAction } from "react";
+import { goPlans } from "../../constants/paths";
+// import { LOGIN_PATH } from "../../constants/paths";
 
+import "./NavigatorComponent.scss";
 export const NavItemsContext = createContext<
   [NavItem[], Dispatch<SetStateAction<NavItem[]>>] | undefined
 >(undefined);
 
-type NavList = NavItem[];
+// type NavList = NavItem[];
 
 type NavItem = {
   name: string;
@@ -30,6 +26,11 @@ type NavItem = {
 // };
 
 export const NavigatorComponent = () => {
-  const navItems: NavList[] = [[{ name: "login", path: LOGIN_PATH }]];
-  return <div className="navigation-component"></div>;
+  // const navItems: NavList[] = [[{ name: "login", path: LOGIN_PATH }]];
+  return (
+    <div id="navigator-component">
+      <a onClick={goPlans}>Plans</a>
+      <a>User</a>
+    </div>
+  );
 };

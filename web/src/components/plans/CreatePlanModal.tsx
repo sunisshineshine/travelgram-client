@@ -3,7 +3,7 @@ import "./CreatePlanModal.scss";
 
 import * as PLANS from "../../firebase/functions/plans";
 import { LoadingStateContext } from "../utils/Loading/LoadingModal";
-import { SelectDatePeriodComponent } from "../utils/calendar/period/SelectDatePeriodComponent";
+import { SelectDatePeriodComponent } from "../utils/calendar/period/SelectPeriodComponents";
 import { PeriodComponent } from "../utils/calendar/period/PeriodComponents";
 import { CancelButton, OkButton } from "../ButtonComponents";
 
@@ -32,7 +32,7 @@ export function CreatePlanModal(props: {
       });
   };
 
-  const onRangeChanged: TimebasedCallBack = (time: TimeBased) => {
+  const handlePeriodChanged: PeriodCallBack = (time: Period) => {
     setStartTime(time.startTime);
     setEndTime(time.endTime);
   };
@@ -71,8 +71,8 @@ export function CreatePlanModal(props: {
           <PeriodComponent period={{ startTime, endTime }} />
           <SelectDatePeriodComponent
             title="SET YOUR PLAN PERIOD"
-            onRangeUpdated={onRangeChanged}
-            selectedRange={{ startTime, endTime }}
+            onPeriodUpdated={handlePeriodChanged}
+            selectedPeriod={{ startTime, endTime }}
           />
         </div>
       </div>

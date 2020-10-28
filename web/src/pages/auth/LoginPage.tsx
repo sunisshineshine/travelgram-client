@@ -45,7 +45,11 @@ export const LoginPage = () => {
         <LoginFormComponent submit={doLogin} />
         <div id="signup-container">
           <label>Don't have account?</label>
-          <button id="signup-button" className="text-button">
+          <button
+            id="signup-button"
+            className="text-button"
+            onClick={goSignUpPage}
+          >
             SIGN UP
           </button>
         </div>

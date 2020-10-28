@@ -2,6 +2,7 @@ import React from "react";
 
 import { useContext, useState } from "react";
 import { createEventItem } from "../../firebase/functions/plans";
+import { DotIcon } from "../Icons";
 import { LoadingStateContext } from "../utils/Loading/LoadingModal";
 
 import "./eventItem.scss";
@@ -20,7 +21,12 @@ export const EventItemListComponent = (props: { eventItems: EventItem[] }) => {
 };
 
 export const EventItemComponent = (props: { eventItem: EventItem }) => {
-  return <div id="event-item-component">✈️ {props.eventItem.content}</div>;
+  return (
+    <div id="event-item-component">
+      <DotIcon />
+      <p>{props.eventItem.content}</p>
+    </div>
+  );
 };
 
 export const AddEventItemComponent = (props: {
@@ -36,7 +42,6 @@ export const AddEventItemComponent = (props: {
 
   const setLoading = useContext(LoadingStateContext)![1];
   const onSubmit = () => {
-    console.log(content);
     setLoading({
       activated: true,
       icon: "travel",
@@ -58,26 +63,18 @@ export const AddEventItemComponent = (props: {
       id="add-event-item-component"
       className={isDisplaying() ? "activated" : ""}
     >
-      <div className="flex-row">
-        <p
-          className="icon"
-          style={{ fontSize: "16px", paddingBottom: "2px", width: "20px" }}
-        >
-          ＋
-        </p>
-        <input
-          value={content}
-          placeholder="adding event here"
-          onChange={(e) => setContent(e.target.value)}
-          onFocus={() => setFocused(true)}
-          onBlur={() => setFocused(false)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              onSubmit();
-            }
-          }}
-        />
-      </div>
+      <input
+        value={content}
+        placeholder="...Adding event here"
+        onChange={(e) => setContent(e.target.value)}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            onSubmit();
+          }
+        }}
+      />
     </div>
   );
 };

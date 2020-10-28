@@ -1,5 +1,4 @@
-import React, { useContext } from "react";
-import { PlanItemComponent } from "./planItem";
+import React from "react";
 // import { deletePlan } from "../../firebase/functions/plans";
 // import { PeriodStringComponent } from "../utils/calendar/period/PeriodComponents";
 
@@ -13,7 +12,6 @@ export function PlanListComponent(props: {
   onClicked: (plan: Plan) => void;
 }) {
   const { plans } = props;
-  console.log(plans);
 
   return (
     <div id="plan-list-component">
@@ -74,14 +72,14 @@ export function PlanComponent(props: {
   );
 }
 
-// export const PlanTitleComponent = (props: { plan: Plan }) => {
-//   const { plan } = props;
-//   return (
-//     <div id="plan-title-component">
-//       <PeriodStringComponent
-//         period={{ startTime: plan.startTime, endTime: plan.endTime }}
-//       />
-//       <h1>{plan.title}</h1>
-//     </div>
-//   );
-// };
+export const PlanTitleComponent = (props: { plan: Plan }) => {
+  const { plan } = props;
+  return (
+    <div id="plan-title-component">
+      <PeriodStringComponent
+        period={{ startTime: plan.startTime, endTime: plan.endTime }}
+      />
+      <h2>{plan.title}</h2>
+    </div>
+  );
+};

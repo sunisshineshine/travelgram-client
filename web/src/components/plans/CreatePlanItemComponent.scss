@@ -1,20 +1,19 @@
-@use '../../style/theme';
+@use '../../style/theme/theme';
 
 #create-plan-item-component {
-  margin-top: theme.$dimen-lg;
+  padding: 4px;
   #select-from-period-component {
     border-radius: 8px;
     padding: 4px;
     margin-left: theme.$dimen-sm;
     width: 500px;
-    position: absolute;
   }
   #select-from-period-component.focused {
     z-index: 1;
     background-color: white;
   }
-  #place-search-bar-component {
-    padding-top: 28px;
-    margin-top: theme.$dimen-xs;
-  }
+  // #place-search-bar-component {
+  //   padding-top: 28px;
+  //   margin-top: theme.$dimen-xs;
+  // }
 }

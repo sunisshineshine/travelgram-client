@@ -5,8 +5,10 @@ import {
   EmailPasswordRequest,
 } from "../../firebase/auth";
 
+import "./SignupPage.scss";
+
 export const SignupPage = () => {
-  const [message, setMessage] = useState("please fill the form");
+  const [message, setMessage] = useState("Please sign up with your Email");
 
   const doSignUp = (request: EmailPasswordRequest) => {
     createUserWithEmailPassword(request).then((result) => {
@@ -19,11 +21,8 @@ export const SignupPage = () => {
   };
 
   return (
-    <div>
-      <h1>SignUp Page</h1>
-      <button onClick={goHome}>Go Main</button>
-      <button onClick={goLoginPage}>Go Login</button>
-      <div>{message}</div>
+    <div id="signup-page">
+      <h3>{message}</h3>
       <SignupInputForm
         submit={(request, message) => {
           if (request) {
@@ -45,8 +44,8 @@ const SignupInputForm = (props: {
   const [passwordConfirm, setpasswordConfirm] = useState("");
   return (
     <div className="signup-input-form">
-      <div id="signup-email-form">
-        <label>email : </label>
+      <div id="signup-email-form" className="input-form">
+        <label>email</label>
         <input
           id="signup-email-input"
           value={email}
@@ -55,7 +54,7 @@ const SignupInputForm = (props: {
           }}
         />
       </div>
-      <div id="signup-password-form">
+      <div id="signup-password-form" className="input-form">
         <label>password : </label>
         <input
           id="signup-password-input"
@@ -65,7 +64,7 @@ const SignupInputForm = (props: {
           }}
         />
       </div>
-      <div id="signup-password-confirm-form">
+      <div id="signup-password-confirm-form" className="input-form">
         <label>password : </label>
         <input
           id="signup-password-confirm-input"

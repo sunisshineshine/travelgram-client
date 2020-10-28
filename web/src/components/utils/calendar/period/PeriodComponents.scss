@@ -1,13 +1,18 @@
-// @use "../../../../style/theme" as theme;
+@use '../../../../style/theme/theme';
 
 #period-component {
-  height: 40px;
-  // margin-top: theme.$dimen-xs;
-  #period-start {
-    width: 100%;
-  }
-  #period-end {
-    width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+
+  border: 1px theme.$color-primary solid;
+  border-radius: 8px;
+
+  margin: 8px;
+  padding: 16px;
+
+  .divider {
+    border-right: 1px gray solid;
   }
 }
 

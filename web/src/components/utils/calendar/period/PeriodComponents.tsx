@@ -1,4 +1,5 @@
 import React from "react";
+import { DateStringComponent } from "../DateComponents";
 // import { DateStringComponent } from "../DateComponents";
 import "./PeriodComponents.scss";
 
@@ -12,10 +13,7 @@ export const PeriodComponent = (props: PeriodComponentPropTypes) => {
   const { period } = props;
 
   return (
-    <div
-      id="period-component"
-      className="border-primary border-radius flex-row"
-    >
+    <div id="period-component">
       <div
         id="period-start"
         className="border-right-primary"
@@ -23,6 +21,7 @@ export const PeriodComponent = (props: PeriodComponentPropTypes) => {
       >
         <DateStringComponent date={period?.startTime || undefined} />
       </div>
+      <div className="divider"></div>
       <div id="period-end" onClick={props.onEndClicked}>
         <DateStringComponent date={period?.endTime || undefined} />
       </div>

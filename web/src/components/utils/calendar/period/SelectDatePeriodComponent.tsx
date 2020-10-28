@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { CalendarComponent } from "../CalendarComponents";
 import { getAllDayPeriod } from "../calendarUtils";
-import "./SelectDatePeriodComponent.scss";
+// import "./SelectDatePeriodComponent.scss";
 
 // type TimeSelectMethod = "NONE" | "START_DATE" | "END_DATE";
 

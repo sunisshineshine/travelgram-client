@@ -5,11 +5,12 @@ import * as PLANS from "../../firebase/functions/plans";
 import { LoadingStateContext } from "../utils/Loading/LoadingModal";
 import { SelectDatePeriodComponent } from "../utils/calendar/period/SelectDatePeriodComponent";
 import { PeriodComponent } from "../utils/calendar/period/PeriodComponents";
+import { CancelButton, OkButton } from "../ButtonComponents";
 
-export const CreatePlanModal = (props: {
+export function CreatePlanModal(props: {
   visible: boolean;
   onClosed: () => void;
-}) => {
+}) {
   const [title, setTitle] = useState("");
 
   const [startTime, setStartTime] = useState<number | null>(null);
@@ -38,35 +39,32 @@ export const CreatePlanModal = (props: {
 
   return (
     <div
-      className="create-plan-modal"
+      id="create-plan-modal"
       style={{ display: props.visible ? "block" : "none" }}
     >
-      <div className="modal-content flex-column border-radius">
-        <div id="top-bar" className="align-center">
-          <p id="title" className="font-bold color-gray">
-            CRATING PLAN HERE
-          </p>
-        </div>
-        <div className="flex-row justify-content-space-between">
-          <div className="close-button" onClick={props.onClosed}>
-            🗙
-          </div>
-          <div className="done-button" onClick={createPlan}>
-            ✔
-          </div>
+      <div id="modal-content">
+        <div id="top-banner">
+          <CancelButton
+            onClick={() => {
+              setTitle("");
+              setStartTime(null);
+              setEndTime(null);
+              props.onClosed();
+            }}
+          />
+          <h3>Create Plan</h3>
+          <OkButton onClick={createPlan} />
         </div>
 
-        <div id="title-input">
-          <div className="input-form">
-            <label>YOUR PLAN TITLE</label>
-            <input
-              value={title}
-              onChange={(e) => {
-                setTitle(e.target.value);
-              }}
-              placeholder="...your plan title here"
-            />
-          </div>
+        <div id="title-form" className="input-form">
+          <label>YOUR PLAN TITLE</label>
+          <input
+            value={title}
+            onChange={(e) => {
+              setTitle(e.target.value);
+            }}
+            placeholder="...your plan title here"
+          />
         </div>
 
         <div className="time-input">
@@ -74,9 +72,10 @@ export const CreatePlanModal = (props: {
           <SelectDatePeriodComponent
             title="SET YOUR PLAN PERIOD"
             onRangeUpdated={onRangeChanged}
+            selectedRange={{ startTime, endTime }}
           />
         </div>
       </div>
     </div>
   );
-};
+}

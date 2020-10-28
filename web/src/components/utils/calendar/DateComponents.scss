@@ -1,8 +1,10 @@
-@use "../../../style/theme" as theme;
+@use "../../../style/theme/theme" as theme;
 
 #date-component {
   width: 100%;
   height: 50px;
+  padding-top: 2px;
+  padding-bottom: 2px;
 
   div {
     height: 100%;
@@ -46,12 +48,32 @@
   .disabled {
     color: lightgray;
   }
+
+  p {
+    text-align: center;
+  }
+
+  label {
+    display: inline-block;
+    width: 100%;
+    margin-top: 8px;
+    margin-bottom: 0;
+    color: theme.$color-gray;
+    text-align: center;
+    font-weight: 500;
+  }
 }
 
 #date-string-component {
-  height: 100%;
+  display: flex;
+  flex-direction: row;
+
+  margin-right: 4px;
   #date-string {
-    margin-left: theme.$dimen-sm;
+    margin-left: 8px;
+    h3 {
+      font-style: unset;
+    }
   }
 }
 

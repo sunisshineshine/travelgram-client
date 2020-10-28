@@ -1,10 +1,11 @@
-@use '../../style/theme' as theme;
+@use '../../style/theme/theme';
 
 /* The Modal (background) */
-.create-plan-modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
+#create-plan-modal {
+  display: none;
+  position: fixed;
+  // modals : 1
+  z-index: 1;
   left: 0;
   top: 0;
   width: 100%; /* Full width */
@@ -12,20 +13,34 @@
   // overflow: auto; /* Enable scroll if needed */
   background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
   /* Modal Content/Box */
-  .modal-content {
+  #modal-content {
     background-color: #fefefe;
-    margin: 15% auto;
+    margin: 10% auto;
 
     padding: 20px;
     border: 1px solid #888;
+    border-radius: 16px;
     width: 500px; /* Could be more or less, depending on screen size */
 
-    #title {
-      margin-bottom: -10px;
+    #top-banner {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
     }
 
-    #title-input {
-      margin-top: theme.$dimen-lg;
+    #title-form {
+      input {
+        font-size: 20px;
+
+        margin: 8px;
+        padding: 8px;
+
+        padding-left: 16px;
+      }
+
+      input:focus {
+        text-decoration: none;
+      }
     }
   }
 

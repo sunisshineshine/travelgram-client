@@ -13,7 +13,7 @@ import "./PlansPage.scss";
 
 export const PlansPage = () => {
   // const setLoadingState = useContext(LoadingStateContext)![1];
-  // const [isDisplayCreateModal, setDisplayCreateModal] = useState(false);
+  const [isDisplayCreateModal, setDisplayCreateModal] = useState(false);
 
   // const setNavItems = useContext(NavItemsContext)![1];
   // useEffect(() => {
@@ -74,18 +74,28 @@ export const PlansPage = () => {
 
   return (
     <div id="plans-page">
+      <CreatePlanModal
+        visible={isDisplayCreateModal}
+        onClosed={() => {
+          setDisplayCreateModal(false);
+          updatePlans();
+        }}
+      />
       <h2 id="page-title">Choose your plans</h2>
       <div id="create-button-container">
         <label>...or create</label>
-        <button className="text-button">NEW PLAN</button>
+        <button
+          className="text-button"
+          onClick={() => {
+            setDisplayCreateModal(true);
+          }}
+        >
+          NEW PLAN
+        </button>
       </div>
       <PlanListComponent onClicked={handlePlanClicked} plans={plans} />
-      {/* <CreatePlanModal visible={true} onClosed={onModalClosed} /> */}
 
-      {/* <CreatePlanModal
-        visible={isDisplayCreateModal}
-        onClosed={onModalClosed}
-      />
+      {/* 
       <p className="title">Please choose your plan</p>
       <PlanListComponent onClicked={onPlanClicked} plans={plans} />
       <button onClick={onCreatePlanButtonClicked}>create plan</button> */}

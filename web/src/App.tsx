@@ -27,18 +27,47 @@ import { LoadingContextProvider } from "./components/utils/Loading/LoadingModal"
 import { UserStateComponent } from "./components/auth/UserStateComponent";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import {
+  goLoginPage,
   HOME_PATH,
   LOGIN_PATH,
   PLANS_PAGE,
+  PLAN_DETAIL_PAGE,
   SIGNUP_PATH,
 } from "./constants/paths";
 import { LoginPage } from "./pages/auth/LoginPage";
 import { SignupPage } from "./pages/auth/SignupPage";
 import { PlansPage } from "./pages/plan/PlansPage";
+import { PlanDetailPage } from "./pages/plan/PlanDetailPage";
+import { User } from "firebase";
+import { getAuthUser } from "./firebase/auth";
 // import "./style/style.scss";
 
 export function App() {
-  // const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(null);
+  useEffect(() => {
+    updateUser();
+  }, []);
+
+  async function updateUser() {
+    const user = await getAuthUser();
+
+    function isUserNotExist(u: User | null): boolean {
+      return !u;
+    }
+
+    function isAuthPath(): boolean {
+      return (
+        location.pathname != LOGIN_PATH && location.pathname != SIGNUP_PATH
+      );
+    }
+
+    if (isUserNotExist(user) && isAuthPath()) {
+      goLoginPage();
+      return;
+    }
+
+    setUser(user);
+  }
   // useEffect(() => {
   //   setLoading(true);
   //   getAuthUser()
@@ -75,9 +104,16 @@ export function App() {
             <Route path={SIGNUP_PATH}>
               <SignupPage />
             </Route>
-            <Route path={HOME_PATH || PLANS_PAGE}>
-              <PlansPage />
-            </Route>
+            {user && (
+              <>
+                <Route exact path={HOME_PATH || PLANS_PAGE}>
+                  <PlansPage />
+                </Route>
+                {/* <Route path={PLAN_DETAIL_PAGE}>
+                  <PlanDetailPage />
+                </Route> */}
+              </>
+            )}
           </Switch>
         </BrowserRouter>
       </div>

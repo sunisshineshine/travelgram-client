@@ -1,10 +1,37 @@
-@use "../../../style/theme" as theme;
-
+@use '../../../style/theme/theme';
 #calendar-component {
-  margin-top: theme.$dimen-xs;
-  padding: theme.$dimen-sm;
+  border: 1px theme.$color-primary solid;
+  border-radius: 8px;
 
-  #calendar {
-    margin-top: theme.$dimen-xs;
+  margin: 8px;
+  padding: 8px;
+
+  #top-bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
   }
+
+  #days-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+
+    p {
+      font-weight: 600;
+    }
+  }
+
+  #dates-container {
+    margin-top: 12px;
+    .week-container {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-evenly;
+    }
+  }
+}
+
+#day-component {
+  text-align: center;
 }

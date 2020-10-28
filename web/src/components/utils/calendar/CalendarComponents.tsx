@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { NextButton, PrevButton } from "../../ButtonComponents";
 import "./CalendarComponents.scss";
 import { days, monthNames } from "./calendarUtils";
 import { DateComponent, DayComponent } from "./DateComponents";
@@ -93,29 +94,24 @@ export const CalendarComponent = (props: {
   };
 
   return (
-    <div id="calendar-component" className="border-radius border-primary">
+    <div id="calendar-component">
       <div id="top-bar" className="flex-row justify-content-space-between">
-        <div onClick={decreaseMonth}>⏪</div>
-        <label className="text-label font-size-md">
+        <PrevButton onClick={decreaseMonth} />
+        <h3>
           {monthNames[month]}, {year}
-        </label>
-        <div onClick={increaseMonth}>⏩</div>
+        </h3>
+        <NextButton onClick={increaseMonth} />
       </div>
       <div id="calendar">
-        <div className="flex-row border-bottom-primary">
+        <div id="days-container">
           {days.map((day, index) => (
             <DayComponent key={index} content={day} />
           ))}
         </div>
-        <div className="flex-column" style={{ marginTop: "8px" }}>
+        <div id="dates-container">
           {weeks.map((week) => {
             return (
-              <div
-                key={Math.random()}
-                id="week"
-                className="flex-row"
-                style={{ marginBottom: "5px" }}
-              >
+              <div className="week-container" key={Math.random()}>
                 {week.map((date) => {
                   const { baseRange, selectedRange } = props;
                   const isStart = isSameDate({

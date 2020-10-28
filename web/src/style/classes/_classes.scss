@@ -71,6 +71,11 @@ input:focus {
   text-decoration: underline;
 }
 
+input::placeholder {
+  font-style: italic;
+  color: colors.$color-gray-light;
+}
+
 button {
   min-width: 80px;
   padding: 4px;

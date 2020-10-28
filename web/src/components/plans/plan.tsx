@@ -5,7 +5,7 @@ import { PlanItemComponent } from "./planItem";
 
 // import { LoadingStateContext } from "../utils/Loading/LoadingModal";
 import "./plan.scss";
-import { DeleteButton, EditButton } from "../ButtonComponents";
+import { CancelButton, EditButton } from "../ButtonComponents";
 import { PeriodStringComponent } from "../utils/calendar/period/PeriodComponents";
 
 export function PlanListComponent(props: {
@@ -35,7 +35,6 @@ export function PlanComponent(props: {
   plan: Plan;
   onClick: (plan: Plan) => void;
 }) {
-  // const setLoadingState = useContext(LoadingStateContext)![1];
   const { plan } = props;
   // const onDeleteButtonClicked = () => {
   //   setLoadingState({ activated: true, message: "plan deleting" });
@@ -63,7 +62,7 @@ export function PlanComponent(props: {
         </h3>
         <div id="action-buttons">
           <EditButton onClick={() => console.log(`edit button clicked`)} />
-          <DeleteButton
+          <CancelButton
             onClick={(e) => {
               e.stopPropagation();
               // onDeleteButtonClicked();

@@ -1,9 +1,10 @@
 import React from "react";
+import { CalendarIcon } from "../../Icons";
 import { displayClockNumber } from "./calendarUtils";
 
 import "./DateComponents.scss";
 
-export const DateComponent = (props: {
+export function DateComponent(props: {
   date: Date;
   isSelected: boolean;
   isSemiSelected?: boolean;
@@ -12,36 +13,39 @@ export const DateComponent = (props: {
   isEnd?: boolean;
   isDisabled?: boolean;
   onClcicked: DateCallBack;
-}) => {
+}) {
+  const {
+    date,
+    isSelected,
+    isDisabled,
+    isEnd,
+    isSemiSelected,
+    isStart,
+    isToday,
+  } = props;
+
   let className = "";
-  if (props.isSelected) {
+  if (isSelected) {
     className += " selected";
   }
-  if (props.isToday) {
+  if (isToday) {
     className += " today";
   }
-  if (props.isStart) {
+  if (isStart) {
     className += " start";
   }
-  if (props.isEnd) {
+  if (isEnd) {
     className += " end";
   }
-  if (props.isDisabled) {
+  if (isDisabled) {
     className += " disabled";
   }
-  if (props.isSemiSelected && !props.isSelected) {
+  if (isSemiSelected && !isSelected) {
     className += " semi-selected";
   }
 
   const displayCaption = (): string => {
-    // if (props.isStart && props.isEnd) {
-    //   return "";
-    // } else if (props.isStart) {
-    //   return "start";
-    // } else if (props.isEnd) {
-    //   return "end";
-    // } else
-    if (props.isToday) {
+    if (isToday) {
       return "today";
     }
 
@@ -52,49 +56,50 @@ export const DateComponent = (props: {
     <div
       id="date-component"
       onClick={() => {
-        if (!props.isDisabled) {
-          props.onClcicked(props.date);
+        if (!isDisabled) {
+          props.onClcicked(date);
         }
       }}
     >
       <div className={className}>
-        <p className="align-center">{props.date.getDate()}</p>
-        <p className="caption">{displayCaption()}</p>
+        <p className="align-center">{date.getDate()}</p>
+        <label>{displayCaption()}</label>
       </div>
     </div>
   );
-};
+}
 
-export const DateStringComponent = (props: { date?: Date | number }) => {
+export function DateStringComponent(props: {
+  date?: Date | number;
+  isDisplayClock: boolean;
+}) {
   const date =
     typeof props.date === "number" ? new Date(props.date) : props.date;
+  const { isDisplayClock } = props;
 
   return (
-    <div
-      id="date-string-component"
-      className="flex-row align-items-center justify-content-center"
-    >
-      <div className="icon">📅</div>
+    <div id="date-string-component">
+      <CalendarIcon />
       <div id="date-string" className="font-size-lg">
         {date ? (
-          <p>
+          <h3>
             {date.getFullYear()}/{date.getMonth() + 1}/{date.getDate()}
-            {date.getHours() || date.getMinutes()
+            {isDisplayClock && (date.getHours() || date.getMinutes())
               ? " " +
                 displayClockNumber(date.getHours()) +
                 ":" +
                 displayClockNumber(date.getMinutes())
               : ""}
-          </p>
+          </h3>
         ) : (
-          <div>not selected</div>
+          <h3>not selected</h3>
         )}
       </div>
     </div>
   );
-};
+}
 
-export const DayComponent = (props: { content: string }) => {
+export function DayComponent(props: { content: string }) {
   return (
     <div
       id="day-component"
@@ -109,4 +114,4 @@ export const DayComponent = (props: { content: string }) => {
       <p className="align-center">{props.content}</p>
     </div>
   );
-};
+}

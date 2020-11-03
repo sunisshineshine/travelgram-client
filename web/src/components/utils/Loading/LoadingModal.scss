@@ -1,9 +1,9 @@
-@use '../../../style/theme';
+@use '../../../style/theme/theme';
 
 #loading-modal-component {
   display: block;
   position: fixed;
-  z-index: 1;
+  z-index: 2;
   left: 0;
   top: 0;
   width: 100%;

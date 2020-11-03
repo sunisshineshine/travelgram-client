@@ -3,14 +3,14 @@ import { CreatePlanItemComponent } from "../../components/plans/CreatePlanItemCo
 import { PlanTitleComponent } from "../../components/plans/plan";
 // import { PlanTitleComponent } from "../../components/plans/plan";
 import { PlanItemListComponent } from "../../components/plans/planItem";
-import { LoadingStateContext } from "../../components/utils/Loading/LoadingModal";
+import { SetLoadingContext } from "../../components/utils/Loading/LoadingModal";
 import * as PATHS from "../../constants/paths";
 import * as PLANS from "../../firebase/functions/plans";
 
 // import "./PlanDetailPage.scss";
 
 export const PlanDetailPage = () => {
-  const setLoadingState = useContext(LoadingStateContext)![1];
+  const setLoadingState = useContext(SetLoadingContext)!;
 
   const [plan, setPlan] = useState<Plan>();
   const [planItems, setPlanItems] = useState<PlanItem[]>([]);

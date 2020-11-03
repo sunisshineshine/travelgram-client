@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import { PlanListComponent } from "../../components/plans/plan";
 import { CreatePlanModal } from "../../components/plans/CreatePlanModal";
@@ -8,9 +8,10 @@ import { getPlans } from "../../firebase/functions/plans";
 import { goPlanDetail } from "../../constants/paths";
 
 import "./PlansPage.scss";
+import { SetLoadingContext } from "../../components/utils/Loading/LoadingModal";
 
 export const PlansPage = () => {
-  console.log(`hello?`);
+  const setLoading = useContext(SetLoadingContext)!;
   const [isDisplayCreateModal, setDisplayCreateModal] = useState(false);
 
   const [plans, setPlans] = useState<Plan[]>([]);
@@ -19,9 +20,13 @@ export const PlansPage = () => {
   }, []);
 
   async function updatePlans() {
+    setLoading({ activated: true, message: "Getting plans" });
     const plans = await getPlans().catch((e) => {
+      console.error(e);
       throw e;
     });
+    console.log(`Plan List`, plans);
+    setLoading({ activated: false });
 
     setPlans(plans);
   }

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 // import { deletePlan } from "../../firebase/functions/plans";
 // import { PeriodStringComponent } from "../utils/calendar/period/PeriodComponents";
 
@@ -6,6 +6,8 @@ import React from "react";
 import "./plan.scss";
 import { CancelButton, EditButton } from "../ButtonComponents";
 import { PeriodStringComponent } from "../utils/calendar/period/PeriodComponents";
+import { SetLoadingContext } from "../utils/Loading/LoadingModal";
+import { deletePlan } from "../../firebase/functions/plans";
 
 export function PlanListComponent(props: {
   plans: Plan[];
@@ -34,15 +36,18 @@ export function PlanComponent(props: {
   onClick: (plan: Plan) => void;
 }) {
   const { plan } = props;
-  // const onDeleteButtonClicked = () => {
-  //   setLoadingState({ activated: true, message: "plan deleting" });
-  //   console.log("plan delete button has clicked");
-  //   deletePlan(plan.docId).then(() => {
-  //     setLoadingState({ activated: false });
-  //     window.location.reload();
-  //   });
-  //   return true;
-  // };
+
+  const setLoading = useContext(SetLoadingContext)!;
+
+  const handleDeleteButtonClicked = () => {
+    setLoading({ activated: true, message: "plan deleting" });
+    console.log("plan delete button has clicked");
+    deletePlan(plan.docId).then(() => {
+      setLoading({ activated: false });
+      window.location.reload();
+    });
+    return true;
+  };
 
   return (
     <div
@@ -63,7 +68,7 @@ export function PlanComponent(props: {
           <CancelButton
             onClick={(e) => {
               e.stopPropagation();
-              // onDeleteButtonClicked();
+              handleDeleteButtonClicked();
             }}
           />
         </div>

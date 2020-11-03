@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { getEventItems } from "../../firebase/functions/plans";
 import { DateDividerComponent } from "../utils/calendar/DateDividerComponent";
 import { PeriodClockComponent } from "../utils/calendar/period/PeriodComponents";
-import { LoadingStateContext } from "../utils/Loading/LoadingModal";
+import { SetLoadingContext } from "../utils/Loading/LoadingModal";
 import { AddEventItemComponent, EventItemListComponent } from "./eventItem";
 import "./planItem.scss";
 
@@ -109,7 +109,7 @@ export function PlanItemComponent(props: { planItem: PlanItem }) {
 
   const [eventItems, setEventItems] = useState<EventItem[]>([]);
 
-  const setLoading = useContext(LoadingStateContext)![1];
+  const setLoading = useContext(SetLoadingContext)!;
   const updateEvents = () => {
     setLoading({
       activated: true,

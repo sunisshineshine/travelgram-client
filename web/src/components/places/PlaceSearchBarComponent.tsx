@@ -2,13 +2,14 @@ import React, { useContext, useEffect, useState } from "react";
 
 import * as PLACES from "../../firebase/functions/places";
 import { SearchIcon } from "../Icons";
-import { LoadingStateContext } from "../utils/Loading/LoadingModal";
+import { SetLoadingContext } from "../utils/Loading/LoadingModal";
 import "./PlaceSearchBarComponent.scss";
 
 let scheduledQuery = "";
 let lastQueried = "";
-function getPredictions(
+function getPredictionsFromQuery(
   query: string,
+  onLoading: () => void,
   onResult: (predictions: google.maps.places.AutocompletePrediction[]) => void
 ) {
   // optimization for searching query
@@ -16,7 +17,7 @@ function getPredictions(
   scheduledQuery = query;
   setTimeout(() => {
     if (scheduledQuery == query && query != "" && lastQueried != query) {
-      console.log(`get predictions with : ${query}`);
+      onLoading();
       lastQueried = query;
 
       PLACES.getPlaceAutocompletions(query)
@@ -35,6 +36,7 @@ export const PlaceSearchBarComponent = (props: {
   onSearched: (place: google.maps.places.PlaceResult) => void;
 }) => {
   const [input, setInput] = useState("");
+  const [isPredioctionsLoading, setPredictionsLoading] = useState(false);
   const [predictions, setPredictions] = useState<
     google.maps.places.AutocompletePrediction[]
   >([]);
@@ -60,7 +62,7 @@ export const PlaceSearchBarComponent = (props: {
     }
   };
 
-  const setLoading = useContext(LoadingStateContext)![1];
+  const setLoading = useContext(SetLoadingContext)!;
   function searchPlace(position: number) {
     if (position == -1 || predictions.length === 0) {
       return;
@@ -121,13 +123,21 @@ export const PlaceSearchBarComponent = (props: {
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
           placeholder="...search place at here"
-          // onBlur={clearPredictions}
           onChange={(e) => {
             setInput(e.target.value);
             if (e.target.value === "") {
               clearPredictions();
             } else {
-              getPredictions(input, setPredictions);
+              getPredictionsFromQuery(
+                input,
+                () => {
+                  setPredictionsLoading(true);
+                },
+                (predictions) => {
+                  setPredictionsLoading(false);
+                  setPredictions(predictions);
+                }
+              );
             }
           }}
           onKeyUp={(e) => {
@@ -138,6 +148,7 @@ export const PlaceSearchBarComponent = (props: {
       <div style={{ display: isFocused ? "block" : "none" }}>
         <PredictionsComponent
           selected={selectedPosition}
+          isLoading={isPredioctionsLoading}
           predictions={predictions}
           onSelected={searchPlace}
         />
@@ -148,10 +159,11 @@ export const PlaceSearchBarComponent = (props: {
 
 const PredictionsComponent = (props: {
   selected: number;
+  isLoading: boolean;
   predictions: google.maps.places.AutocompletePrediction[];
   onSelected: (position: number) => void;
 }) => {
-  const { predictions } = props;
+  const { predictions, isLoading } = props;
   const [selected, setSelected] = useState(props.selected);
   useEffect(() => {
     setSelected(props.selected);
@@ -176,7 +188,11 @@ const PredictionsComponent = (props: {
         </div>
       ) : (
         <div>
-          <p>searched place not exist.</p>
+          {isLoading ? (
+            <p>Getting Predictions</p>
+          ) : (
+            <p>Searched place not exist.</p>
+          )}
         </div>
       )}
     </div>

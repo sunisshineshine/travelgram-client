@@ -24,6 +24,13 @@ export function SelectDatePeriodComponent(props: SelectDatePeriodProps) {
   const [selectedPeriod, setPeriod] = useState<Period | undefined>(
     props.selectedPeriod
   );
+
+  useEffect(() => {
+    if (selectedPeriod) {
+      props.onPeriodUpdated(selectedPeriod);
+    }
+  }, [selectedPeriod]);
+
   // when parents update => props update
   useEffect(() => {
     setPeriod(props.selectedPeriod);
@@ -76,7 +83,7 @@ export function SelectDatePeriodComponent(props: SelectDatePeriodProps) {
         }
       }
     }
-    console.log("selected period changed :", period);
+    console.info("selected period changed :", period);
     setPeriod(period);
     forceRender();
   };

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { goHome, goLoginPage } from "../../constants/paths";
+import { goHome } from "../../constants/paths";
 import {
   createUserWithEmailPassword,
   EmailPasswordRequest,

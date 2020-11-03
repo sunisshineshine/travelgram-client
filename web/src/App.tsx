@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 // import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 // import * as PATHS from "./constants/paths";
@@ -23,7 +23,11 @@ import React, { useEffect, useState } from "react";
 import "./style/classes/_classes.scss";
 import "./App.scss";
 import { NavigatorComponent } from "./components/utils/NavigatorComponent";
-import { LoadingContextProvider } from "./components/utils/Loading/LoadingModal";
+import {
+  LoadingContextProvider,
+  LoadingModalComponent,
+  SetLoadingContext,
+} from "./components/utils/Loading/LoadingModal";
 import { UserStateComponent } from "./components/auth/UserStateComponent";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import {
@@ -44,6 +48,7 @@ import { getAuthUser } from "./firebase/auth";
 // import "./style/style.scss";
 
 export function App() {
+  const setLoading = useContext(SetLoadingContext)!;
   const [user, setUser] = useState<User | null>(null);
   useEffect(() => {
     if (location.pathname == HOME_PATH) {
@@ -53,7 +58,17 @@ export function App() {
   }, []);
 
   async function updateUser() {
+    setLoading({
+      activated: true,
+      icon: "auth",
+      message: "Getting user state",
+    });
+
     const user = await getAuthUser();
+
+    setLoading({
+      activated: false,
+    });
 
     function isUserNotExist(u: User | null): boolean {
       return !u;
@@ -75,7 +90,7 @@ export function App() {
 
   return (
     <div id="app">
-      {/* <LoadingModalComponent /> */}
+      <LoadingModalComponent />
       <div id="side-container">
         <TitleComponent />
         <UserStateComponent />

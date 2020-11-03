@@ -3,7 +3,7 @@ import React from "react";
 import { useContext, useState } from "react";
 import { createEventItem } from "../../firebase/functions/plans";
 import { DotIcon } from "../Icons";
-import { LoadingStateContext } from "../utils/Loading/LoadingModal";
+import { SetLoadingContext } from "../utils/Loading/LoadingModal";
 
 import "./eventItem.scss";
 
@@ -40,7 +40,7 @@ export const AddEventItemComponent = (props: {
   const [content, setContent] = useState("");
   const [isFocused, setFocused] = useState(false);
 
-  const setLoading = useContext(LoadingStateContext)![1];
+  const setLoading = useContext(SetLoadingContext)!;
   const onSubmit = () => {
     setLoading({
       activated: true,

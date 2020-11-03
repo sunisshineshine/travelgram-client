@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import "./CreatePlanModal.scss";
 
 import * as PLANS from "../../firebase/functions/plans";
-import { LoadingStateContext } from "../utils/Loading/LoadingModal";
+import { SetLoadingContext } from "../utils/Loading/LoadingModal";
 import { SelectDatePeriodComponent } from "../utils/calendar/period/SelectPeriodComponents";
 import { PeriodComponent } from "../utils/calendar/period/PeriodComponents";
 import { CancelButton, OkButton } from "../ButtonComponents";
@@ -16,14 +16,14 @@ export function CreatePlanModal(props: {
   const [startTime, setStartTime] = useState<number | null>(null);
   const [endTime, setEndTime] = useState<number | null>(null);
 
-  const setLoadingState = useContext(LoadingStateContext)![1];
+  const setLoading = useContext(SetLoadingContext)!;
 
   const createPlan = () => {
-    setLoadingState({ activated: true, message: "creating plan" });
+    setLoading({ activated: true, message: "creating plan" });
     PLANS.createPlan(title, startTime, endTime)
       .then(() => {
         setTitle("");
-        setLoadingState({ activated: false });
+        setLoading({ activated: false });
         props.onClosed();
       })
       .catch((error) => {
@@ -33,6 +33,7 @@ export function CreatePlanModal(props: {
   };
 
   const handlePeriodChanged: PeriodCallBack = (time: Period) => {
+    console.log(`period changed`);
     setStartTime(time.startTime);
     setEndTime(time.endTime);
   };

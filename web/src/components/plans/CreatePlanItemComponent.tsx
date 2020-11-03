@@ -4,7 +4,7 @@ import "./CreatePlanItemComponent.scss";
 import * as PLANS from "../../firebase/functions/plans";
 
 import { PlaceSearchBarComponent } from "../places/PlaceSearchBarComponent";
-import { LoadingStateContext } from "../utils/Loading/LoadingModal";
+import { SetLoadingContext } from "../utils/Loading/LoadingModal";
 import { getAllDayPeriod } from "../utils/calendar/calendarUtils";
 import { SelectPeriodStringComponent } from "../utils/calendar/period/SelectPeriodComponents";
 
@@ -27,7 +27,7 @@ export const CreatePlanItemComponent = (props: {
     setSelectedPeriod(period);
   };
 
-  const setLoading = useContext(LoadingStateContext)![1];
+  const setLoading = useContext(SetLoadingContext)!;
   const createPlanItem = (place: google.maps.places.PlaceResult) => {
     setLoading({ activated: true, message: "adding plan" });
 

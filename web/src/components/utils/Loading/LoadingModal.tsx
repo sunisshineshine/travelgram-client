@@ -5,35 +5,45 @@ import React, {
   useContext,
   useState,
 } from "react";
-// import "./LoadingModal.scss";
 
-interface LoadingPageProps {
+import "./LoadingModal.scss";
+
+interface LoadingState {
   activated: boolean | "blur";
   icon?: "auth" | "place" | "travel";
   message?: string;
 }
 
-export const LoadingStateContext = createContext<
-  [LoadingPageProps, Dispatch<SetStateAction<LoadingPageProps>>] | undefined
+export const SetLoadingContext = createContext<
+  Dispatch<SetStateAction<LoadingState>> | undefined
 >(undefined);
+
+export const LoadingStateContext = createContext<LoadingState | undefined>(
+  undefined
+);
+// export const LoadingStateContext = createContext<
+//   [LoadingPageProps, Dispatch<SetStateAction<LoadingPageProps>>] | undefined
+// >(undefined);
 
 export const LoadingContextProvider = (props: {
   children: React.ReactNode;
 }) => {
-  const [loadingState, setLoadingState] = useState<LoadingPageProps>({
+  const [loadingState, setLoadingState] = useState<LoadingState>({
     activated: false,
     message: "loading page",
   });
 
   return (
-    <LoadingStateContext.Provider value={[loadingState, setLoadingState]}>
-      {props.children}
+    <LoadingStateContext.Provider value={loadingState}>
+      <SetLoadingContext.Provider value={setLoadingState}>
+        {props.children}
+      </SetLoadingContext.Provider>
     </LoadingStateContext.Provider>
   );
 };
 
 export function LoadingModalComponent() {
-  const loadingState = useContext(LoadingStateContext)![0];
+  const loadingState = useContext(LoadingStateContext)!;
   const getIcon = (): string | undefined => {
     switch (loadingState.icon) {
       case "auth":
